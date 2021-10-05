@@ -6,7 +6,7 @@ Meeting Time: lect02
 
 Type of meeting: 
 - []sprint planning
-- [x]daily scrum
+- [x] daily scrum
 - []sprint review
 - []retrospective
 - []story time
