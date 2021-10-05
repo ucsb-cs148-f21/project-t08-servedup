@@ -2,7 +2,7 @@
 ## Project Name: Served Up!
 ### A small app that help users to find the best dining hall in UCSB!
 #### Names:
-Quansen Wang - Callter
-Ryan Vu - ryanvu
-Kaede Hamada - kaemaple9
-Roy Wang - qianyouwang
+Quansen Wang - Callter  
+Ryan Vu - ryanvu  
+Kaede Hamada - kaemaple9  
+Roy Wang - qianyouwang  
