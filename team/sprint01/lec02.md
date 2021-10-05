@@ -1,6 +1,6 @@
 # Let 02 Meeting
 
-Mentor: Self-Mentored ;)
+Mentor: Bryan Terce
 
 Meeting Time: lect02
 
