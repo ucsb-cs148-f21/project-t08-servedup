@@ -5,11 +5,11 @@ Mentor: Self-Mentored ;)
 Meeting Time: lect02
 
 Type of meeting: 
-- [] sprint planning
+- [ ] sprint planning
 - [x] daily scrum
-- [] sprint review
-- [] retrospective
-- [] story time
+- [ ] sprint review
+- [ ] retrospective
+- [ ] story time
 
 Team: 
 - [x] Kaede
