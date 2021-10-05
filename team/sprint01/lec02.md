@@ -1,5 +1,20 @@
 # Let 02 Meeting
 
+Mentor: Self-Mentored ;)
+
+Meeting Time: lect02
+
+Type of meeting: 
+- []sprint planning
+- [x]daily scrum
+- []sprint review
+- []retrospective
+- []story time
+
+Team: Kaede [x], Quansen [x], Roy [x], Ryan [x]
+
+
+
 ## Meeting Time: 
 
 upload all our schedules on slack
