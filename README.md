@@ -3,6 +3,6 @@
 ### A small app that help users to find the best dining hall in UCSB!
 #### Names:
 Quansen Wang - Callter  
-Ryan Vu - ryanvu  
+Ryan Vu - ryanlavu  
 Kaede Hamada - kaemaple9  
 Roy Wang - qianyouwang  
