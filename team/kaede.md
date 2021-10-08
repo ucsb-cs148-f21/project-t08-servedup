@@ -1,8 +1,7 @@
 Name: Kaede Hamada
+- A junior transfer CS major.
 
-My project idea:
-
-- Display the ists of dining halls and menus.
-- Display ratings, reviews and pictures.
-- Avoid inappropriate posts by using user reports/flags.
-
+My project ideas:
+- Display the lists of dining halls and their menus.
+- Display the ratings, reviews, and pictures of dishes.
+- Avoid or Manage inappropriate posts from users.
