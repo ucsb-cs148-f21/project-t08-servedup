@@ -4,8 +4,8 @@ import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const FormScreen = ({ navigation}) => {
-    return <Text>Submit your reviews here.</Text>
+const MenuScreen = ({ navigation}) => {
+    return <Text>Placeholder for menus.</Text>
   }
 
-export default FormScreen
+export default MenuScreen

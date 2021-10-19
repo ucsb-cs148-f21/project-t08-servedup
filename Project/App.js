@@ -63,6 +63,10 @@ import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import FormScreen from './screens/FormScreen';
+import MenuScreen from './screens/MenuScreen';
+import CommunityScreen from './screens/CommunityScreen';
+
 const Separator = () => (
   <View style={styles.separator} />
 );
@@ -82,15 +86,21 @@ const HomeScreen = ({ navigation }) => {
       <View>
       <Button title="View Today's Menus" onPress={() => navigation.navigate('Menu')}/>
       </View>
+      <Separator /> 
+      <View>
+        <Button 
+          title="Join our community" onPress={() => navigation.navigate('Community')}
+        />
+      </View>
     </SafeAreaView>
   );
 };
-const FormScreen = ({ navigation}) => {
-  return <Text>This is form screen.</Text>;
-};
-const MenuScreen = ({ navigation}) => {
-  return <Text>Placeholder for menus.</Text>
-}
+// const FormScreen = ({ navigation}) => {
+//   return <Text>This is form screen.</Text>;
+// };
+// const MenuScreen = ({ navigation}) => {
+//   return <Text>Placeholder for menus.</Text>
+// }
 
 const Stack = createNativeStackNavigator();
 
@@ -105,6 +115,7 @@ const App = () => {
         />
         <Stack.Screen name="Submit" component={FormScreen}/>
         <Stack.Screen name="Menu" component={MenuScreen}/>
+        <Stack.Screen name="Community" component={CommunityScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
