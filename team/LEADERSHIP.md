@@ -5,3 +5,4 @@
 | 10.07 | Quansen Wang | Led team to setup environment and complete Helloworld app |
 | 10.11 | Quansen Wnag | Led the first sprint planning |
 | 10.13 | Ryan Vu | Led the first retro meeting |
+| 10.18 | Ryan Vu | Let the meeting to disucss the MVP |

@@ -27,4 +27,3 @@ Meeting Notes:
 6. Quansen should update his current status first because he has the basic features. 
 7. Ryan needs to have the google oauth on the main page.
 8. Roy needs to integrate his database work with his teammates. 
-
