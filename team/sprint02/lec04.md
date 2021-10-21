@@ -1,6 +1,6 @@
 Mentor: Bryan Terce
 
-Meeting Time: lec04
+Meeting Time: lect04
 
 Type of meeting: 
 
