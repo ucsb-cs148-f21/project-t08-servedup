@@ -61,61 +61,81 @@ import * as React from 'react';
 import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+// import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
 
 import FormScreen from './screens/FormScreen';
 import MenuScreen from './screens/MenuScreen';
 import CommunityScreen from './screens/CommunityScreen';
+import UserScreen from './screens/UserScreen';
 
-const Separator = () => (
-  <View style={styles.separator} />
-);
+// const Separator = () => (
+//   <View style={styles.separator} />
+// );
 
-const HomeScreen = ({ navigation }) => {
-  return (
-    <SafeAreaView style={styles.container}>
-      <View >
-        <Button
-          title="Submit your feedback"
-          onPress={() =>
-            navigation.navigate('Submit')
-          }
-        />
-      </View>
-      <Separator />
-      <View>
-      <Button title="View Today's Menus" onPress={() => navigation.navigate('Menu')}/>
-      </View>
-      <Separator /> 
-      <View>
-        <Button 
-          title="Join our community" onPress={() => navigation.navigate('Community')}
-        />
-      </View>
-    </SafeAreaView>
-  );
-};
-// const FormScreen = ({ navigation}) => {
-//   return <Text>This is form screen.</Text>;
+// const HomeScreen = ({ navigation }) => {
+//   return (
+//     <SafeAreaView style={styles.container}>
+//       <View >
+//         <Button
+//           title="Submit your feedback"
+//           onPress={() =>
+//             navigation.navigate('Submit')
+//           }
+//         />
+//       </View>
+//       <Separator />
+//       <View>
+//       <Button title="View Today's Menus" onPress={() => navigation.navigate('Menu')}/>
+//       </View>
+//       <Separator /> 
+//       <View>
+//         <Button 
+//           title="Join our community" onPress={() => navigation.navigate('Community')}
+//         />
+//       </View>
+//     </SafeAreaView>
+//   );
 // };
-// const MenuScreen = ({ navigation}) => {
-//   return <Text>Placeholder for menus.</Text>
-// }
 
-const Stack = createNativeStackNavigator();
+const Stack = createBottomTabNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Menu') {
+              iconName = focused
+                ? 'list-sharp'
+                : 'list-outline';
+            } else if (route.name === 'Reviews') {
+              iconName = focused ? 'chatbox-ellipses' : 'chatbox-ellipses-outline';
+            } else if (route.name === 'Submit') {
+              iconName = focused ? 'git-commit' : 'git-commit-outline';
+            } else if (route.name === 'User') {
+              iconName = focused ? 'people' : 'people-outline';
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'gray',
+        })}
+      >
         <Stack.Screen
-          name="MainScreen"
-          component={HomeScreen}
-          options={{ title: 'Servedup!' }}
+          name="Menu"
+          component={MenuScreen}
+          options={{ title: 'Today\'s menu' }}
         />
+        <Stack.Screen name="Reviews" component={CommunityScreen}/>
         <Stack.Screen name="Submit" component={FormScreen}/>
-        <Stack.Screen name="Menu" component={MenuScreen}/>
-        <Stack.Screen name="Community" component={CommunityScreen}/>
+        <Stack.Screen name="User" component={UserScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
