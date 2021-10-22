@@ -69,6 +69,7 @@ import FormScreen from './screens/FormScreen';
 import MenuScreen from './screens/MenuScreen';
 import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
+import LoginScreen from "./screens/LoginScreen";
 
 // const Separator = () => (
 //   <View style={styles.separator} />
@@ -104,7 +105,8 @@ const Stack = createBottomTabNavigator();
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator
+      <Stack.Navigator 
+        initialRouteName="Login"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -127,7 +129,9 @@ const App = () => {
           tabBarActiveTintColor: 'tomato',
           tabBarInactiveTintColor: 'gray',
         })}
-      >
+          >
+
+        <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen
           name="Menu"
           component={MenuScreen}
@@ -140,6 +144,13 @@ const App = () => {
     </NavigationContainer>
   );
 };
+
+/*function passedLogin() {
+    return (
+        
+    );
+
+};*/
 
 const styles = StyleSheet.create({
   container: {
