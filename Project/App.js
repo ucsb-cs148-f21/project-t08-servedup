@@ -13,8 +13,9 @@ import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import LoginScreen from "./screens/LoginScreen";
 
+import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback} from 'react';
 import * as firebase from "firebase";
 import 'firebase/firestore';
 
@@ -38,12 +39,36 @@ if (firebase.apps.length === 0) {
 
 const Stack = createBottomTabNavigator();
 
+const db = firebase.firestore();
+const reviewRef = db.collection('Reviews');
+
 export default function App () {
   // Roy
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = useState(null)
+  const [name, setName] = useState('')
+  const [messages, setMessages] = useState([])
+
   useEffect(() => {
      readUser()
+     const unsubscribe = reviewRef.onSnapshot((querySnapshot) => {
+      const messagesFirestore = querySnapshot
+          .docChanges()
+          .filter(({type }) => type === 'added')
+          .map(({ doc }) => {
+            const message = doc.data()
+            //createdAt is firebase.firestore.Timestamp instance
+            //https://firebase.google.com/docs/reference/js/firebase.firestore.Timestamp
+            return { ...message, createdAt: message.createdAt.toDate() }
+          })
+          .sort((a, b) => b.createdAt - a.createdAt)
+      appendMessages(messagesFirestore)
+    })
+    return () => unsubscribe()
   }, [])
+
+  const appendMessages = useCallback((messages) => {
+    setMessages((prevMessages) => GiftedChat.append(prevMessages, messages))
+  }, [messages])
 
   async function readUser() {
     const user = await AsyncStorage.getItem('user'); 
@@ -51,13 +76,35 @@ export default function App () {
       setUser(JSON.parse(user));
     }
   }
+
+  async function handlePress() {
+    const _id = Math.random().toString(36).substring(7);
+    const user = {_id, name};
+    await AsyncStorage.setItem('user', JSON.stringify(user));
+    setUser(user);
+  }
+
+  async function handleSend(messages) {
+    const writes = messages.map(m => reviewRef.add(m) )
+    await Promise.all(writes)
+  }
+
   if (!user) {
     return (
       <View style={styles.container}>
-        <TextInput style={styles.input} placeholder='Enter your name' value={name} onTextInput={setName} />
+          <TextInput style={styles.input} placeholder="Enter Your Name" value={name} onChangeText={setName} />
+          <Button onPress={handlePress} title="Enter the Chat" />
       </View>
     )
-  }
+  } 
+
+  return (
+    <View style={styles.container}>
+      <GiftedChat messages={messages} user={user} onSend={handleSend} />
+    </View>
+  )
+};
+
 //   return (
 //     <NavigationContainer>
 //       <Stack.Navigator
@@ -101,25 +148,31 @@ export default function App () {
 // };
 
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     marginHorizontal: 16,
-//   },
-//   title: {
-//     textAlign: 'center',
-//     marginVertical: 8,
-//   },
-//   fixToText: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//   },
-//   separator: {
-//     marginVertical: 8,
-//     borderBottomColor: '#737373',
-//     borderBottomWidth: 0,
-//   },
-};
-
-//export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    marginHorizontal: 16,
+  },
+  title: {
+    textAlign: 'center',
+    marginVertical: 8,
+  },
+  fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  separator: {
+    marginVertical: 8,
+    borderBottomColor: '#737373',
+    borderBottomWidth: 0,
+  },
+  input: {
+    height: 50,
+    width: '100%',
+    borderWidth: 1,
+    padding: 15,
+    marginBottom: 20,
+    borderColor: 'gray',
+},
+});
