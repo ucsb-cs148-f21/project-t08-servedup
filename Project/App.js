@@ -13,7 +13,7 @@ import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import LoginScreen from "./screens/LoginScreen";
 
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEfffect } from 'react';
 import * as firebase from "firebase";
 import 'firebase/firestore';
