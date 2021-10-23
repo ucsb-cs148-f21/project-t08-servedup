@@ -14,7 +14,7 @@ import UserScreen from './screens/UserScreen';
 import LoginScreen from "./screens/LoginScreen";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEfffect } from 'react';
+import { useState, useEffect } from 'react';
 import * as firebase from "firebase";
 import 'firebase/firestore';
 
@@ -31,7 +31,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-if (firebase.apps.length() === 0) {
+if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 
 }
