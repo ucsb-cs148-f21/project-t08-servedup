@@ -38,7 +38,7 @@ if (firebase.apps.length() === 0) {
 
 const Stack = createBottomTabNavigator();
 
-export default function App = () => {
+export default function App () {
   // Roy
   const [user, setUser] = React.useState(null);
   useEffect(() => {
@@ -120,6 +120,6 @@ export default function App = () => {
 //     borderBottomColor: '#737373',
 //     borderBottomWidth: 0,
 //   },
-});
+};
 
-export default App;
+//export default App;
