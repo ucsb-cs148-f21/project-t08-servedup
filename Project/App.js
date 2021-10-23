@@ -1,7 +1,6 @@
 // @refresh reset
 import * as React from 'react';
-import { useState, useEfffect } from 'react';
-import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, TextInput,  Button, StyleSheet, SafeAreaView } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 // import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -14,6 +13,8 @@ import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import LoginScreen from "./screens/LoginScreen";
 
+import AsyncStorage from '@react-native-community/async-storage';
+import { useState, useEfffect } from 'react';
 import * as firebase from "firebase";
 import 'firebase/firestore';
 
@@ -37,78 +38,88 @@ if (firebase.apps.length() === 0) {
 
 const Stack = createBottomTabNavigator();
 
-const App = () => {
+export default function App = () => {
+  // Roy
   const [user, setUser] = React.useState(null);
   useEffect(() => {
      readUser()
   }, [])
 
   async function readUser() {
-
+    const user = await AsyncStorage.getItem('user'); 
+    if (user) {
+      setUser(JSON.parse(user));
+    }
   }
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <TextInput style={styles.input} placeholder='Enter your name' value={name} onTextInput={setName} />
+      </View>
+    )
+  }
+//   return (
+//     <NavigationContainer>
+//       <Stack.Navigator
+//         initialRouteName="Login"
+//         screenOptions={({ route }) => ({
+//           tabBarIcon: ({ focused, color, size }) => {
+//             let iconName;
 
-  return (
-    <NavigationCon tainer>
-      <Stack.Navigator 
-        initialRouteName="Login"
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+//             if (route.name === 'Menu') {
+//               iconName = focused
+//                 ? 'list-sharp'
+//                 : 'list-outline';
+//             } else if (route.name === 'Reviews') {
+//               iconName = focused ? 'chatbox-ellipses' : 'chatbox-ellipses-outline';
+//             } else if (route.name === 'Submit') {
+//               iconName = focused ? 'git-commit' : 'git-commit-outline';
+//             } else if (route.name === 'User') {
+//               iconName = focused ? 'people' : 'people-outline';
+//             }
 
-            if (route.name === 'Menu') {
-              iconName = focused
-                ? 'list-sharp'
-                : 'list-outline';
-            } else if (route.name === 'Reviews') {
-              iconName = focused ? 'chatbox-ellipses' : 'chatbox-ellipses-outline';
-            } else if (route.name === 'Submit') {
-              iconName = focused ? 'git-commit' : 'git-commit-outline';
-            } else if (route.name === 'User') {
-              iconName = focused ? 'people' : 'people-outline';
-            }
+//             // You can return any component that you like here!
+//             return <Ionicons name={iconName} size={size} color={color} />;
+//           },
+//           tabBarActiveTintColor: 'tomato',
+//           tabBarInactiveTintColor: 'gray',
+//         })}
+//           >
 
-            // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: 'tomato',
-          tabBarInactiveTintColor: 'gray',
-        })}
-          >
-
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen
-          name="Menu"
-          component={MenuScreen}
-          options={{ title: 'Today\'s menu' }}
-        />
-        <Stack.Screen name="Reviews" component={CommunityScreen}/>
-        <Stack.Screen name="Submit" component={FormScreen}/>
-        <Stack.Screen name="User" component={UserScreen}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
+//         <Stack.Screen name="Login" component={LoginScreen} />
+//         <Stack.Screen
+//           name="Menu"
+//           component={MenuScreen}
+//           options={{ title: 'Today\'s menu' }}
+//         />
+//         <Stack.Screen name="Reviews" component={CommunityScreen}/>
+//         <Stack.Screen name="Submit" component={FormScreen}/>
+//         <Stack.Screen name="User" component={UserScreen}/>
+//       </Stack.Navigator>
+//     </NavigationContainer>
+//   );
+// };
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    marginHorizontal: 16,
-  },
-  title: {
-    textAlign: 'center',
-    marginVertical: 8,
-  },
-  fixToText: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  separator: {
-    marginVertical: 8,
-    borderBottomColor: '#737373',
-    borderBottomWidth: 0,
-  },
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     marginHorizontal: 16,
+//   },
+//   title: {
+//     textAlign: 'center',
+//     marginVertical: 8,
+//   },
+//   fixToText: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//   },
+//   separator: {
+//     marginVertical: 8,
+//     borderBottomColor: '#737373',
+//     borderBottomWidth: 0,
+//   },
 });
 
 export default App;

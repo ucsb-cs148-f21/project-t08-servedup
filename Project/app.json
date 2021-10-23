@@ -8,8 +8,6 @@
     ],
     "ios": {
       "supportsTablet": true,
-      //"bundleIdentifier": "org.name.served-up",
-      "googleServicesFile": "./GoogleService-Info.plist",
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.1013730947248-k1drlh72srgq8mgbejeelbj2kq1jknhg"
@@ -17,9 +15,6 @@
       }
     },
     "android": {
-      "package": "com.yourcompany.yourappname",
-      "versionCode": 1,
-      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
