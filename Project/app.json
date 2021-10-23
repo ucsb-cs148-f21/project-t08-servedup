@@ -1,19 +1,23 @@
 {
   "expo": {
-    "name": "Project",
-    "slug": "Project",
+    "name": "AwesomeProject",
+    "slug": "AwesomeProject",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.webiosandroid.all",
-      "config": {
-        "googleSignIn": {
-          "reservedClientId": "com.googleusercontent.apps.1013730947248-k1drlh72srgq8mgbejeelbj2kq1jknhg"
-        }
-      }
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
