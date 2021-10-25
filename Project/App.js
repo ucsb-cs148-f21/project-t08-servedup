@@ -34,6 +34,8 @@ const App = () => {
               iconName = focused ? 'git-commit' : 'git-commit-outline';
             } else if (route.name === 'User') {
               iconName = focused ? 'people' : 'people-outline';
+            } else if (route.name === "Login") {
+              iconName = focused ? 'log-in' : 'log-in-outline';
             }
 
             // You can return any component that you like here!

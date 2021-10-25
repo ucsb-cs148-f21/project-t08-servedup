@@ -2879,6 +2879,15 @@
     "snapdragon" "^0.8.1"
     "to-regex" "^3.0.1"
 
+"expo-app-auth@~11.0.2":
+  "integrity" "sha512-vw6rWfrVAKFaDB/VShEZYH/Vsd2dYp5BS4Vuq3UARDlrCNwNumO8AualmffTc42k13RTBlKhGoaxUaol/UiTUA=="
+  "resolved" "https://registry.npmjs.org/expo-app-auth/-/expo-app-auth-11.0.3.tgz"
+  "version" "11.0.3"
+  dependencies:
+    "@expo/config-plugins" "^4.0.2"
+    "expo-modules-core" "~0.4.4"
+    "invariant" "^2.2.4"
+
 "expo-application@~3.2.0":
   "integrity" "sha512-NDPQAtB05Jeiw771bDYsecbLrLA39X33Jk8uP1VUVdHMy6cCfJrL8PSDssgMLElAzR94K8toeqdGsGx9mVv8zw=="
   "resolved" "https://registry.npmjs.org/expo-application/-/expo-application-3.2.0.tgz"
@@ -2926,6 +2935,13 @@
     "expo-modules-core" "~0.2.0"
     "fontfaceobserver" "^2.1.0"
 
+"expo-google-app-auth@^8.2.4":
+  "integrity" "sha512-ZMhJFimwuWAv+0tjGz28vuSIunqSoV5Fk2WIK5gGJWgkF/KksiCNLEqNKM4zHlCVAjszoBUE3MMtGUsNDn1Yvw=="
+  "resolved" "https://registry.npmjs.org/expo-google-app-auth/-/expo-google-app-auth-8.2.4.tgz"
+  "version" "8.2.4"
+  dependencies:
+    "expo-app-auth" "~11.0.2"
+
 "expo-image-loader@~2.2.0":
   "integrity" "sha512-kTs/lW8LUXYFQ5t8wkdJs0A41zd7dIB8uRRC0a9L0EurSGUvQWiVTbHQoLo/GYWL7nM85OaPAe2qkHfcz5KeyA=="
   "resolved" "https://registry.npmjs.org/expo-image-loader/-/expo-image-loader-2.2.0.tgz"
@@ -2951,6 +2967,14 @@
   "integrity" "sha512-inpfZ5X/BaTtbj2wG9PA9AC0MN8VyId6KSRlVuEg7+ziurHBy/kKDFxpOddUokhwiln2uhoYPSStJjR/tKypdw=="
   "resolved" "https://registry.npmjs.org/expo-modules-core/-/expo-modules-core-0.2.0.tgz"
   "version" "0.2.0"
+
+"expo-modules-core@~0.4.4":
+  "integrity" "sha512-/pvI235uApWp156SP8Ve4a/adz2zx/41hppa0Q/XpRe9WPqHoOilOsgcqXuzjZhwyQwzeyBIPEYuqBMO+Vn41g=="
+  "resolved" "https://registry.npmjs.org/expo-modules-core/-/expo-modules-core-0.4.4.tgz"
+  "version" "0.4.4"
+  dependencies:
+    "compare-versions" "^3.4.0"
+    "invariant" "^2.2.4"
 
 "expo-splash-screen@~0.11.2":
   "integrity" "sha512-WycJfWaBuj/W9KSgYTUHjm90VkwZ0Pv/EIqh2pW4/zw10AoSLHVgVA0CoC5R944iE42m6KWioax/0ydHU61qzA=="
@@ -6342,7 +6366,7 @@
   dependencies:
     "sax" "^1.2.4"
 
-"xml2js@^0.4.23":
+"xml2js@^0.4.23", "xml2js@0.4.23":
   "integrity" "sha512-ySPiMjM0+pLDftHgXY4By0uswI3SPKLDw/i3UXbnO8M/p28zqexCUoPmQFrYD+/1BzhGJSs2i1ERWKJAtiLrug=="
   "resolved" "https://registry.npmjs.org/xml2js/-/xml2js-0.4.23.tgz"
   "version" "0.4.23"
