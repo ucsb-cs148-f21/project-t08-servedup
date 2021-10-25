@@ -15,7 +15,7 @@ const LoginScreen = ({ navigation }) => {
         try {
             const { type, accessToken } = await Google.logInAsync({
                 iosClientId: `1013730947248-k1drlh72srgq8mgbejeelbj2kq1jknhg.apps.googleusercontent.com`,
-                androidClientId: `<YOUR_ANDROID_CLIENT_ID>`,
+                androidClientId: `1013730947248-rr5c6p3vdmno9i1rs0cq1n672kj81usp.apps.googleusercontent.com`,
             });
 
             if (type === "success") {
@@ -41,7 +41,7 @@ const LoginScreen = ({ navigation }) => {
                 accessTokenUser,
                 expoClientId: `<YOUR_WEB_CLIENT_ID>`,
                 iosClientId: `1013730947248-k1drlh72srgq8mgbejeelbj2kq1jknhg.apps.googleusercontent.com`,
-                androidClientId: `<YOUR_ANDROID_CLIENT_ID>`,
+                androidClientId: `1013730947248-rr5c6p3vdmno9i1rs0cq1n672kj81usp.apps.googleusercontent.com`,
                 iosStandaloneAppClientId: `<YOUR_IOS_CLIENT_ID>`,
                 androidStandaloneAppClientId: `<YOUR_ANDROID_CLIENT_ID>`,
             });
