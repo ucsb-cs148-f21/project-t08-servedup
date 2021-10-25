@@ -1,5 +1,6 @@
+// @refresh reset
 import * as React from 'react';
-import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, TextInput,  Button, StyleSheet, SafeAreaView } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 // import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -12,13 +13,40 @@ import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import LoginScreen from "./screens/LoginScreen";
 
+import { GiftedChat } from 'react-native-gifted-chat'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect, useCallback} from 'react';
+import * as firebase from "firebase";
+import 'firebase/firestore';
+
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
+  authDomain: 'served-up-63c2e.firebaseapp.com',
+  databaseURL: 'https://served-up-63c2e.firebaseio.com',
+  projectId: 'served-up-63c2e',
+  storageBucket: 'served-up-63c2e.appspot.com',
+  //messagingSenderId: 'sender-id',
+  appId: '1:456652905966:ios:80d960e213cb40ea1182ff',
+  //measurementId: 'G-measurement-id',
+};
+
+// Initialize Firebase
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+
+}
 
 const Stack = createBottomTabNavigator();
 
+const db = firebase.firestore();
+const reviewRef = db.collection('Reviews');
+
 const App = () => {
+
   return (
     <NavigationContainer>
-      <Stack.Navigator 
+      <Stack.Navigator
         initialRouteName="Login"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -60,6 +88,7 @@ const App = () => {
   );
 };
 
+export default App;
 
 const styles = StyleSheet.create({
   container: {
@@ -80,6 +109,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#737373',
     borderBottomWidth: 0,
   },
+  input: {
+    height: 50,
+    width: '100%',
+    borderWidth: 1,
+    padding: 15,
+    marginBottom: 20,
+    borderColor: 'gray',
+},
 });
-
-export default App;

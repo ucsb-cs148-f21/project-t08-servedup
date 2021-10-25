@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Button } from "react-native";
 import * as Google from "expo-google-app-auth";
+import * as firebase from 'firebase';
 
 const LoginScreen = ({ navigation }) => {
     const [isAbleLogIn, setAbleLogIn] = React.useState(false);

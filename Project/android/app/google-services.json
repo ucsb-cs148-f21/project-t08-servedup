@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "456652905966",
+    "firebase_url": "https://served-up-63c2e-default-rtdb.firebaseio.com",
+    "project_id": "served-up-63c2e",
+    "storage_bucket": "served-up-63c2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456652905966:android:37cecd19909f24081182ff",
+        "android_client_info": {
+          "package_name": "com.ucsb.servedup.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "456652905966-kbu928p41easah5ibmrtbbnauak2d62e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "456652905966-kbu928p41easah5ibmrtbbnauak2d62e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "456652905966-0g6bce2f3mpcr678tbhe4aaq888oda8k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.name.served-up"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,6 +7,7 @@
     "start": "react-native start"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-firebase/app": "^12.9.1",
     "@react-navigation/bottom-tabs": "^6.0.9",
     "@react-navigation/native": "^6.0.6",
@@ -16,10 +17,12 @@
     "expo-splash-screen": "~0.11.2",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.8.1",
+    "firebase": "8.2.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
     "react-native-gesture-handler": "~1.10.2",
+    "react-native-gifted-chat": "^0.16.3",
     "react-native-reanimated": "~2.2.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
