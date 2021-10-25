@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, SectionList } from 'react-native';
 import pLimit from 'p-limit';
 
@@ -181,7 +181,10 @@ const MenuScreen = ({ navigation}) => {
     return (
       <SafeAreaView style={styles.container}>
             <View style={styles.container}>
-              <SectionList
+            { meals[0].data != null ? // Check if the data is NOT undefined
+                // True: display the SectionList
+                <SectionList
+                  refreshing={(meals.length >= 3)}
                   keyExtractor={(item, index) => index.toString()}
                   sections={meals}
                   renderSectionHeader={({section}) => (
@@ -191,29 +194,36 @@ const MenuScreen = ({ navigation}) => {
                   renderItem={({item}) => (
                       <Text style={styles.sectionListItemStyle}>
                           {item}
-                      </Text>
-                  )}
-              />
+                      </Text>)}
+                />
+                : // False: display a loading screen
+                <Text style={styles.loadingTextStyle}>Loading...</Text>
+              }
              </View>
       </SafeAreaView>
       );
+     
   }
 
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    backgroundColor: '#000000',
+  },
+  loadingTextStyle: {
+    textAlign: 'center',
+    color: '#000000',
   },
   sectionHeaderStyle: {
+      textAlign: 'center',
       backgroundColor: '#003660',
-      fontSize: 18,
-      padding: 5,
+      fontSize: 19,
+      padding: 6,
       color: '#ffffff',
   },
   sectionListItemStyle: {
-      fontSize: 15,
+      textAlign: 'center',
+      fontSize: 16,
       color: '#000000',
-      backgroundColor: '#ffffff',
   },
 });
 
