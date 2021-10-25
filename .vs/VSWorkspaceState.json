@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\Project",
+    "\\Project\\android",
+    "\\Project\\android\\app",
+    "\\Project\\android\\app\\src",
+    "\\Project\\android\\app\\src\\main",
+    "\\Project\\android\\gradle",
+    "\\Project\\android\\gradle\\wrapper",
+    "\\Project\\screens"
+  ],
+  "SelectedNode": "\\Project\\android\\app\\src\\main\\AndroidManifest.xml",
+  "PreviewInSolutionExplorer": false
+}
