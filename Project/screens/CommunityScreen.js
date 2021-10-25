@@ -1,11 +1,128 @@
 import * as React from 'react';
-import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const CommunityScreen = ({ navigation}) => {
-    return <Text>Placeholder for forum of reviews</Text>
+import { GiftedChat } from 'react-native-gifted-chat'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect, useCallback} from 'react';
+import * as firebase from "firebase";
+import 'firebase/firestore';
+import * as Google from 'expo-google-app-auth';
+
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+
+}
+
+const db = firebase.firestore();
+const reviewRef = db.collection('Reviews');
+
+
+//export default function CommunityScreen () {
+  const CommunityScreen = ({navigation}) => {
+    // Roy
+  // set variables and functions
+
+  // const { type, accessToken, user } = await Google.logInAsync(config);
+
+  // if (type === 'success') {
+  //   // Then you can use the Google REST API
+  //   let userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
+  //     headers: { Authorization: `Bearer ${accessToken}` },
+  //   });
+  // }
+
+  const [user, setUser] = useState(null)
+  const [name, setName] = useState('')
+  const [messages, setMessages] = useState([])
+
+  useEffect(() => {
+    readUser()
+    const unsubscribe = reviewRef.onSnapshot((querySnapshot) => {
+    const messagesFirestore = querySnapshot
+          .docChanges()
+          .filter(({type }) => type === 'added')
+          .map(({ doc }) => {
+            const message = doc.data()
+            //createdAt is firebase.firestore.Timestamp instance
+            //https://firebase.google.com/docs/reference/js/firebase.firestore.Timestamp
+            return { ...message, createdAt: message.createdAt.toDate() }
+          })
+          .sort((a, b) => b.createdAt - a.createdAt)
+      appendMessages(messagesFirestore)
+    })
+    return () => unsubscribe()
+  }, [])
+
+  const appendMessages = useCallback((messages) => {
+    setMessages((prevMessages) => GiftedChat.append(prevMessages, messages))
+  }, [messages]) // append current message to previous messages
+
+  async function readUser() {
+    const user = await AsyncStorage.getItem('user'); 
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+  } // get user name
+
+  async function handlePress() {
+    const _id = Math.random().toString(36).substring(7);
+    const user = {_id, name};
+    await AsyncStorage.setItem('user', JSON.stringify(user));
+    setUser(user);
+  } 
+
+  async function handleSend(messages) {
+    const writes = messages.map(m => reviewRef.add(m) )
+    await Promise.all(writes)
   }
 
+  if (!user) {
+    return (
+      <View style={styles.container}>
+          <TextInput style={styles.input} placeholder="Enter Your Name" value={name} onChangeText={setName} />
+          <Button onPress={handlePress} title="Enter the Chat" />
+      </View>
+    )
+  } 
+
+  return (
+    <View style={styles.container}>
+      <GiftedChat messages={messages} user={user} onSend={handleSend} />
+    </View>
+  )
+};
+
 export default CommunityScreen
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    marginHorizontal: 16,
+  },
+  title: {
+    textAlign: 'center',
+    marginVertical: 8,
+  },
+  fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  separator: {
+    marginVertical: 8,
+    borderBottomColor: '#737373',
+    borderBottomWidth: 0,
+  },
+  input: {
+    height: 50,
+    width: '100%',
+    borderWidth: 1,
+    padding: 15,
+    marginBottom: 20,
+    borderColor: 'gray',
+},
+});
