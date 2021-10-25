@@ -1,36 +1,44 @@
 {
   "name": "ExpoModulesCore",
-  "version": "0.2.0",
+  "version": "0.4.4",
   "summary": "The core of Expo Modules architecture",
   "description": "The core of Expo Modules architecture",
   "license": "MIT",
   "authors": "650 Industries, Inc.",
   "homepage": "https://github.com/expo/expo/tree/master/packages/expo-modules-core",
   "platforms": {
-    "ios": "11.0"
+    "ios": "12.0"
   },
+  "swift_versions": "5.4",
   "source": {
     "git": "https://github.com/expo/expo.git"
   },
+  "static_framework": true,
+  "header_dir": "ExpoModulesCore",
+  "pod_target_xcconfig": {
+    "DEFINES_MODULE": "YES"
+  },
   "dependencies": {
-    "UMCore": [
+    "React-Core": [
 
     ]
   },
-  "subspecs": [
+  "source_files": "**/*.{h,m,swift}",
+  "exclude_files": "Tests/",
+  "testspecs": [
     {
-      "name": "Core",
-      "source_files": "**/*.{h,m}",
-      "exclude_files": "Interfaces/"
-    },
-    {
-      "name": "Interfaces",
-      "source_files": "Interfaces/**/*.{h,m}",
+      "name": "Tests",
+      "test_type": "unit",
       "dependencies": {
-        "ExpoModulesCore/Core": [
+        "Quick": [
+
+        ],
+        "Nimble": [
 
         ]
-      }
+      },
+      "source_files": "Tests/**/*.swift"
     }
-  ]
+  ],
+  "swift_version": "5.4"
 }
