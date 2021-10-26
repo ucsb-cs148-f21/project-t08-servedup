@@ -22,3 +22,43 @@ The purpose of the product is to provide information regarding the UCSB dining h
 2. Admins who can review contents posted in the app.
     Admins can do all the things that users can.
     Admins can also approve or deny users' requests.
+
+### Installation
+#### Prerequisites
+1. Node 12 LTS
+2. Run the following code in command line to install expo-cli:  
+    npm install -g expo-cli
+3. An app named "Expo Go" on mobile devices
+
+#### Dependencies
+##### Navigation between different pages and icons
+1. @react-navigation/native: create navigation container
+2. @react-navigation/bottom-tabs: create bottom tabs on top of different screens
+3. @expo/vector-icons: add icons to each tab
+##### Google user login
+1. expo-google-app-auth: connect with Google OAuth servie
+##### Firebase database related and display reviews
+1. react-native-gifted-chat: display data received from DB in chat form
+2. @react-native-async-storage/async-storage: sync the storage
+3. firebase: connect to the cloud firebase database
+##### Display list of menu contents and loading screen
+1. p-limit: Limit the api calls
+
+#### Installation steps
+1. Download the files in the main branch
+2. Make sure you have all the Prequisites
+3. Go to the folder named "Project"
+4. run 'npm install' command to install all the dependencies
+5. run 'npm install expo-google-app-auth' to install the library for google oauth
+6. run 'expo start' to start the expo server
+7. Use the mobile device to scan the QR code in the terminal
+
+#### Functionlity
+1. Log in with UCSB google account
+2. View menus for all four dining halls (The content of the menus will change to different meals according to the time of viewing)
+3. Submit comments on dining halls
+4. View community reviews through chat interface
+
+#### Known Issues
+1. The User Profile page is not being updated upon logged in.
+2. The log out button in LoginScreen.js is currently not working.
