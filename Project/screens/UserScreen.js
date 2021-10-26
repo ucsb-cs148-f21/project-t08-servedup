@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const UserScreen = ({ navigation}) => {
-    return <Text>Placeholder for menus.</Text>
+    return <Text>Placeholder for future implementation.</Text>
   }
 
 export default UserScreen
