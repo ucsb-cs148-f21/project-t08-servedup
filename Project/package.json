@@ -17,12 +17,9 @@
     "expo-splash-screen": "~0.11.2",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.8.1",
-<<<<<<< HEAD
     "fetch-rate-limit-util": "^1.1.6",
     "p-limit": "^4.0.0",
-=======
     "firebase": "8.2.3",
->>>>>>> 4946737dc469cfe322713c3ec117e34439b332a4
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
