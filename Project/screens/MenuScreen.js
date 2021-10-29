@@ -5,7 +5,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, SectionList } from 'react-native';
-import pLimit from 'p-limit';
 
 const MenuScreen = ({ navigation}) => {
     // Current date
@@ -49,77 +48,75 @@ const MenuScreen = ({ navigation}) => {
     var meal = [];
     var meals = [];
     
-    // Limit the api calls to be made one at a time.
-    const limit = pLimit(1);
     // Fetch the data from APIs.
     if ((0 < currentDay) && (currentDay < 6)) { // Weekdays
       if (currentHour < 10) { // Breakfast: (display) 0:00am - 9:59am
           inputs = [
               // Carrillo - Breakfast
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[0],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[0],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // De La Guerra - Breakfast
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[0],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[0],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // Portola - Breakfast
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[0],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[0],
+                    { headers: { "ucsb-api-key": apiKey }}),
           ];
       } else if ((10 <= currentHour) && (currentHour < 15)) { // Lunch: (display) 10:00am - 2:59pm
           inputs = [
               // Carrillo - Lunch
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[2],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[2],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // De La Guerra - Lunch
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[2],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[2],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // Ortega - Lunch
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[2] + '/' + hourCodes[2],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[2] + '/' + hourCodes[2],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // Portola - Lunch
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[2],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[2],
+                    { headers: { "ucsb-api-key": apiKey }}),
           ];
       } else if (15 <= currentHour) { // Dinner1: (display) 3:00pm - 23:59pm
           inputs = [
               // Carrillo - Dinner
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[2],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[2],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // De La Guerra - Dinner
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[3],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[3],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // Ortega - Dinner
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[2] + '/' + hourCodes[3],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[2] + '/' + hourCodes[3],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // Portola - Dinner
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[3],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[3],
+                    { headers: { "ucsb-api-key": apiKey }}),
           ];
       }
     } else { // Weekend
       if (currentHour < 14) { // Brunch: (display) 0:00am - 1:59pm
           inputs = [
               // Carrillo - Brunch
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[1],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[1],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // De La Guerra - Brunch
-                  limit(() => fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[1],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[1],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // Portola - Brunch
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[1],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[1],
+                    { headers: { "ucsb-api-key": apiKey }}),
           ];
       } else { // Dinner: (display) 2:00pm - 23:59pm
           inputs = [
               // Carrillo - Dinner
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[3],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[3],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // De La Guerra - Dinner
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[3],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[3],
+                    { headers: { "ucsb-api-key": apiKey }}),
               // Portola - Dinner
-              limit(() => fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[3],
-                                  { headers: { "ucsb-api-key": apiKey }})),
+              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[3],
+                    { headers: { "ucsb-api-key": apiKey }}),
           ];
       }
     }
