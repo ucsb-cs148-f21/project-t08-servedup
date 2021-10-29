@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "@testing-library/react-native": "^8.0.0",
+    "jest": "^27.3.1"
+  }
+}
