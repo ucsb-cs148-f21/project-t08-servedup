@@ -36,7 +36,7 @@ The purpose of the product is to provide information regarding the UCSB dining h
 2. @react-navigation/bottom-tabs: create bottom tabs on top of different screens
 3. @expo/vector-icons: add icons to each tab
 ##### Google user login
-1. expo-google-app-auth: connect with Google OAuth servie
+1. expo-google-app-auth: connect with Google OAuth service, is used to limit only those with ucsb accounts to submit reviews as well as allowing school accounts to sign into the app
 ##### Firebase database related and display reviews
 1. react-native-gifted-chat: display data received from DB in chat form
 2. @react-native-async-storage/async-storage: sync the storage
