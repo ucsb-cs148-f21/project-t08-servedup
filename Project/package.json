@@ -7,6 +7,12 @@
     "start": "react-native start",
     "test": "jest"
   },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|p-limit)"
+    ]
+  },
   "dependencies": {
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-firebase/app": "^12.9.1",
@@ -18,7 +24,9 @@
     "expo-splash-screen": "~0.11.2",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.8.1",
+    "fetch-rate-limit-util": "^1.1.6",
     "firebase": "8.2.3",
+    "p-limit": "^4.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
@@ -28,11 +36,15 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-unimodules": "0.14.10",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "react-spinners": "^0.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "jest": "^27.3.1"
+    "jest": "^27.3.1",
+    "@emotion/babel-plugin": "^11.3.0",
+    "jest-expo": "^43.0.1",
+    "react-test-renderer": "^17.0.2"
   },
   "private": true
 }
