@@ -21,6 +21,7 @@
     "@react-navigation/native-stack": "^6.2.4",
     "expo": "~42.0.1",
     "expo-google-app-auth": "^8.2.4",
+    "expo-image-picker": "~10.2.2",
     "expo-splash-screen": "~0.11.2",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.8.1",
@@ -41,8 +42,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "jest": "^27.3.1",
     "@emotion/babel-plugin": "^11.3.0",
+    "jest": "^27.3.1",
     "jest-expo": "^43.0.1",
     "react-test-renderer": "^17.0.2"
   },

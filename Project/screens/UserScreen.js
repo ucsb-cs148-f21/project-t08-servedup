@@ -1,11 +1,64 @@
-import * as React from 'react';
-import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
+import React, { useState, useEffect } from 'react';
+import { Button, Image, View, Platform, Text } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+export default function ImagePickerExample() {
+  const [image, setImage] = useState(null);
+  const [camImg, setCamImg] = useState(null);
 
-const UserScreen = ({ navigation}) => {
-    return <Text>Placeholder for future implementation.</Text>
-  }
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
 
-export default UserScreen
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+
+  const takeImage = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View >
+            <Button title="Pick an image from camera roll" onPress={pickImage} />
+        </View>
+        <View>
+            <Button title="Take a new picture" onPress={takeImage} />
+        </View>
+        <View>
+            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+        </View>
+        
+    </View>
+  );
+}
