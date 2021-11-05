@@ -1,0 +1,4 @@
+1. We use Jest Library, and we test whether each screen can render or not without user input.
+2. We plan to use the unit as a way to test if the app will open successfully instead of functionality.
+3. We implemented Component test in our tests. We use mocking process to mock a user. The user will then use each screen to see if the result are correct. Since our app works on four separate components, we believe that mock four users to use four components will satisfy the requirement for component test.
+4. In the future, everytime we add a new feature, we will mock the user to test the feature in the component.
