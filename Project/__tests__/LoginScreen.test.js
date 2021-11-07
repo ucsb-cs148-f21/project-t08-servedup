@@ -13,7 +13,7 @@ import * as Google from "expo-google-app-auth";
 
 jest.mock('expo-google-app-auth', () => ({
     logInAsync: jest.fn(() => 'mock success'),
-    logOutAsync: jest.fn(() => 'mock failure'),
+    logOutAsync: jest.fn(() => 'mock success'),
 }));
 
 //Module renders
