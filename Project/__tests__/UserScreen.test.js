@@ -22,6 +22,7 @@ describe('<UserScreen />', () => {
             useStateMock.mockImplementation(init => [init, setState]);
          });
   it('default render', () => {
+    
     renderer.create(<UserScreen />);
   });
 });
