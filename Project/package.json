@@ -10,7 +10,7 @@
   "jest": {
     "preset": "jest-expo",
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|expo-image-picker)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|expo-image-picker|@testing-library/user-event|@testing-library/dom)"
     ]
   },
   "dependencies": {
@@ -19,6 +19,7 @@
     "@react-navigation/bottom-tabs": "^6.0.9",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.4",
+    "@testing-library/dom": "^8.11.0",
     "expo": "~42.0.1",
     "expo-google-app-auth": "^8.2.4",
     "expo-image-picker": "~10.2.2",
