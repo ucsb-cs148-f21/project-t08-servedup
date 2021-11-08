@@ -1,14 +1,13 @@
 import { exportAllDeclaration } from '@babel/types';
 import { GiftedChat } from 'react-native-gifted-chat'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TestWatcher } from 'jest';
 import React from 'react';
 import renderer from 'react-test-renderer';
-import * as firebase from "firebase";
 import 'firebase/firestore';
 
 // import App from '../App';
-import CommunityScreen from '../screens/CommunityScreen';
+//import CommunityScreen from '../screens/CommunityScreen';
 // import Loading from '../screens/Loading';
 // import LoginScreen from '../screens/LoginScreen';
 // import MenuScreen from '../screens/MenuScreen';
@@ -18,89 +17,112 @@ import CommunityScreen from '../screens/CommunityScreen';
 //   await AsyncStorage.clear();
 // });
 
-'use strict'
+const functions = require('firebase-functions')
+const firebase = require('@firebase/testing')
+const admin = require('firebase-admin')
 
-const collection = jest.fn(() => {
-  return {
-    doc: jest.fn(() => {
-      return {
-        collection: collection,
-        update: jest.fn(() => Promise.resolve(true)),
-        onSnapshot: jest.fn(() => Promise.resolve(true)),
-        get: jest.fn(() => Promise.resolve(true))
-      }
-    }),
-    where: jest.fn(() => {
-      return {
-        get: jest.fn(() => Promise.resolve(true)),
-        onSnapshot: jest.fn(() => Promise.resolve(true)),
-      }
-    })
-  }
+const projectId = "served-up-63c2e"
+process.env.GCLOUD_PROJECT = projectId
+process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
+let app = admin.initializeApp({projectId})
+let db = firebase.firestore(app) 
+
+beforeAll(async ()=>{
+  await firebase.clearFirestoreData({projectId});
 });
 
-const Firestore = () => {
-  return {
-    collection
+test("Expect to find a copy in 'Copies' Collection", async ()=>{
+  const testDoc = {
+      name: 'Samer',
+      age: 21,
+      city: 'Riyadh'
   }
-}
 
-Firestore.FieldValue = {
-  serverTimestamp: jest.fn()
-}
+  const ref = db.collection('Test').doc()
+  ref.set(testDoc)
+  expect(1).toBe(1)
+});
 
-export default class RNFirebase {
 
-  static initializeApp = jest.fn();
+// const collection = jest.fn(() => {
+//   return {
+//     doc: jest.fn(() => {
+//       return {
+//         collection: collection,
+//         update: jest.fn(() => Promise.resolve(true)),
+//         onSnapshot: jest.fn(() => Promise.resolve(true)),
+//         get: jest.fn(() => Promise.resolve(true))
+//       }
+//     }),
+//     where: jest.fn(() => {
+//       return {
+//         get: jest.fn(() => Promise.resolve(true)),
+//         onSnapshot: jest.fn(() => Promise.resolve(true)),
+//       }
+//     })
+//   }
+// });
 
-  static auth = jest.fn(() => {
-    return {
-      createUserAndRetrieveDataWithEmailAndPassword: jest.fn(() => Promise.resolve(true)),
-      sendPasswordResetEmail: jest.fn(() => Promise.resolve(true)),
-      signInAndRetrieveDataWithEmailAndPassword: jest.fn(() => Promise.resolve(true)),
-      fetchSignInMethodsForEmail: jest.fn(() => Promise.resolve(true)),
-      signOut: jest.fn(() => Promise.resolve(true)),
-      onAuthStateChanged: jest.fn(),
-      currentUser: {
-        sendEmailVerification: jest.fn(() => Promise.resolve(true))
-      }
-    }
-  });
+// const Firestore = () => {
+//   return {
+//     collection
+//   }
+// }
 
-  static firestore = Firestore;
-}
+// Firestore.FieldValue = {
+//   serverTimestamp: jest.fn()
+// }
 
-jest.mock("react-native-gifted-chat", () => ({
-  GiftedChat: jest.fn(),
-}));
+// export default class RNFirebase {
 
-jest.mock("@react-native-async-storage/async-storage", () => ({
-  AsyncStorage: jest.fn(() => "mock success"),
-}));
+//   static initializeApp = jest.fn();
 
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  useState: jest.fn(),
-  useEffect: jest.fn(), 
-  useCallback: jest.fn(),
-}));
+//   static auth = jest.fn(() => {
+//     return {
+//       createUserAndRetrieveDataWithEmailAndPassword: jest.fn(() => Promise.resolve(true)),
+//       sendPasswordResetEmail: jest.fn(() => Promise.resolve(true)),
+//       signInAndRetrieveDataWithEmailAndPassword: jest.fn(() => Promise.resolve(true)),
+//       fetchSignInMethodsForEmail: jest.fn(() => Promise.resolve(true)),
+//       signOut: jest.fn(() => Promise.resolve(true)),
+//       onAuthStateChanged: jest.fn(),
+//       currentUser: {
+//         sendEmailVerification: jest.fn(() => Promise.resolve(true))
+//       }
+//     }
+//   });
 
-describe('<CommunityScreen />', () => {
-  // const setState = jest.fn();
-  // beforeEach(() => {
-  //           useStateMock.mockImplementation(init => [init, setState]);
-  //        });
-  let db;
-  let reviewRef;
-  it('default render', () => {
+//   static firestore = Firestore;
+// }
+
+// jest.mock("react-native-gifted-chat", () => ({
+//   GiftedChat: jest.fn(),
+// }));
+
+// jest.mock("@react-native-async-storage/async-storage", () => ({
+//   AsyncStorage: jest.fn(() => "mock success"),
+// }));
+
+// jest.mock('react', () => ({
+//   ...jest.requireActual('react'),
+//   useState: jest.fn(),
+//   useEffect: jest.fn(), 
+//   useCallback: jest.fn(),
+// }));
+
+// describe('<CommunityScreen />', () => {
+//   // const setState = jest.fn();
+//   // beforeEach(() => {
+//   //           useStateMock.mockImplementation(init => [init, setState]);
+//   //        });
+//   it('default render', () => {
     
-    renderer.create(<CommunityScreen />);
-  });
-});
+//     renderer.create(<CommunityScreen />);
+//   });
+// });
 
-test('mocking asyncstorage', () => {
-  expect(AsyncStorage) === 'mock success';
-});
+// test('mocking asyncstorage', () => {
+//   expect(AsyncStorage) === 'mock success';
+// });
 
 // it('checks if Async Storage is used', async () => {
 //   await asyncOperationOnAsyncStorage();

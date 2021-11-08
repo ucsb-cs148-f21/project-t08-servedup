@@ -42,7 +42,11 @@
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@emotion/babel-plugin": "^11.3.0",
+    "@firebase/testing": "^0.20.11",
     "@testing-library/react-native": "^8.0.0",
+    "@types/jest": "^27.0.2",
+    "firebase-admin": "^10.0.0",
+    "firebase-functions": "^3.16.0",
     "jest": "^27.3.1",
     "jest-expo": "^43.0.1",
     "mock-async-storage": "^2.2.0",
