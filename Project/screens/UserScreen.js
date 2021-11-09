@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import { Button, Image, View, Platform, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
 // import * as ImagePicker from 'expo-image-picker';
 import {MediaTypeOptions, requestMediaLibraryPermissionsAsync, launchImageLibraryAsync, launchCameraAsync} from 'expo-image-picker';
 // import ImagePicker from 'react-native-image-picker';
