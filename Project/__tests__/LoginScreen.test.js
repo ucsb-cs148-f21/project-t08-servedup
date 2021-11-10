@@ -1,31 +1,33 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import {
-    render
-} from '@testing-library/react';
-// import App from '../App';
-// import CommunityScreen from '../screens/CommunityScreen';
-// import Loading from '../screens/Loading';
 import LoginScreen from '../screens/LoginScreen';
-
-//import fetchMock from 'fetch-mock';
-import * as Google from "expo-google-app-auth";
+import { logInAsync, logOutAsync } from "expo-google-app-auth";
 
 jest.mock('expo-google-app-auth', () => ({
-    logInAsync: jest.fn(() => 'mock success'),
-    logOutAsync: jest.fn(() => 'mock success'),
+    
+    logInAsync: jest.fn(),
+    logOutAsync: jest.fn(),
 }));
 
 //Module renders
 describe('<LoginScreen />', () => {
     it('default render', () => {
         renderer.create(<LoginScreen />);
-        
     });
 });
-test('mocking login async', () => {
-    expect(Google.logInAsync) === 'mock success';
-});
-test('mocking logout async', () => {
-    expect(Google.logOutAsync) === 'mock success';
-});
+
+//Tests login logout
+describe('Mock functions', () => {
+    it('default render', () => {
+        renderer.create(<LoginScreen />);
+    });
+    it('can login', () => {
+        logInAsync.mockImplementation(() => 'success');
+        expect(logInAsync()).toBe('success');
+    })
+    it('can logout', () => {
+        logOutAsync.mockImplementation(() => 'fail');
+        expect(logOutAsync()).toBe('fail');
+    })
+
+})
