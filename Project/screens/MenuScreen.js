@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, SectionList } from 'react-native';
+import SwitchSelector from "react-native-switch-selector";
 
 const MenuScreen = ({ navigation}) => {
     // Current date
@@ -47,6 +48,8 @@ const MenuScreen = ({ navigation}) => {
     var names = [];
     var meal = [];
     var meals = [];
+    
+    var options = [];
     
     // Fetch the data from APIs.
     if ((0 < currentDay) && (currentDay < 6)) { // Weekdays
@@ -137,6 +140,11 @@ const MenuScreen = ({ navigation}) => {
     }
 
     if ((0 < currentDay) && (currentDay < 6)) { // Weekdays
+        options = [
+            { label: hourNames[0], value: "0" },
+            { label: hourNames[2], value: "2" },
+            { label: hourNames[3], value: "3" }
+          ];
         if (currentHour < 10) { // Breakfast: (display) 0:00am - 9:59am
             meals = [
                 { title: `${hourNames[0]}: ${hallNames[0]}`, data: meal[0], },
@@ -159,6 +167,10 @@ const MenuScreen = ({ navigation}) => {
             ];
         }
     } else { // Weekend
+        options = [
+            { label: hourNames[1], value: "1" },
+            { label: hourNames[2], value: "2" }
+          ];
         if (currentHour < 14) { // Brunch: (display) 0:00am - 1:59pm
             meals = [
                 { title: `${hourNames[1]}: ${hallNames[0]}`, data: meal[0], },
@@ -177,6 +189,15 @@ const MenuScreen = ({ navigation}) => {
 
     return (
       <SafeAreaView style={styles.container}>
+            <SwitchSelector
+              options={options}
+              initial={0}
+              //onPress={value =>)}
+              textColor={'#FEBC11'}
+              selectedColor={'#ffffff'}
+              buttonColor={'#FEBC11'}
+              borderColor={'#FEBC11'}
+            />
             <View style={styles.container}>
             { meals[0].data != null ? // Check if the data is NOT undefined
                 // True: display the SectionList
