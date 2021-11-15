@@ -47,6 +47,7 @@ const reviewRef = db.collection('Reviews');
 //   iconName = focused ? 'git-commit' : 'git-commit-outline';
 // }
 // <Stack.Screen name="Submit" component={FormScreen}/>
+
 const App = () => {
   return (
     <NavigationContainer>

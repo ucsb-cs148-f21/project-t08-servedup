@@ -5,8 +5,9 @@ import { TestWatcher } from 'jest';
 import React from 'react';
 import renderer from 'react-test-renderer';
 import 'firebase/firestore';
-import firebase from "firebase/app";
-import "firebase/functions";
+
+import { getApp } from "firebase/app";
+import { useEmulator } from "firebase/functions";
 
 // import App from '../App';
 //import CommunityScreen from '../screens/CommunityScreen';
@@ -19,8 +20,7 @@ import "firebase/functions";
 //   await AsyncStorage.clear();
 // });
 
-const functions = require('firebase-functions')
-const firebaset = require('@firebase/testing')
+const firebase = require('@firebase/testing')
 const admin = require('firebase-admin')
 
 firebase.functions().useEmulator("localhost", 8080);
@@ -29,10 +29,10 @@ const projectId = "served-up-63c2e"
 process.env.GCLOUD_PROJECT = projectId
 process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
 let app = admin.initializeApp({projectId})
-let db = firebaset.firestore(app) 
+let db = firebase.firestore(app) 
 
 beforeAll(async ()=>{
-  await firebaset.clearFirestoreData({projectId});
+  await firebase.clearFirestoreData({projectId});
 });
 
 test("Expect to find a copy in 'Copies' Collection", async ()=>{

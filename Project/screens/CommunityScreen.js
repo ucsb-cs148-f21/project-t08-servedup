@@ -27,7 +27,10 @@ const firebaseConfig = {
   }
   
   const db = firebase.firestore();
-  const reviewRef = db.collection('Reviews');
+  const carrillo = db.collection('Carrillo');
+  const dlg = db.collection('De La Guerra')
+  const ortega = db.collection('Ortega')
+  const portola = db.collection('Portola')
 
 const Separator = () => (
   <View style={styles.separator} />
@@ -76,7 +79,7 @@ const Carrillo = ({ navigation}) => {
   
     useEffect(() => {
       readUser()
-      const unsubscribe = reviewRef.onSnapshot((querySnapshot) => {
+      const unsubscribe = carrillo.onSnapshot((querySnapshot) => {
       const messagesFirestore = querySnapshot
             .docChanges()
             .filter(({type}) => type === 'added')
@@ -84,7 +87,7 @@ const Carrillo = ({ navigation}) => {
               const message = doc.data()
               //createdAt is firebase.firestore.Timestamp instance
               //https://firebase.google.com/docs/reference/js/firebase.firestore.Timestamp
-              return { ...message, createdAt: message.createdAt.toDate() }
+              return { ...message, createdAt: message.createdAt.toDate()}
             })
             .sort((a, b) => b.createdAt - a.createdAt)
         appendMessages(messagesFirestore)
@@ -101,7 +104,7 @@ const Carrillo = ({ navigation}) => {
       if (user) {
         setUser(JSON.parse(user));
       }
-    } // get user name
+    }; // get user name
   
     async function handlePress() {
       const _id = Math.random().toString(36).substring(7);
@@ -113,7 +116,7 @@ const Carrillo = ({ navigation}) => {
     } 
   
     async function handleSend(messages) {
-      const writes = messages.map(m => reviewRef.add(m) )
+      const writes = messages.map(m => carrillo.add(m) )
       await Promise.all(writes)
     }
   
@@ -142,7 +145,7 @@ const DeLaGuerra = ({ navigation}) => {
   
     useEffect(() => {
       readUser()
-      const unsubscribe = reviewRef.onSnapshot((querySnapshot) => {
+      const unsubscribe = dlg.onSnapshot((querySnapshot) => {
       const messagesFirestore = querySnapshot
             .docChanges()
             .filter(({type }) => type === 'added')
@@ -150,7 +153,7 @@ const DeLaGuerra = ({ navigation}) => {
               const message = doc.data()
               //createdAt is firebase.firestore.Timestamp instance
               //https://firebase.google.com/docs/reference/js/firebase.firestore.Timestamp
-              return { ...message, createdAt: message.createdAt.toDate() }
+              return { ...message, createdAt: message.createdAt.toDate()}
             })
             .sort((a, b) => b.createdAt - a.createdAt)
         appendMessages(messagesFirestore)
@@ -167,7 +170,7 @@ const DeLaGuerra = ({ navigation}) => {
       if (user) {
         setUser(JSON.parse(user));
       }
-    } // get user name
+    }; // get user name
   
     async function handlePress() {
       const _id = Math.random().toString(36).substring(7);
@@ -179,7 +182,7 @@ const DeLaGuerra = ({ navigation}) => {
     } 
   
     async function handleSend(messages) {
-      const writes = messages.map(m => reviewRef.add(m) )
+      const writes = messages.map(m => dlg.add(m) )
       await Promise.all(writes)
     }
   
@@ -208,7 +211,7 @@ const Ortega = ({ navigation}) => {
   
     useEffect(() => {
       readUser()
-      const unsubscribe = reviewRef.onSnapshot((querySnapshot) => {
+      const unsubscribe = ortega.onSnapshot((querySnapshot) => {
       const messagesFirestore = querySnapshot
             .docChanges()
             .filter(({type }) => type === 'added')
@@ -245,7 +248,7 @@ const Ortega = ({ navigation}) => {
     } 
   
     async function handleSend(messages) {
-      const writes = messages.map(m => reviewRef.add(m) )
+      const writes = messages.map(m => ortega.add(m) )
       await Promise.all(writes)
     }
   
@@ -273,7 +276,7 @@ const Portola = ({ navigation}) => {
   
     useEffect(() => {
       readUser()
-      const unsubscribe = reviewRef.onSnapshot((querySnapshot) => {
+      const unsubscribe = portola.onSnapshot((querySnapshot) => {
       const messagesFirestore = querySnapshot
             .docChanges()
             .filter(({type }) => type === 'added')
@@ -310,7 +313,7 @@ const Portola = ({ navigation}) => {
     } 
   
     async function handleSend(messages) {
-      const writes = messages.map(m => reviewRef.add(m) )
+      const writes = messages.map(m => portola.add(m) )
       await Promise.all(writes)
     }
   
