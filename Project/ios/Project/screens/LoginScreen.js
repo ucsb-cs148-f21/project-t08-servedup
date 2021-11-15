@@ -3,6 +3,10 @@ import { StyleSheet, View, Button } from "react-native";
 import * as Google from "expo-google-app-auth";
 import * as firebase from 'firebase';
 
+import { connect } from 'react-redux';
+
+import { signIn, signOut } from './src/Actions/signInStates';
+
 export default function LoginScreen ({ navigation }) {
     const [isAbleLogIn, setAbleLogIn] = React.useState(false);
 
@@ -76,3 +80,15 @@ const styles = StyleSheet.create({
     }
 }
 );
+
+const mapStateToProps = (state) => {
+    return {
+        logInVariable: state.logInReducer.
+    }
+}
+
+const mapDispatchToProps = (state) => {
+    return {
+
+    }
+}

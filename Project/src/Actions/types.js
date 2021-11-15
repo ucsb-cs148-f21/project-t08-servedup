@@ -1,0 +1,2 @@
+export const ENABLED_SIGNIN = 'ENABLED_SIGNIN';
+export const DISABLED_SIGNIN = 'DISABLED_SIGNIN';
