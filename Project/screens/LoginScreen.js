@@ -7,7 +7,13 @@ import { connect } from 'react-redux';
 
 import { signIn, signOut } from './src/Actions/signInStates';
 
-export default function LoginScreen ({ navigation }) {
+//export function LoginScreen({ navigation }) {
+export var loginFunc = function ({ navigation }) {
+    state = {
+        name: null,
+        isSignedIn: false
+    }
+
     const [isAbleLogIn, setAbleLogIn] = React.useState(false);
 
     const [isAbleLogOut, setAbleLogOut] = React.useState(true);
@@ -35,6 +41,8 @@ export default function LoginScreen ({ navigation }) {
                 setAbleLogOut(false);
                 accessTokenUser = accessToken;
                 console.log(accessTokenUser);
+
+
             }
         }
         catch (error) {
@@ -84,11 +92,20 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return {
         logInVariable: state.logInReducer.
-    }
+    };
 }
 
-const mapDispatchToProps = (state) => {
+const mapDispatchToPropsSignIn = (dispatch) => {
     return {
-
-    }
+        signInP: (name, isSignedIn) => dispatch(signIn(name, isSignedIn))
+    };
 }
+
+const mapDispatchToPropsSignOut = (dispatch) => {
+    return {
+        signOutP: (name, isSignedIn) => dispatch(signOut(name, isSignedIn))
+    };
+}
+
+export const ConnectSignIn = () => connect(mapStateToProps, mapDispatchToPropsSignIn)(LoginScreen);
+export const ConnectSignOut = () => connect(mapStateToProps, mapDispatchToPropsSignOut)(LoginScreen);

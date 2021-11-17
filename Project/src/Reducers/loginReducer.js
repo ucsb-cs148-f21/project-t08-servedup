@@ -17,6 +17,8 @@ const loginReducer = ( state = initialState, action ) => {
 				name: "Not Signed In",
 				isSignedIn: false
 			};
+		default:
+			return state;
 	}
 }
 			
