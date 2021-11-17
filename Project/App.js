@@ -13,6 +13,7 @@ import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import LoginScreen from "./screens/LoginScreen";
 
+import { Provider } from 'react-redux';
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
@@ -47,7 +48,7 @@ const reviewRef = db.collection('Reviews');
 // }
 // <Stack.Screen name="Submit" component={FormScreen}/>
 const App = () => {
-  return (
+    return (
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Login"
