@@ -4,9 +4,7 @@ import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from "react-n
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { GiftedChat } from 'react-native-gifted-chat'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEffect, useCallback} from 'react';
+
 import * as firebase from "firebase";
 import 'firebase/firestore';
 import * as Google from 'expo-google-app-auth';
@@ -74,8 +72,6 @@ const Carrillo = ({ navigation}) => {
     const [user, setUser] = useState(null)
     const [name, setName] = useState('')
     const [messages, setMessages] = useState([])
-    
-    // currentroom = "Carrillo"
   
     useEffect(() => {
       readUser()
