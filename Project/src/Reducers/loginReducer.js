@@ -1,11 +1,9 @@
-import { ENABLED_SIGNIN, DISABLED_SIGNIN } from '.../Actions/types'
-
 const initialState = {
 	name: "exampleUser",
 	isSignedIn: false,
 }
 
-const loginReducer = ( state = initialState, action ) => {
+/*const loginReducer = ( state = initialState, action ) => {
 	switch (action.type) {
 		case ENABLED_SIGNIN:
 			return {...state,
@@ -20,6 +18,14 @@ const loginReducer = ( state = initialState, action ) => {
 		default:
 			return state;
 	}
+}*/
+
+const loginReducer = (state = initialState, action) => {
+	return {
+		...state,
+		name: action.dataName,
+		isSignedIn: action.dataIsSignIn
+	};
 }
 			
 		

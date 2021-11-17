@@ -5,10 +5,10 @@ import * as firebase from 'firebase';
 
 import { connect } from 'react-redux';
 
-import { signIn, signOut } from './src/Actions/signInStates';
+import changeSignInOut from '../src/Actions/signInStates';
 
-//export function LoginScreen({ navigation }) {
-export var loginFunc = function ({ navigation }) {
+//default function LoginScreen({ navigation }) {
+export function LoginScreen ({ navigation }) {
     state = {
         name: null,
         isSignedIn: false
@@ -91,11 +91,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        logInVariable: state.logInReducer.
+        name: state.logInReducer.name,
+        isSignedIn: state.logInReducer.isSignedIn
     };
 }
 
-const mapDispatchToPropsSignIn = (dispatch) => {
+/*const mapDispatchToPropsSignIn = (dispatch) => {
     return {
         signInP: (name, isSignedIn) => dispatch(signIn(name, isSignedIn))
     };
@@ -105,7 +106,15 @@ const mapDispatchToPropsSignOut = (dispatch) => {
     return {
         signOutP: (name, isSignedIn) => dispatch(signOut(name, isSignedIn))
     };
+}*/
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeSignInOut: (name, isSignedIn) => dispatch(changeSignInOut(name, isSignedIn))
+    };
 }
 
-export const ConnectSignIn = () => connect(mapStateToProps, mapDispatchToPropsSignIn)(LoginScreen);
-export const ConnectSignOut = () => connect(mapStateToProps, mapDispatchToPropsSignOut)(LoginScreen);
+//export const ConnectSignIn = () => connect(mapStateToProps, mapDispatchToPropsSignIn)(LoginScreen);
+//export const ConnectSignOut = () => connect(mapStateToProps, mapDispatchToPropsSignOut)(LoginScreen);
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
