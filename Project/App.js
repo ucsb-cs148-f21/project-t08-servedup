@@ -11,9 +11,10 @@ import { Ionicons } from '@expo/vector-icons';
 import MenuScreen from './screens/MenuScreen';
 import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
-import LoginScreen from "./screens/LoginScreen";
+import { LoginScreen } from './screens/LoginScreen';
 
 import { Provider } from 'react-redux';
+import { Store } from './src/store';
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
@@ -50,9 +51,9 @@ const reviewRef = db.collection('Reviews');
 // }
 // <Stack.Screen name="Submit" component={FormScreen}/>
 const App = () => {
-    const store = configureStore();
+
     return (
-    <Provider store={store}>
+    <Provider store={Store}>
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Login"

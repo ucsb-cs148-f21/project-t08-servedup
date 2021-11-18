@@ -2,13 +2,19 @@ import React from "react";
 import { StyleSheet, View, Button } from "react-native";
 import * as Google from "expo-google-app-auth";
 import * as firebase from 'firebase';
-
-import { connect } from 'react-redux';
+import loginReducer from '../src/Reducers/loginReducer';
+import { connect, useSelector, useDispatch } from 'react-redux';
+import {setSignInState, setName} from '../src/Actions/types'
 
 import changeSignInOut from '../src/Actions/signInStates';
 
+import Store from '../src/store';
+
 //default function LoginScreen({ navigation }) {
-export function LoginScreen ({ navigation }) {
+export function LoginScreen({ navigation }) {
+
+    const { name, isSignedIn } = useSelector(state => state.loginReducer);
+    const dispatch = useDispatch();
 
     const [isAbleLogIn, setAbleLogIn] = React.useState(false);
 
@@ -27,7 +33,7 @@ export function LoginScreen ({ navigation }) {
     const signInAsync = async () => {
         console.log("LoginScreen.js 6 | loggin in");
         try {
-            const { type, accessToken } = await Google.logInAsync(config);
+            const { type, accessToken, user} = await Google.logInAsync(config);
 
             if (type === "success") {
                 // Then you can use the Google REST API
@@ -37,8 +43,12 @@ export function LoginScreen ({ navigation }) {
                 setAbleLogOut(false);
                 accessTokenUser = accessToken;
                 console.log(accessTokenUser);
-
-                this.props.changeSignInOut(this.state.name, this.state.isSignedIn);
+                var userName = user.name;
+                var signInState = true;
+                dispatch(setName(userName));
+                dispatch(setSignInState(signInState));
+                //console.log(name);
+                //console.log(Store);
             }
         }
         catch (error) {
@@ -61,7 +71,6 @@ export function LoginScreen ({ navigation }) {
             <Button disabled={isAbleLogOut} title="Logout with Google" onPress={signOutAsync} />
             
         </View>
-        //<Button logOutButton={logOutDisable} title="Logout" onPress={signOutAsync} />
         
     );
 };
@@ -79,19 +88,4 @@ const styles = StyleSheet.create({
 }
 );
 
-const mapStateToProps = (state) => {
-    console.log(state);
-    const name1 = state.loginReducer.name
-    const isSignedIn1 = state.loginReducer.isSignedIn
-    return {
-        name1, isSignedIn1
-    };
-}
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        changeSignInOut: (name, isSignedIn) => dispatch(changeSignInOut(name, isSignedIn))
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
