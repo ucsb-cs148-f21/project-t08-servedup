@@ -21,6 +21,8 @@ import * as firebase from "firebase";
 import 'firebase/firestore';
 
 
+import configureStore from './src/store.js';
+
 // const firebaseConfig = {
 //   apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
 //   authDomain: 'served-up-63c2e.firebaseapp.com',
@@ -48,7 +50,9 @@ const reviewRef = db.collection('Reviews');
 // }
 // <Stack.Screen name="Submit" component={FormScreen}/>
 const App = () => {
+    const store = configureStore();
     return (
+    <Provider store={store}>
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Login"
@@ -83,7 +87,8 @@ const App = () => {
         <Stack.Screen name="Reviews" component={CommunityScreen}/>
         <Stack.Screen name="User" component={UserScreen}/>
       </Stack.Navigator>
-    </NavigationContainer>
+            </NavigationContainer>
+        </Provider>
   );
 };
 

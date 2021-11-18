@@ -9,10 +9,6 @@ import changeSignInOut from '../src/Actions/signInStates';
 
 //default function LoginScreen({ navigation }) {
 export function LoginScreen ({ navigation }) {
-    state = {
-        name: null,
-        isSignedIn: false
-    }
 
     const [isAbleLogIn, setAbleLogIn] = React.useState(false);
 
@@ -42,7 +38,7 @@ export function LoginScreen ({ navigation }) {
                 accessTokenUser = accessToken;
                 console.log(accessTokenUser);
 
-
+                this.props.changeSignInOut(this.state.name, this.state.isSignedIn);
             }
         }
         catch (error) {
@@ -53,12 +49,6 @@ export function LoginScreen ({ navigation }) {
 
     const signOutAsync = async () => {
         console.log("LoginScreen.js | logging out");
-
-            /*await Google.logOutAsync({
-                accessTokenUser,
-                config
-            });*/
-
             setAbleLogOut(true);
             setAbleLogIn(false);
 
@@ -90,31 +80,18 @@ const styles = StyleSheet.create({
 );
 
 const mapStateToProps = (state) => {
+    console.log(state);
+    const name1 = state.loginReducer.name
+    const isSignedIn1 = state.loginReducer.isSignedIn
     return {
-        name: state.logInReducer.name,
-        isSignedIn: state.logInReducer.isSignedIn
+        name1, isSignedIn1
     };
 }
-
-/*const mapDispatchToPropsSignIn = (dispatch) => {
-    return {
-        signInP: (name, isSignedIn) => dispatch(signIn(name, isSignedIn))
-    };
-}
-
-const mapDispatchToPropsSignOut = (dispatch) => {
-    return {
-        signOutP: (name, isSignedIn) => dispatch(signOut(name, isSignedIn))
-    };
-}*/
 
 const mapDispatchToProps = (dispatch) => {
     return {
         changeSignInOut: (name, isSignedIn) => dispatch(changeSignInOut(name, isSignedIn))
     };
 }
-
-//export const ConnectSignIn = () => connect(mapStateToProps, mapDispatchToPropsSignIn)(LoginScreen);
-//export const ConnectSignOut = () => connect(mapStateToProps, mapDispatchToPropsSignOut)(LoginScreen);
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
