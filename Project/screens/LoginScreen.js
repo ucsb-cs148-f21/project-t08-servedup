@@ -2,8 +2,20 @@ import React from "react";
 import { StyleSheet, View, Button } from "react-native";
 import * as Google from "expo-google-app-auth";
 import * as firebase from 'firebase';
+import loginReducer from '../src/Reducers/loginReducer';
+import { connect, useSelector, useDispatch } from 'react-redux';
+import {setSignInState, setName} from '../src/Actions/types'
 
-export default function LoginScreen ({ navigation }) {
+import changeSignInOut from '../src/Actions/signInStates';
+
+import Store from '../src/store';
+
+//default function LoginScreen({ navigation }) {
+export function LoginScreen({ navigation }) {
+
+    const { name, isSignedIn } = useSelector(state => state.loginReducer);
+    const dispatch = useDispatch();
+
     const [isAbleLogIn, setAbleLogIn] = React.useState(false);
 
     const [isAbleLogOut, setAbleLogOut] = React.useState(true);
@@ -21,7 +33,7 @@ export default function LoginScreen ({ navigation }) {
     const signInAsync = async () => {
         console.log("LoginScreen.js 6 | loggin in");
         try {
-            const { type, accessToken } = await Google.logInAsync(config);
+            const { type, accessToken, user} = await Google.logInAsync(config);
 
             if (type === "success") {
                 // Then you can use the Google REST API
@@ -31,6 +43,12 @@ export default function LoginScreen ({ navigation }) {
                 setAbleLogOut(false);
                 accessTokenUser = accessToken;
                 console.log(accessTokenUser);
+                var userName = user.name;
+                var signInState = true;
+                dispatch(setName(userName));
+                dispatch(setSignInState(signInState));
+                //console.log(name);
+                //console.log(Store);
             }
         }
         catch (error) {
@@ -41,12 +59,6 @@ export default function LoginScreen ({ navigation }) {
 
     const signOutAsync = async () => {
         console.log("LoginScreen.js | logging out");
-
-            /*await Google.logOutAsync({
-                accessTokenUser,
-                config
-            });*/
-
             setAbleLogOut(true);
             setAbleLogIn(false);
 
@@ -59,7 +71,6 @@ export default function LoginScreen ({ navigation }) {
             <Button disabled={isAbleLogOut} title="Logout with Google" onPress={signOutAsync} />
             
         </View>
-        //<Button logOutButton={logOutDisable} title="Logout" onPress={signOutAsync} />
         
     );
 };
@@ -76,3 +87,5 @@ const styles = StyleSheet.create({
     }
 }
 );
+
+

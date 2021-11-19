@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, SafeAreaView, SectionList } from 'react-native';
+import SwitchSelector from "react-native-switch-selector";
 
 const MenuScreen = ({ navigation}) => {
     // Current date
@@ -24,182 +24,163 @@ const MenuScreen = ({ navigation}) => {
     
     // State variables to store data fetched from API.
     // Each element is a JSON object with keys 'name' and 'station.'
-    /* Breakfast: 7:15am - 10:00am on Weekdays
+    /* Breakfast
        [0]: Carrillo - Breakfast, [1]: De La Guerra - Breakfast,
        [2]: Portola - Breakfast */
-    /* Lunch: 11:00am - 3:00pm on Weekdays
+    /* Lunch
        [0]: Carrillo - Lunch, [1]: De La Guerra - Lunch,
        [2]: Ortega - Lunch, [3]: Portola - Lunch */
-    /* Dinner 1 : 5:00pm - 8:30pm on Weekdays
+    /* Dinner1 on Weekdays
        [0]: Carrillo - Dinner, [1]: De La Guerra - Dinner,
        [2]: Ortega - Dinner, [3]: Portola - Dinner */
-    /* Brunch: 10:00am - 2:00pm on Weekend
+    /* Brunch
        [0]: Carrillo - Brunch, [1]: De La Guerra - Brunch,
        [2]: Portola - Brunch */
-    /* Dinner 2: 5:00pm - 8:30pm
+    /* Dinner2 on Weekend
        [0]: Carrillo - Dinner, [1]: De La Guerra - Dinner,
        [2]: Portola - Dinner */
-    const [ result, setResult ] = useState([]);
-
-    // Variables to use for processing the data.
-    var inputs = [];
-    var pair = [];
-    var names = [];
-    var meal = [];
-    var meals = [];
+    const [ result1, setResult1 ] = useState([]);
+    const [ result2, setResult2 ] = useState([]);
+    const [ result3, setResult3 ] = useState([]);
+    const [ hourChoice, setHourChoice ] = useState(0);
     
-    // Fetch the data from APIs.
-    if ((0 < currentDay) && (currentDay < 6)) { // Weekdays
-      if (currentHour < 10) { // Breakfast: (display) 0:00am - 9:59am
-          inputs = [
-              // Carrillo - Breakfast
-              fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[0],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // De La Guerra - Breakfast
-              fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[0],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // Portola - Breakfast
-              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[0],
-                    { headers: { "ucsb-api-key": apiKey }}),
-          ];
-      } else if ((10 <= currentHour) && (currentHour < 15)) { // Lunch: (display) 10:00am - 2:59pm
-          inputs = [
-              // Carrillo - Lunch
-              fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[2],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // De La Guerra - Lunch
-              fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[2],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // Ortega - Lunch
-              fetch( baseUrl + today + '/' + hallCodes[2] + '/' + hourCodes[2],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // Portola - Lunch
-              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[2],
-                    { headers: { "ucsb-api-key": apiKey }}),
-          ];
-      } else if (15 <= currentHour) { // Dinner1: (display) 3:00pm - 23:59pm
-          inputs = [
-              // Carrillo - Dinner
-              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[2],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // De La Guerra - Dinner
-              fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[3],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // Ortega - Dinner
-              fetch( baseUrl + today + '/' + hallCodes[2] + '/' + hourCodes[3],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // Portola - Dinner
-              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[3],
-                    { headers: { "ucsb-api-key": apiKey }}),
-          ];
-      }
-    } else { // Weekend
-      if (currentHour < 14) { // Brunch: (display) 0:00am - 1:59pm
-          inputs = [
-              // Carrillo - Brunch
-              fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[1],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // De La Guerra - Brunch
-              fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[1],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // Portola - Brunch
-              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[1],
-                    { headers: { "ucsb-api-key": apiKey }}),
-          ];
-      } else { // Dinner: (display) 2:00pm - 23:59pm
-          inputs = [
-              // Carrillo - Dinner
-              fetch( baseUrl + today + '/' + hallCodes[0] + '/' + hourCodes[3],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // De La Guerra - Dinner
-              fetch( baseUrl + today + '/' + hallCodes[1] + '/' + hourCodes[3],
-                    { headers: { "ucsb-api-key": apiKey }}),
-              // Portola - Dinner
-              fetch( baseUrl + today + '/' + hallCodes[3] + '/' + hourCodes[3],
-                    { headers: { "ucsb-api-key": apiKey }}),
-          ];
-      }
+    // Craete and return the fetch with specified hall and hour.
+    const fetchSelected = (hallIndex, hourIndex) => {
+        return fetch( baseUrl + today + '/' + hallCodes[hallIndex] + '/' + hourCodes[hourIndex],
+                     { headers: { "ucsb-api-key": apiKey }})
     }
-                     
-    Promise.all(inputs)
-      .then(responses => { return Promise.all(responses.map(r => r.json())); })
-      .then(jsons => { setResult(jsons); })
-      .catch(error => { console.log(error); });
-        
-    // Process the date to make it usable in Section List.
-    for (var i = 0; i < result.length; i++) {
-        for (var j = 0; j < result[i].length; j++) {
-            pair = Object.values(result[i][j]);
-            names.push(pair[0]);
+    // Store the response from fetch in the specified state variable.
+    const storeData = (inputs, setState) => {
+        Promise.all(inputs)
+            .then(responses => { return Promise.all(responses.map(r => r.json())); })
+            .then(jsons => { setState(jsons); })
+            .catch(error => { console.log(error); })
+    }
+    // Process the data to make it usable in Section List.
+    const processData = (state) => {
+        var pair = [];
+        var names = [];
+        var result = [];
+        for (var i = 0; i < state.length; i++) {
+            for (var j = 0; j < state[i].length; j++) {
+                pair = Object.values(state[i][j]);
+                names.push(pair[0]);
+            }
+            result.push(names);
+            names = [];
         }
-        meal.push(names);
-        names = [];
+        return result;
     }
+    
+    useEffect (() => {
+        // Fetch the data from APIs.
+        if ((0 < currentDay) && (currentDay < 6)) { // Weekdays
+            // Breakfast: Carrillo, De La Guerra, Portola
+            var inputs1 = [ fetchSelected(0,0), fetchSelected(1,0), fetchSelected(3,0) ];
+            storeData(inputs1, setResult1);
+            
+            // Lunch: Carrillo, De La Guerra, Ortega, Portola
+            var inputs2 = [ fetchSelected(0,2), fetchSelected(1,2), fetchSelected(2,2), fetchSelected(3,2) ];
+            storeData(inputs2, setResult2);
+            
+            // Dinner1: Carrillo, De La Guerra, Ortega, Portola
+            var inputs3 = [ fetchSelected(0,3), fetchSelected(1,3), fetchSelected(2,3), fetchSelected(3,3) ];
+            storeData(inputs3, setResult3);
+            
+        } else { // Weekend
+            // Brunch: Carrillo, De La Guerra, Portola
+            var inputs1 = [ fetchSelected(0,1), fetchSelected(1,1), fetchSelected(3,1) ];
+            storeData(inputs1, setResult1);
+            
+            // Dinner2: Carrillo, De La Guerra, Portola
+            var inputs2 = [ fetchSelected(0,3), fetchSelected(1,3), fetchSelected(3,3) ];
+            storeData(inputs2, setResult2);
+        }
+    }, [])
+    
+    var meal1 = processData(result1);
+    var meal2 = processData(result2);
+    var meal3 = processData(result3);
 
     if ((0 < currentDay) && (currentDay < 6)) { // Weekdays
-        if (currentHour < 10) { // Breakfast: (display) 0:00am - 9:59am
-            meals = [
-                { title: `${hourNames[0]}: ${hallNames[0]}`, data: meal[0], },
-                { title: `${hourNames[0]}: ${hallNames[1]}`, data: meal[1], },
-                { title: `${hourNames[0]}: ${hallNames[3]}`, data: meal[2], },
-            ];
-        } else if ((10 <= currentHour) && (currentHour < 15)) { // Lunch: (display) 10:00am - 2:59pm
-            meals = [
-                { title: `${hourNames[2]}: ${hallNames[0]}`, data: meal[0], },
-                { title: `${hourNames[2]}: ${hallNames[1]}`, data: meal[1], },
-                { title: `${hourNames[2]}: ${hallNames[2]}`, data: meal[2], },
-                { title: `${hourNames[2]}: ${hallNames[3]}`, data: meal[3], },
-            ];
-        } else if (15 <= currentHour) { // Dinner1: (display) 3:00pm - 23:59pm
-            meals = [
-                { title: `${hourNames[3]}: ${hallNames[0]}`, data: meal[0], },
-                { title: `${hourNames[3]}: ${hallNames[1]}`, data: meal[1], },
-                { title: `${hourNames[3]}: ${hallNames[2]}`, data: meal[2], },
-                { title: `${hourNames[3]}: ${hallNames[3]}`, data: meal[3], },
-            ];
-        }
+        var options = [
+            { label: hourNames[0], value: "0" },
+            { label: hourNames[2], value: "1" },
+            { label: hourNames[3], value: "2" }
+          ];
+        var meals1 = [
+            { title: hallNames[0], data: meal1[0], },
+            { title: hallNames[1], data: meal1[1], },
+            { title: hallNames[3], data: meal1[2], },
+        ];
+        var  meals2 = [
+            { title: hallNames[0], data: meal2[0], },
+            { title: hallNames[1], data: meal2[1], },
+            { title: hallNames[2], data: meal2[2], },
+            { title: hallNames[3], data: meal2[3], },
+        ];
+        var meals3 = [
+            { title: hallNames[0], data: meal3[0], },
+            { title: hallNames[1], data: meal3[1], },
+            { title: hallNames[2], data: meal3[2], },
+            { title: hallNames[3], data: meal3[3], },
+        ];
+        var mealsList = [meals1, meals2, meals3];
+        
     } else { // Weekend
-        if (currentHour < 14) { // Brunch: (display) 0:00am - 1:59pm
-            meals = [
-                { title: `${hourNames[1]}: ${hallNames[0]}`, data: meal[0], },
-                { title: `${hourNames[1]}: ${hallNames[1]}`, data: meal[1], },
-                { title: `${hourNames[1]}: ${hallNames[3]}`, data: meal[2], },
+        options = [
+            { label: hourNames[1], value: "0" },
+            { label: hourNames[2], value: "1" }
+          ];
+        var meals1 = [
+                { title: hallNames[0], data: meal1[0], },
+                { title: hallNames[1], data: meal1[1], },
+                { title: hallNames[3], data: meal1[2], },
             ];
             
-        } else { // Dinner: (display) 2:00pm - 23:59pm
-            meals = [
-                { title: `${hourNames[3]}: ${hallNames[0]}`, data: meal[0], },
-                { title: `${hourNames[3]}: ${hallNames[1]}`, data: meal[1], },
-                { title: `${hourNames[3]}: ${hallNames[3]}`, data: meal[2], },
+        var meals2 = [
+                { title: hallNames[0], data: meal2[0], },
+                { title: hallNames[1], data: meal2[1], },
+                { title: hallNames[3], data: meal2[2], },
             ];
-        }
+        var mealsList = [meals1, meals2];
     }
-
+    
+    const createSectionList = (meals) => {
+        return <SectionList
+                keyExtractor={(item, index) => index.toString()}
+                sections={meals}
+                renderSectionHeader={({section}) => (
+                    <Text style={styles.sectionHeaderStyle}>{section.title}</Text>)}
+                renderItem={({item}) => (
+                    <Text style={styles.sectionListItemStyle}>{item}</Text>)}
+                />
+    }
+    
     return (
       <SafeAreaView style={styles.container}>
+            <Text style={styles.loadingTextStyle}></Text>
+            <Text style={styles.loadingTextStyle}></Text>
+            <Text style={styles.loadingTextStyle}></Text>
+            <SwitchSelector
+              options={options}
+              initial={0}
+              onPress={value => setHourChoice(Number(value))}
+              textColor={'#febc11'}
+              selectedColor={'#ffffff'}
+              buttonColor={'#febc11'}
+              borderColor={'#febc11'}
+            />
             <View style={styles.container}>
-            { meals[0].data != null ? // Check if the data is NOT undefined
+            { meals1[0].data != null ? // Check if the data is NOT undefined
                 // True: display the SectionList
-                <SectionList
-                  refreshing={(meals.length >= 3)}
-                  keyExtractor={(item, index) => index.toString()}
-                  sections={meals}
-                  renderSectionHeader={({section}) => (
-                      <Text style={styles.sectionHeaderStyle}>
-                          {section.title}
-                      </Text>)}
-                  renderItem={({item}) => (
-                      <Text style={styles.sectionListItemStyle}>
-                          {item}
-                      </Text>)}
-                />
+                createSectionList(mealsList[hourChoice])
                 : // False: display a loading screen
                 <Text style={styles.loadingTextStyle}>Loading...</Text>
-              }
-             </View>
+            }
+            </View>
       </SafeAreaView>
       );
-     
   }
 
 const styles = StyleSheet.create({

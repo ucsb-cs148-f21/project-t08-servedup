@@ -22,13 +22,17 @@
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.1013730947248-k1drlh72srgq8mgbejeelbj2kq1jknhg"
         }
-      }
+      },
+      "bundleIdentifier": "com.servedup.cs148team8",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.servedup.cs148team8",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"

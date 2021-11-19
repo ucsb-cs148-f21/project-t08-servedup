@@ -4,10 +4,17 @@ import React, { useState, useEffect } from 'react';
 import {MediaTypeOptions, requestMediaLibraryPermissionsAsync, launchImageLibraryAsync, launchCameraAsync} from 'expo-image-picker';
 // import ImagePicker from 'react-native-image-picker';
 
-export default function userProfilePicture() {
-  const [image, setImage] = useState();
+import Store from '../src/store';
+import { useSelector, useDispatch} from 'react-redux'
 
+import getName from '../src/Actions/signInStates';
 
+const UserScreen = ({ navigation }) => {
+    //console.log(getName() + "hellO!!!");
+    const dispatch = useDispatch();
+    const disName = useSelector(state => state.loginReducer.name);
+    console.log(disName + "hello!!!");
+    const [image, setImage] = useState();
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -51,6 +58,9 @@ export default function userProfilePicture() {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
+          <Text>Welcome {disName}</Text>
+        </View>
         <View >
             <Button title="Pick an image from camera roll" onPress={pickImage} />
         </View>
@@ -63,4 +73,4 @@ export default function userProfilePicture() {
         
     </View>
   );
-}
+  }
