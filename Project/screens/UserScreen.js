@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
-
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Button, Image, View, Platform, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+// import * as ImagePicker from 'expo-image-picker';
+import {MediaTypeOptions, requestMediaLibraryPermissionsAsync, launchImageLibraryAsync, launchCameraAsync} from 'expo-image-picker';
+// import ImagePicker from 'react-native-image-picker';
 
 import Store from '../src/store';
 import { useSelector, useDispatch} from 'react-redux'
@@ -14,7 +14,63 @@ const UserScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const disName = useSelector(state => state.loginReducer.name);
     console.log(disName + "hello!!!");
-    return <Text>Placeholder for future implementation.</Text>
-  }
+    const [image, setImage] = useState();
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
 
-export default UserScreen
+  const pickImage = async () => {
+    let result = await launchImageLibraryAsync({
+      mediaTypes: MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+
+  const takeImage = async () => {
+    let result = await launchCameraAsync({
+      mediaTypes: MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result.uri);
+    }
+  };
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View>
+          <Text>Welcome {disName}</Text>
+        </View>
+        <View >
+            <Button title="Pick an image from camera roll" onPress={pickImage} />
+        </View>
+        <View>
+            <Button title="Take a new picture" onPress={takeImage} />
+        </View>
+        <View>
+            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+        </View>
+        
+    </View>
+  );
+  }
