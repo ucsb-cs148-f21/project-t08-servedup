@@ -8,3 +8,6 @@
 1. Download the .apk file from google drive link.
 2. Install the app in an Android environment.
 3. Start the program.
+
+##### Please note that the google login function is not working in the online android emulator.
+##### If you want to try out that function, please use an physical Android device for testing.
