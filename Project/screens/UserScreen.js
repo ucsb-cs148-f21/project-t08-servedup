@@ -9,11 +9,11 @@ import { useSelector, useDispatch} from 'react-redux'
 
 import getName from '../src/Actions/signInStates';
 
-const UserScreen = ({ navigation }) => {
+export default UserScreen = ({ navigation }) => {
     //console.log(getName() + "hellO!!!");
     const dispatch = useDispatch();
     const disName = useSelector(state => state.loginReducer.name);
-    console.log(disName + "hello!!!");
+    console.log(disName + " hello!!!");
     const [image, setImage] = useState();
   useEffect(() => {
     (async () => {
