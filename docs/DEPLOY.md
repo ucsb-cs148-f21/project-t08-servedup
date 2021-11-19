@@ -6,7 +6,7 @@
 
 #### Instruction
 1. Download the .apk file from google drive link.
-2. Install the app in an Android environment.
+2. Install the app in an Android environment (Bluestacks is a good one to emulate a Android device, download Bluestacks -> import APK file, run APK file)
 3. Start the program.
 
 OR
