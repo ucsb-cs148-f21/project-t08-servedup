@@ -4,7 +4,7 @@ import { View, Text, Button, StyleSheet, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const FormScreen = ({ navigation}) => {
+const FormScreen = ({navigation}) => {
     return <Text>Submit your reviews here.</Text>
   }
 
