@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, SafeAreaView, SectionList } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
 import SwitchSelector from "react-native-switch-selector";
 
 const MenuScreen = ({ navigation}) => {
@@ -43,6 +43,7 @@ const MenuScreen = ({ navigation}) => {
     const [ result2, setResult2 ] = useState([]);
     const [ result3, setResult3 ] = useState([]);
     const [ hourChoice, setHourChoice ] = useState(0);
+    const [ hallChoice, setHallChoice ] = useState(0);
     
     // Craete and return the fetch with specified hall and hour.
     const fetchSelected = (hallIndex, hourIndex) => {
@@ -101,84 +102,67 @@ const MenuScreen = ({ navigation}) => {
     var meal1 = processData(result1);
     var meal2 = processData(result2);
     var meal3 = processData(result3);
+    
+    var hallOptions = [
+        { label: hallNames[0], value: "0" },
+        { label: hallNames[1], value: "1" },
+        { label: hallNames[2], value: "2" },
+        { label: hallNames[3], value: "3" },
+    ];
 
     if ((0 < currentDay) && (currentDay < 6)) { // Weekdays
-        var options = [
+        var hourOptions = [
             { label: hourNames[0], value: "0" },
             { label: hourNames[2], value: "1" },
             { label: hourNames[3], value: "2" }
-          ];
-        var meals1 = [
-            { title: hallNames[0], data: meal1[0], },
-            { title: hallNames[1], data: meal1[1], },
-            { title: hallNames[3], data: meal1[2], },
         ];
-        var  meals2 = [
-            { title: hallNames[0], data: meal2[0], },
-            { title: hallNames[1], data: meal2[1], },
-            { title: hallNames[2], data: meal2[2], },
-            { title: hallNames[3], data: meal2[3], },
-        ];
-        var meals3 = [
-            { title: hallNames[0], data: meal3[0], },
-            { title: hallNames[1], data: meal3[1], },
-            { title: hallNames[2], data: meal3[2], },
-            { title: hallNames[3], data: meal3[3], },
-        ];
+        var meals1 = [ meal1[0], meal1[1], ["Closed"], meal1[2] ];
+        var meals2 = [ meal2[0], meal2[1], meal2[2], meal2[3] ];
+        var meals3 = [ meal3[0], meal3[1], meal3[2], meal3[3] ];
         var mealsList = [meals1, meals2, meals3];
         
     } else { // Weekend
-        options = [
+        var hourOptions = [
             { label: hourNames[1], value: "0" },
             { label: hourNames[2], value: "1" }
           ];
-        var meals1 = [
-                { title: hallNames[0], data: meal1[0], },
-                { title: hallNames[1], data: meal1[1], },
-                { title: hallNames[3], data: meal1[2], },
-            ];
-            
-        var meals2 = [
-                { title: hallNames[0], data: meal2[0], },
-                { title: hallNames[1], data: meal2[1], },
-                { title: hallNames[3], data: meal2[2], },
-            ];
+        var meals1 = [ meal1[0], meal1[1], ["Closed"], meal1[2] ];
+        var meals2 = [ meal2[0], meal2[1], ["Closed"], meal2[2] ];
         var mealsList = [meals1, meals2];
-    }
-    
-    const createSectionList = (meals) => {
-        return <SectionList
-                keyExtractor={(item, index) => index.toString()}
-                sections={meals}
-                renderSectionHeader={({section}) => (
-                    <Text style={styles.sectionHeaderStyle}>{section.title}</Text>)}
-                renderItem={({item}) => (
-                    <Text style={styles.sectionListItemStyle}>{item}</Text>)}
-                />
     }
     
     return (
       <SafeAreaView style={styles.container}>
-            <Text style={styles.loadingTextStyle}></Text>
-            <Text style={styles.loadingTextStyle}></Text>
-            <Text style={styles.loadingTextStyle}></Text>
             <SwitchSelector
-              options={options}
+              options={hourOptions}
               initial={0}
               onPress={value => setHourChoice(Number(value))}
-              textColor={'#febc11'}
+              backgroundColor={'#ffffff'}
+              buttonColor={'#003660'}
               selectedColor={'#ffffff'}
-              buttonColor={'#febc11'}
-              borderColor={'#febc11'}
+              textColor={'#003660'}
             />
-            <View style={styles.container}>
-            { meals1[0].data != null ? // Check if the data is NOT undefined
-                // True: display the SectionList
-                createSectionList(mealsList[hourChoice])
+            <SwitchSelector
+              options={hallOptions}
+              initial={0}
+              onPress={value => setHallChoice(Number(value))}
+              backgroundColor={'#ffffff'}
+              buttonColor={'#febc11'}
+              selectedColor={'#ffffff'}
+              textColor={'#febc11'}
+            />
+            <ScrollView>
+            { mealsList[0][0] != null  ? // Check if the data is NOT undefined
+                // True: display the mealsList
+                mealsList[hourChoice][hallChoice].map((item, key)=>(
+                    <Text key={key} style={styles.textStyle}>{ item }</Text>))
                 : // False: display a loading screen
-                <Text style={styles.loadingTextStyle}>Loading...</Text>
+                <Text style={styles.textStyle}>Loading...</Text>
             }
-            </View>
+            <Text> </Text>
+            <Text> </Text>
+            <Text> </Text>
+            </ScrollView>
       </SafeAreaView>
       );
   }
@@ -187,18 +171,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
   },
-  loadingTextStyle: {
-    textAlign: 'center',
-    color: '#000000',
-  },
-  sectionHeaderStyle: {
-      textAlign: 'center',
-      backgroundColor: '#003660',
-      fontSize: 19,
-      padding: 6,
-      color: '#ffffff',
-  },
-  sectionListItemStyle: {
+  textStyle: {
       textAlign: 'center',
       fontSize: 16,
       color: '#000000',
@@ -206,31 +179,3 @@ const styles = StyleSheet.create({
 });
 
 export default MenuScreen
-
-/*
- var testFlag = false;
- // Check the contents of state variable
- // Each object in a list inside the state variable should have more than 1 element.
- if (result.length > 0) {
-     if (!testFlag) {
-         if ((0 < currentDay) && (currentDay < 6) && (10 <= currentHour)) { // State variable will have a list of 4 json objects
-             console.log("result[0].length > 1: " + (result[0].length > 1))
-             console.log("result[1].length > 1: " + (result[1].length > 1))
-             console.log("result[2].length > 1: " + (result[2].length > 1))
-             console.log("result[3].length > 1: " + (result[3].length > 1))
-             console.log("Fetch worked as expected: " + ((result[0].length > 1) && (result[1].length > 1) && (result[2].length > 1) && (result[3].length > 1)))
-             if ((result[0].length > 1) && (result[1].length > 1) && (result[2].length > 1) && (result[3].length > 1)) {
-                 testFlag = true;
-             }
-         } else { // State variable will have a list of 3 json objects
-             console.log("result[0].length > 1: " + (result[0].length > 1))
-             console.log("result[1].length > 1: " + (result[1].length > 1))
-             console.log("result[2].length > 1: " + (result[2].length > 1))
-             console.log("Fetch worked as expected: " + ((result[0].length > 1) && (result[1].length > 1) && (result[2].length > 1) && (result[3].length > 1)))
-             if ((result[0].length > 1) && (result[1].length > 1) && (result[2].length > 1)) {
-                 testFlag = true;
-             }
-         }
-     }
- }
- */
