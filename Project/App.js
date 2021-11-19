@@ -1,4 +1,3 @@
-// @refresh reset
 import * as React from 'react';
 import { View, Text, TextInput,  Button, StyleSheet, SafeAreaView } from "react-native";
 
