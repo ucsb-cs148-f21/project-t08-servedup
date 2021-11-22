@@ -19,7 +19,7 @@ const MenuScreen = ({ navigation }) => {
     // Base URL and API key
     const baseUrl = "https://api.ucsb.edu/dining/menu/v1/";
     const apiKey = "S7Onov28BCmMrMbIWfh4rGRvg2Uc3F6I";
-    // The options of dining halls and meal hours: for switch selectors
+    // The options of dining halls, meal hours and food filters: for switch selectors
     var hallOptions = [
         { label: "Carrillo", value: "0" },
         { label: "De La Guerra", value: "1" },
