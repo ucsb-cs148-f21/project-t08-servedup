@@ -10,13 +10,11 @@ import { useSelector, useDispatch} from 'react-redux'
 import getName from '../src/Actions/signInStates';
 
 export default UserScreen = ({ navigation }) => {
-  // Use react-redux to get login
-  const dispatch = useDispatch();
-  const disName = useSelector(state => state.loginReducer.name);
-  console.log(disName + " hello!!!");
-  const [image, setImage] = useState();
-  
-  // Ask for premission
+    //console.log(getName() + "hellO!!!");
+    const dispatch = useDispatch();
+    const disName = useSelector(state => state.loginReducer.name);
+    console.log(disName + " hello!!!");
+    const [image, setImage] = useState();
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -28,12 +26,11 @@ export default UserScreen = ({ navigation }) => {
     })();
   }, []);
 
-  // pick image from gallary
   const pickImage = async () => {
     let result = await launchImageLibraryAsync({
       mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [16, 9],
+      aspect: [4, 3],
       quality: 1,
     });
 
@@ -44,12 +41,11 @@ export default UserScreen = ({ navigation }) => {
     }
   };
 
-  // take an image using camera
   const takeImage = async () => {
     let result = await launchCameraAsync({
       mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [16, 9],
+      aspect: [4, 3],
       quality: 1,
     });
 
@@ -62,9 +58,8 @@ export default UserScreen = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <View style={styles.container}>
+        <View>
           <Text>Welcome {disName}</Text>
-          {image && <Image source={{ uri: image }} style={{ width: 50, height: 50 }} />}
         </View>
         <View >
             <Button title="Pick an image from camera roll" onPress={pickImage} />
@@ -72,18 +67,10 @@ export default UserScreen = ({ navigation }) => {
         <View>
             <Button title="Take a new picture" onPress={takeImage} />
         </View>
-      </View>
-    );
+        <View>
+            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+        </View>
+        
+    </View>
+  );
   }
-
-const styles = StyleSheet.create({
-  container: {
-      flex: 1,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-  },
-  buttonContainer: {
-    flex: 1,
-  }
-});
