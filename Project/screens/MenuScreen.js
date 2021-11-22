@@ -96,6 +96,8 @@ const MenuScreen = ({ navigation }) => {
                         hasNuts = true;
                     }
                 }
+                // If the menu contains no vegetarian, vegan, or nuts item,
+                // store the message string that tells no result to display.
                 if (!hasVegetarian) {
                     names[1].push("No Item");
                 }
@@ -167,7 +169,7 @@ const MenuScreen = ({ navigation }) => {
                 (mealsList!= undefined) && (mealsList[hourChoice] != undefined) &&
                 (mealsList[hourChoice][hallChoice] != undefined) &&
                 (mealsList[hourChoice][hallChoice][filterChoice] != undefined) ?
-                // True: display the element of mealsList selected by switch selector.
+                // True: display the element of mealsList selected by switch selectors.
                 mealsList[hourChoice][hallChoice][filterChoice].map((item, key)=>(
                     <Text key={key} style={styles.textStyle}>{ item }</Text>))
                 : // False: display a loading message.
