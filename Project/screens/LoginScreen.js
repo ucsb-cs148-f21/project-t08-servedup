@@ -25,7 +25,7 @@ export function LoginScreen({ navigation }) {
         iosClientId: `1013730947248-k1drlh72srgq8mgbejeelbj2kq1jknhg.apps.googleusercontent.com`,
         androidClientId: `1013730947248-rr5c6p3vdmno9i1rs0cq1n672kj81usp.apps.googleusercontent.com`,
         iosStandaloneAppClientId: `<YOUR_IOS_CLIENT_ID>`,
-        androidStandaloneAppClientId: `396777316066-c1ephc8n67msh6c8fu7l6ogl3c08lhih.apps.googleusercontent.com`,
+        androidStandaloneAppClientId: `1013730947248-p7ol733de1v9qn5152q4ooslonqff1ek.apps.googleusercontent.com`,
     };
 
     var accessTokenUser = "";

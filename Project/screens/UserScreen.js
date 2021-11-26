@@ -10,11 +10,17 @@ import { useSelector, useDispatch} from 'react-redux'
 import getName from '../src/Actions/signInStates';
 
 export default UserScreen = ({ navigation }) => {
-    //console.log(getName() + "hellO!!!");
-    const dispatch = useDispatch();
-    const disName = useSelector(state => state.loginReducer.name);
-    console.log(disName + " hello!!!");
-    const [image, setImage] = useState();
+  //console.log(getName() + "hellO!!!");
+  const dispatch = useDispatch();
+  const disName = useSelector(state => state.loginReducer.name);
+  console.log(disName + " hello!!!");
+  const [image, setImage] = useState();
+  var name = "";
+  if (disName == "") {
+    name = "User";
+  } else {
+    name = disName;
+  }
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -30,7 +36,7 @@ export default UserScreen = ({ navigation }) => {
     let result = await launchImageLibraryAsync({
       mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [16, 9],
       quality: 1,
     });
 
@@ -45,7 +51,7 @@ export default UserScreen = ({ navigation }) => {
     let result = await launchCameraAsync({
       mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [16, 9],
       quality: 1,
     });
 
@@ -57,20 +63,20 @@ export default UserScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <View>
-          <Text>Welcome {disName}</Text>
+    <View  style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View> 
+          <Text>Welcome to Servedup</Text>
         </View>
-        <View >
+        <View  style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',}}>
+        {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
+        <Text>       {name}       </Text>
+        </View>
+        <View>
             <Button title="Pick an image from camera roll" onPress={pickImage} />
         </View>
         <View>
             <Button title="Take a new picture" onPress={takeImage} />
         </View>
-        <View>
-            {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-        </View>
-        
     </View>
   );
   }
