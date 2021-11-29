@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, ScrollView, SectionList } from 'react-native';
 import SwitchSelector from "react-native-switch-selector";
 
 const MenuScreen = ({ navigation }) => {
@@ -35,6 +35,8 @@ const MenuScreen = ({ navigation }) => {
         { label: "Vegetarian", value: "1" },
         { label: "Vegan", value: "2" },
         { label: "WITH Nuts", value: "3" } ];
+    // Array of food filter strings to find specific menu items: for processing data
+    const filterStrings = ['(v)', '(vgn)', '(w/nuts)'];
     
     // State variables to store data fetched from API
     // Each element is a JSON object with keys 'name' and 'station.'
@@ -50,7 +52,7 @@ const MenuScreen = ({ navigation }) => {
     
     /* ============================= Functions ============================= */
     
-    // Fetch the menu data for a specified hour and store to a specified state variable.
+    // Fetch the menu data for a specified hour and store in a specified state variable.
         // hourIndex: an integer (0 <= i <= 3) to be the index of the hourCodes
         // setState: the setState function for a state variable
     const getMenuData = ( hourIndex, setState ) => {
@@ -65,59 +67,68 @@ const MenuScreen = ({ navigation }) => {
             .catch(error => { console.log(error); })
     }
     
-    // Process the data to make it usable for the display.
+    // Process the data to make it usable for the display as a sectionList.
         // state: the state variable which contains the menu data
     const processData = (state) => {
         var result = [];
         for (var i = 0; i < state.length; i++) {
             // state[i] contains menu data if it is an array (of objects).
             if ( Array.isArray(state[i]) ) {
-                // Create the array of arrays of food name strings from the menu data.
-                // names[0]: all names, names[1]: names with (v),
-                // names[2]: names with (vgn), names[3]: names with (w/nuts)
-                var names = [[], [], [], []];
-                // Flag to see if the menu contains any vegetarian, vegan, or nuts item.
-                var hasVegetarian = false;
-                var hasVegan = false;
-                var hasNuts = false;
+                // Create the array of arrays of objects from the menu data.
+                // menus[0] = all menus, menus[1] = menus with (v),
+                // menus[2] = menus with (vgn), menus[3] = menus with (w/nuts)
+                var menus = [[], [], [], []];
+                
+                // Push each menu item in the array, menus, with its section information.
                 for (var j = 0; j < state[i].length; j++) {
                     var pair = Object.values(state[i][j]);
-                    names[0].push(pair[0]);
-                    if (pair[0].includes('(v)')) {
-                        names[1].push(pair[0]);
-                        hasVegetarian = true;
-                    }
-                    if (pair[0].includes('(vgn)')) {
-                        names[2].push(pair[0]);
-                        hasVegan = true;
-                    }
-                    if (pair[0].includes('(w/nuts)')) {
-                        names[3].push(pair[0]);
-                        hasNuts = true;
+                    addElement(menus[0], pair);
+                    
+                    // Push the menu item if its name has a food filter string.
+                    for (var k = 1; k < menus.length; k++) {
+                        if (pair[0].includes(filterStrings[k - 1])) {
+                            addElement(menus[k], pair);
+                        }
                     }
                 }
                 // If the menu contains no vegetarian, vegan, or nuts item,
-                // store the message string that tells no result to display.
-                if (!hasVegetarian) {
-                    names[1].push("No Item");
+                // store the message section that tells no result to display.
+                for (var l = 1; l < menus.length; l++) {
+                    if (menus[l] == 0) {
+                        menus[l].push({ title: "No Item", data: [], });
+                    }
                 }
-                if (!hasVegan) {
-                    names[2].push("No Item");
-                }
-                if (!hasNuts) {
-                    names[3].push("No Item");
-                }
-                result.push(names);
+                
+                result.push(menus);
             } else {
                 // state[i] contains an object to represent the meal is not served.
                 if (state[i].status == 404 ) {
-                    result.push([["Closed"], ["Closed"], ["Closed"], ["Closed"]]);
+                    var message = "Closed"
                 } else { // state[i] contains an object to represent some error.
-                    result.push([["Error"], ["Error"], ["Error"], ["Error"]]);
+                    var message = "Error";
                 }
+                createNoDataElement(result, message);
             }
         }
         return result;
+    }
+    
+    // Store an menu name in the array inside the object which stores its section name.
+        // dataList: 1-D array to store the menu data
+        // pairData: pairData[0] = string for menu name, pairData[1] = string for section name
+    const addElement = (dataList, pairData) => {
+        if ((dataList.length == 0) || (dataList[dataList.length - 1].title != pairData[1])) {
+            dataList.push({ title: pairData[1], data: [], });
+        }
+        dataList[dataList.length - 1].data.push(pairData[0]);
+    }
+    
+    // Store the message section that tells closed or error.
+        // dataList: Array to srore the message.
+        // message: string to tell closed or error.
+    const createNoDataElement = (dataList, message) => {
+        dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }],
+                       [{ title: message, data: [], }], [{ title: message, data: [], }]]);
     }
     
     /* ============================= Main Part ============================= */
@@ -128,7 +139,7 @@ const MenuScreen = ({ navigation }) => {
         getMenuData(2, setLunchJson); // Lunch
         getMenuData(1, setBrunchJson); // Brunch
         getMenuData(3, setDinnerJson); // Dinner
-    }, [])
+    }, [today])
     
     // The array of all the data to diplay on the menu screen.
     // With this structure, the data can be selected by switch selectors through its indexes.
@@ -170,8 +181,14 @@ const MenuScreen = ({ navigation }) => {
                 (mealsList[hourChoice][hallChoice] != undefined) &&
                 (mealsList[hourChoice][hallChoice][filterChoice] != undefined) ?
                 // True: display the element of mealsList selected by switch selectors.
-                mealsList[hourChoice][hallChoice][filterChoice].map((item, key)=>(
-                    <Text key={key} style={styles.textStyle}>{ item }</Text>))
+                <SectionList
+                    keyExtractor={(item, index) => index.toString()}
+                    sections={mealsList[hourChoice][hallChoice][filterChoice]}
+                    renderSectionHeader={({section}) => (
+                        <Text style={styles.sectionStyle}> {section.title} </Text>)}
+                    renderItem={({item}) => (
+                        <Text style={styles.textStyle}> {item} </Text>)}
+                />
                 : // False: display a loading message.
                 <Text style={styles.textStyle}>Loading...</Text>
             }
@@ -187,6 +204,13 @@ const MenuScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
+  },
+  sectionStyle: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 16,
+    padding: 6,
+    color: '#000000',
   },
   textStyle: {
       textAlign: 'center',
