@@ -42,12 +42,14 @@ export function LoginScreen({ navigation }) {
                 setAbleLogIn(true);
                 setAbleLogOut(false);
                 accessTokenUser = accessToken;
-                console.log(accessTokenUser);
+                //console.log(accessTokenUser);
                 var userName = user.name;
                 var userEmail = user.email;
                 var userID = user.id;
-                var userPhotoURL = user.photoURL;
+                var userPhotoURL = user.photoUrl;
+                //console.log("this is the photourl!" + userPhotoURL);
                 var signInState = true;
+                //console.log(user);
                 dispatch(setName(userName));
                 dispatch(setSignInState(signInState));
                 dispatch(setID(userID));

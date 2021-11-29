@@ -16,11 +16,11 @@ export default UserScreen = ({ navigation }) => {
     var disEmail = useSelector(state => state.loginReducer.email);
     var disID = useSelector(state => state.loginReducer.id);
     var disState = useSelector(state => state.loginReducer.isSignedIn);
-    var disPhotoURL = useSelector(state => state.loginReducer.photoUrl);
+    var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
     console.log("disName = " + disName + ", disEmail = " + disEmail + ", disID = " + disID + ", disState = " + disState + ", disPhotoURL = " + disPhotoURL);
 
 
-    const [image, setImage] = useState();
+    const [image = disPhotoURL, setImage] = useState();
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
