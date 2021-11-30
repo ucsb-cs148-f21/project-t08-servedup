@@ -2,30 +2,64 @@ import React from "react";
 import { StyleSheet, View, Button } from "react-native";
 import * as Google from "expo-google-app-auth";
 import * as firebase from 'firebase';
+import loginReducer from '../src/Reducers/loginReducer';
+import { connect, useSelector, useDispatch } from 'react-redux';
+import {setSignInState, setName, setPhotoURL, setEmail, setID} from '../src/Actions/types'
 
-const LoginScreen = ({ navigation }) => {
+import changeSignInOut from '../src/Actions/signInStates';
+
+import Store from '../src/store';
+
+//default function LoginScreen({ navigation }) {
+export function LoginScreen({ navigation }) {
+
+    const { name, isSignedIn, id, email, photoURL } = useSelector(state => state.loginReducer);
+    const dispatch = useDispatch();
+
     const [isAbleLogIn, setAbleLogIn] = React.useState(false);
 
     const [isAbleLogOut, setAbleLogOut] = React.useState(true);
+
+    const config = {
+        expoClientId: `<YOUR_WEB_CLIENT_ID>`,
+        iosClientId: `1013730947248-k1drlh72srgq8mgbejeelbj2kq1jknhg.apps.googleusercontent.com`,
+        androidClientId: `1013730947248-rr5c6p3vdmno9i1rs0cq1n672kj81usp.apps.googleusercontent.com`,
+        iosStandaloneAppClientId: `<YOUR_IOS_CLIENT_ID>`,
+        androidStandaloneAppClientId: `1013730947248-p7ol733de1v9qn5152q4ooslonqff1ek.apps.googleusercontent.com`,
+    };
 
     var accessTokenUser = "";
 
     const signInAsync = async () => {
         console.log("LoginScreen.js 6 | loggin in");
         try {
-            const { type, accessToken } = await Google.logInAsync({
-                iosClientId: `1013730947248-k1drlh72srgq8mgbejeelbj2kq1jknhg.apps.googleusercontent.com`,
-                androidClientId: `1013730947248-rr5c6p3vdmno9i1rs0cq1n672kj81usp.apps.googleusercontent.com`,
-            });
+            const { type, accessToken, user} = await Google.logInAsync(config);
 
             if (type === "success") {
                 // Then you can use the Google REST API
                 console.log("LoginScreen.js 17 | success, navigating to profile");
-                navigation.navigate("User");
+                
                 setAbleLogIn(true);
                 setAbleLogOut(false);
                 accessTokenUser = accessToken;
-                console.log(accessTokenUser);
+                //console.log(accessTokenUser);
+                var userName = user.name;
+                var userEmail = user.email;
+                var userID = user.id;
+                var userPhotoURL = user.photoUrl;
+                //console.log("this is the photourl!" + userPhotoURL);
+                var signInState = true;
+                //console.log(user);
+                dispatch(setName(userName));
+                dispatch(setSignInState(signInState));
+                dispatch(setID(userID));
+                dispatch(setEmail(userEmail));
+                dispatch(setPhotoURL(userPhotoURL));
+
+                //id, email, photoURL
+                //console.log(name);
+                //console.log(Store);
+                navigation.navigate("User");
             }
         }
         catch (error) {
@@ -36,23 +70,8 @@ const LoginScreen = ({ navigation }) => {
 
     const signOutAsync = async () => {
         console.log("LoginScreen.js | logging out");
-
-            await Google.logOutAsync({
-                accessTokenUser,
-                expoClientId: `<YOUR_WEB_CLIENT_ID>`,
-                iosClientId: `1013730947248-k1drlh72srgq8mgbejeelbj2kq1jknhg.apps.googleusercontent.com`,
-                androidClientId: `1013730947248-rr5c6p3vdmno9i1rs0cq1n672kj81usp.apps.googleusercontent.com`,
-                iosStandaloneAppClientId: `<YOUR_IOS_CLIENT_ID>`,
-                androidStandaloneAppClientId: `<YOUR_ANDROID_CLIENT_ID>`,
-            });
-
-            if (type === "success") {
-                console.log("LoginScreen.js 17 | success, navigating to profile");
-                
-                setAbleLogOut(true);
-                setAbleLogIn(false);
-                
-            }
+            setAbleLogOut(true);
+            setAbleLogIn(false);
 
     };
 
@@ -63,12 +82,9 @@ const LoginScreen = ({ navigation }) => {
             <Button disabled={isAbleLogOut} title="Logout with Google" onPress={signOutAsync} />
             
         </View>
-        //<Button logOutButton={logOutDisable} title="Logout" onPress={signOutAsync} />
         
     );
 };
-
-export default LoginScreen;
 
 const styles = StyleSheet.create({
     container: {
@@ -82,3 +98,5 @@ const styles = StyleSheet.create({
     }
 }
 );
+
+

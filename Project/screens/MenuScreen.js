@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
   },
+
   sectionStyle: {
     fontWeight: 'bold',
     textAlign: 'center',

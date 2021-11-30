@@ -3,7 +3,7 @@ require_relative '../node_modules/react-native-unimodules/cocoapods.rb'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 platform :ios, '12.0'
-pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
 
 target 'Project' do
   use_unimodules!

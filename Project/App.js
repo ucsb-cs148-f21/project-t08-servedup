@@ -1,24 +1,27 @@
-// @refresh reset
 import * as React from 'react';
 import { View, Text, TextInput,  Button, StyleSheet, SafeAreaView } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
-// import { createNativeStackNavigator } from "@react-navigation/native-stack";
+// { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
-import FormScreen from './screens/FormScreen';
+// FormScreen from './screens/FormScreen';
 import MenuScreen from './screens/MenuScreen';
 import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
-import LoginScreen from "./screens/LoginScreen";
+import { LoginScreen } from './screens/LoginScreen';
 
+import { Provider } from 'react-redux';
+import { Store } from './src/store';
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
 import * as firebase from "firebase";
 import 'firebase/firestore';
 
+
+import configureStore from './src/store.js';
 
 // const firebaseConfig = {
 //   apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
@@ -42,9 +45,15 @@ const Stack = createBottomTabNavigator();
 const db = firebase.firestore();
 const reviewRef = db.collection('Reviews');
 
+// else if (route.name === 'Submit') {
+//   iconName = focused ? 'git-commit' : 'git-commit-outline';
+// }
+// <Stack.Screen name="Submit" component={FormScreen}/>
+
 const App = () => {
 
-  return (
+    return (
+    <Provider store={Store}>
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Login"
@@ -58,14 +67,11 @@ const App = () => {
                 : 'list-outline';
             } else if (route.name === 'Reviews') {
               iconName = focused ? 'chatbox-ellipses' : 'chatbox-ellipses-outline';
-            } else if (route.name === 'Submit') {
-              iconName = focused ? 'git-commit' : 'git-commit-outline';
-            } else if (route.name === 'User') {
+            }  else if (route.name === 'User') {
               iconName = focused ? 'people' : 'people-outline';
             } else if (route.name === "Login") {
               iconName = focused ? 'log-in' : 'log-in-outline';
             }
-
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
@@ -73,7 +79,6 @@ const App = () => {
           tabBarInactiveTintColor: 'gray',
         })}
           >
-
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen
           name="Menu"
@@ -81,10 +86,10 @@ const App = () => {
           options={{ title: 'Today\'s menu' }}
         />
         <Stack.Screen name="Reviews" component={CommunityScreen}/>
-        <Stack.Screen name="Submit" component={FormScreen}/>
         <Stack.Screen name="User" component={UserScreen}/>
       </Stack.Navigator>
-    </NavigationContainer>
+            </NavigationContainer>
+        </Provider>
   );
 };
 
