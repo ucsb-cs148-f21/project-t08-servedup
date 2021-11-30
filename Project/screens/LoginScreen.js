@@ -29,7 +29,7 @@ export function LoginScreen({ navigation }) {
         iosStandaloneAppClientId: `<YOUR_IOS_CLIENT_ID>`,
         androidStandaloneAppClientId: `1013730947248-p7ol733de1v9qn5152q4ooslonqff1ek.apps.googleusercontent.com`,
     };
-
+    var accessTokenUser = "";
     const signInAsync = async () => {
         console.log("LoginScreen.js 34 | loggin in");
         try {
