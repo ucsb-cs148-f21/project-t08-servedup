@@ -3,137 +3,152 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, ScrollView, SectionList } from 'react-native';
 import SwitchSelector from "react-native-switch-selector";
 
-const MenuScreen = ({ navigation}) => {
+const MenuScreen = ({ navigation }) => {
+    
+    /* ============================= Variables ============================= */
+    
     // Current date
     const date = new Date();
     const today = `${date.getFullYear()}-${(date.getMonth()+1)}-${date.getDate()}`;
-    const currentDay = date.getDay(); // 0: Sn, 1: M, 2: T, 3: W, 4: R, 5: F, 6: St
-    const currentHour = date.getHours(); // 0 - 23
     // Codes of dining halls and meal hours: for API calls
-    const hallCodes = ["carrillo", "de-la-guerra", "ortega", "portola"];
-    const hourCodes = ["breakfast", "brunch", "lunch", "dinner", "late-night"];
-    // Names of dining halls and meal hours: for display
-    const hallNames = ["Carrillo", "De La Guerra", "Ortega", "Portola"];
-    const hourNames = ["Breakfast", "Brunch", "Lunch", "Dinner", "Late Night"];
+    const hallCodes = [ "carrillo", "de-la-guerra", "ortega", "portola" ];
+    const hourCodes = [ "breakfast", "brunch", "lunch", "dinner" ];
     // Base URL and API key
     const baseUrl = "https://api.ucsb.edu/dining/menu/v1/";
     const apiKey = "S7Onov28BCmMrMbIWfh4rGRvg2Uc3F6I";
+    // The options of dining halls, meal hours and food filters: for switch selectors
+    var hallOptions = [
+        { label: "Carrillo", value: "0" },
+        { label: "De La Guerra", value: "1" },
+        { label: "Ortega", value: "2" },
+        { label: "Portola", value: "3" } ];
+    var hourOptions = [
+        { label: "Breakfast", value: "0" },
+        { label: "Lunch", value: "1" },
+        { label: "Brunch", value: "2" },
+        { label: "Dinner", value: "3" } ];
+    var filterOptions = [
+        { label: "All", value: "0" },
+        { label: "Vegetarian", value: "1" },
+        { label: "Vegan", value: "2" },
+        { label: "WITH Nuts", value: "3" } ];
+    // Array of food filter strings to find specific menu items: for processing data
+    const filterStrings = ['(v)', '(vgn)', '(w/nuts)'];
     
-    // State variables to store data fetched from API.
+    // State variables to store data fetched from API
     // Each element is a JSON object with keys 'name' and 'station.'
-    /* Breakfast
-       [0]: Carrillo - Breakfast, [1]: De La Guerra - Breakfast,
-       [2]: Portola - Breakfast */
-    /* Lunch
-       [0]: Carrillo - Lunch, [1]: De La Guerra - Lunch,
-       [2]: Ortega - Lunch, [3]: Portola - Lunch */
-    /* Dinner1 on Weekdays
-       [0]: Carrillo - Dinner, [1]: De La Guerra - Dinner,
-       [2]: Ortega - Dinner, [3]: Portola - Dinner */
-    /* Brunch
-       [0]: Carrillo - Brunch, [1]: De La Guerra - Brunch,
-       [2]: Portola - Brunch */
-    /* Dinner2 on Weekend
-       [0]: Carrillo - Dinner, [1]: De La Guerra - Dinner,
-       [2]: Portola - Dinner */
-    const [ result1, setResult1 ] = useState([]);
-    const [ result2, setResult2 ] = useState([]);
-    const [ result3, setResult3 ] = useState([]);
-    const [ hourChoice, setHourChoice ] = useState(0);
-    const [ hallChoice, setHallChoice ] = useState(0);
+    const [ breakfastJson, setBreakfastJson ] = useState([]); // Breakfast data
+    const [ lunchJson, setLunchJson ] = useState([]); // Lunch data
+    const [ brunchJson, setBrunchJson ] = useState([]); // Brunch data
+    const [ dinnerJson, setDinnerJson ] = useState([]); // Dinner data
     
-    // Craete and return the fetch with specified hall and hour.
-    const fetchSelected = (hallIndex, hourIndex) => {
-        return fetch( baseUrl + today + '/' + hallCodes[hallIndex] + '/' + hourCodes[hourIndex],
-                     { headers: { "ucsb-api-key": apiKey }})
-    }
-    // Store the response from fetch in the specified state variable.
-    const storeData = (inputs, setState) => {
+    // State variables to store the choices selected by switch selectors
+    const [ hourChoice, setHourChoice ] = useState(0); // Meal hour choice
+    const [ hallChoice, setHallChoice ] = useState(0); // Dining hall choice
+    const [ filterChoice, setFilterChoice ] = useState(0); // Food filter choice
+    
+    /* ============================= Functions ============================= */
+    
+    // Fetch the menu data for a specified hour and store in a specified state variable.
+        // hourIndex: an integer (0 <= i <= 3) to be the index of the hourCodes
+        // setState: the setState function for a state variable
+    const getMenuData = ( hourIndex, setState ) => {
+        var inputs = [];
+        for (var i = 0; i < hallCodes.length; i++) {
+            inputs.push(fetch( baseUrl + today + '/' + hallCodes[i] + '/' + hourCodes[hourIndex],
+                               { headers: { "ucsb-api-key": apiKey }}))
+        }
         Promise.all(inputs)
             .then(responses => { return Promise.all(responses.map(r => r.json())); })
             .then(jsons => { setState(jsons); })
             .catch(error => { console.log(error); })
     }
-    // Process the data to make it usable in Section List.
+    
+    // Process the data to make it usable for the display as a sectionList.
+        // state: the state variable which contains the menu data
     const processData = (state) => {
-        var pair = [];
-        var names = [];
         var result = [];
         for (var i = 0; i < state.length; i++) {
-            for (var j = 0; j < state[i].length; j++) {
-                pair = Object.values(state[i][j]);
-                names.push(pair[0]);
+            // state[i] contains menu data if it is an array (of objects).
+            if ( Array.isArray(state[i]) ) {
+                // Create the array of arrays of objects from the menu data.
+                // menus[0] = all menus, menus[1] = menus with (v),
+                // menus[2] = menus with (vgn), menus[3] = menus with (w/nuts)
+                var menus = [[], [], [], []];
+                
+                // Push each menu item in the array, menus, with its section information.
+                for (var j = 0; j < state[i].length; j++) {
+                    var pair = Object.values(state[i][j]);
+                    addElement(menus[0], pair);
+                    
+                    // Push the menu item if its name has a food filter string.
+                    for (var k = 1; k < menus.length; k++) {
+                        if (pair[0].includes(filterStrings[k - 1])) {
+                            addElement(menus[k], pair);
+                        }
+                    }
+                }
+                // If the menu contains no vegetarian, vegan, or nuts item,
+                // store the message section that tells no result to display.
+                for (var l = 1; l < menus.length; l++) {
+                    if (menus[l] == 0) {
+                        menus[l].push({ title: "No Item", data: [], });
+                    }
+                }
+                
+                result.push(menus);
+            } else {
+                // state[i] contains an object to represent the meal is not served.
+                if (state[i].status == 404 ) {
+                    var message = "Closed"
+                } else { // state[i] contains an object to represent some error.
+                    var message = "Error";
+                }
+                createNoDataElement(result, message);
             }
-            result.push(names);
-            names = [];
         }
         return result;
     }
     
-    useEffect (() => {
-        // Fetch the data from APIs.
-        if ((0 < currentDay) && (currentDay < 6)) { // Weekdays
-            // Breakfast: Carrillo, De La Guerra, Portola
-            var inputs1 = [ fetchSelected(0,0), fetchSelected(1,0), fetchSelected(3,0) ];
-            storeData(inputs1, setResult1);
-            
-            // Lunch: Carrillo, De La Guerra, Ortega, Portola
-            var inputs2 = [ fetchSelected(0,2), fetchSelected(1,2), fetchSelected(2,2), fetchSelected(3,2) ];
-            storeData(inputs2, setResult2);
-            
-            // Dinner1: Carrillo, De La Guerra, Ortega, Portola
-            var inputs3 = [ fetchSelected(0,3), fetchSelected(1,3), fetchSelected(2,3), fetchSelected(3,3) ];
-            storeData(inputs3, setResult3);
-            
-        } else { // Weekend
-            // Brunch: Carrillo, De La Guerra, Portola
-            var inputs1 = [ fetchSelected(0,1), fetchSelected(1,1), fetchSelected(3,1) ];
-            storeData(inputs1, setResult1);
-            
-            // Dinner2: Carrillo, De La Guerra, Portola
-            var inputs2 = [ fetchSelected(0,3), fetchSelected(1,3), fetchSelected(3,3) ];
-            storeData(inputs2, setResult2);
+    // Store an menu name in the array inside the object which stores its section name.
+        // dataList: 1-D array to store the menu data
+        // pairData: pairData[0] = string for menu name, pairData[1] = string for section name
+    const addElement = (dataList, pairData) => {
+        if ((dataList.length == 0) || (dataList[dataList.length - 1].title != pairData[1])) {
+            dataList.push({ title: pairData[1], data: [], });
         }
-    }, [])
-    
-    var meal1 = processData(result1);
-    var meal2 = processData(result2);
-    var meal3 = processData(result3);
-    
-    var hallOptions = [
-        { label: hallNames[0], value: "0" },
-        { label: hallNames[1], value: "1" },
-        { label: hallNames[2], value: "2" },
-        { label: hallNames[3], value: "3" },
-    ];
-
-    if ((0 < currentDay) && (currentDay < 6)) { // Weekdays
-        var hourOptions = [
-            { label: hourNames[0], value: "0" },
-            { label: hourNames[2], value: "1" },
-            { label: hourNames[3], value: "2" }
-        ];
-        var meals1 = [ meal1[0], meal1[1], ["Closed"], meal1[2] ];
-        var meals2 = [ meal2[0], meal2[1], meal2[2], meal2[3] ];
-        var meals3 = [ meal3[0], meal3[1], meal3[2], meal3[3] ];
-        var mealsList = [meals1, meals2, meals3];
-        
-    } else { // Weekend
-        var hourOptions = [
-            { label: hourNames[1], value: "0" },
-            { label: hourNames[2], value: "1" }
-          ];
-        var meals1 = [ meal1[0], meal1[1], ["Closed"], meal1[2] ];
-        var meals2 = [ meal2[0], meal2[1], ["Closed"], meal2[2] ];
-        var mealsList = [meals1, meals2];
+        dataList[dataList.length - 1].data.push(pairData[0]);
     }
+    
+    // Store the message section that tells closed or error.
+        // dataList: Array to srore the message.
+        // message: string to tell closed or error.
+    const createNoDataElement = (dataList, message) => {
+        dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }],
+                       [{ title: message, data: [], }], [{ title: message, data: [], }]]);
+    }
+    
+    /* ============================= Main Part ============================= */
+    
+    useEffect (() => {
+        // Fetch the data from APIs and store it to state variables.
+        getMenuData(0, setBreakfastJson); // Breakfast
+        getMenuData(2, setLunchJson); // Lunch
+        getMenuData(1, setBrunchJson); // Brunch
+        getMenuData(3, setDinnerJson); // Dinner
+    }, [today])
+    
+    // The array of all the data to diplay on the menu screen.
+    // With this structure, the data can be selected by switch selectors through its indexes.
+    var mealsList = [ processData(breakfastJson), processData(lunchJson),
+                      processData(brunchJson), processData(dinnerJson) ];
     
     return (
       <SafeAreaView style={styles.container}>
-            <SwitchSelector
+            <SwitchSelector // Switch selector for meal hours
               options={hourOptions}
               initial={0}
               onPress={value => setHourChoice(Number(value))}
@@ -142,7 +157,7 @@ const MenuScreen = ({ navigation}) => {
               selectedColor={'#ffffff'}
               textColor={'#003660'}
             />
-            <SwitchSelector
+            <SwitchSelector // Switch selector for dining halls
               options={hallOptions}
               initial={0}
               onPress={value => setHallChoice(Number(value))}
@@ -151,14 +166,33 @@ const MenuScreen = ({ navigation}) => {
               selectedColor={'#ffffff'}
               textColor={'#febc11'}
             />
+            <SwitchSelector // Switch selector for food filters
+              options={filterOptions}
+              initial={0}
+              onPress={value => setFilterChoice(Number(value))}
+              backgroundColor={'#ffffff'}
+              buttonColor={'#6d7d33'}
+              selectedColor={'#ffffff'}
+              textColor={'#6d7d33'}
+            />
             <ScrollView>
-            { mealsList[0][0] != null  ? // Check if the data is NOT undefined
-                // True: display the mealsList
-                mealsList[hourChoice][hallChoice].map((item, key)=>(
-                    <Text key={key} style={styles.textStyle}>{ item }</Text>))
-                : // False: display a loading screen
+            { // Check if the selected element of mealsList is NOT undefined.
+                (mealsList!= undefined) && (mealsList[hourChoice] != undefined) &&
+                (mealsList[hourChoice][hallChoice] != undefined) &&
+                (mealsList[hourChoice][hallChoice][filterChoice] != undefined) ?
+                // True: display the element of mealsList selected by switch selectors.
+                <SectionList
+                    keyExtractor={(item, index) => index.toString()}
+                    sections={mealsList[hourChoice][hallChoice][filterChoice]}
+                    renderSectionHeader={({section}) => (
+                        <Text style={styles.sectionStyle}> {section.title} </Text>)}
+                    renderItem={({item}) => (
+                        <Text style={styles.textStyle}> {item} </Text>)}
+                />
+                : // False: display a loading message.
                 <Text style={styles.textStyle}>Loading...</Text>
             }
+            <Text> </Text>
             <Text> </Text>
             <Text> </Text>
             <Text> </Text>
@@ -170,6 +204,14 @@ const MenuScreen = ({ navigation}) => {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
+  },
+
+  sectionStyle: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 16,
+    padding: 6,
+    color: '#000000',
   },
   textStyle: {
       textAlign: 'center',
