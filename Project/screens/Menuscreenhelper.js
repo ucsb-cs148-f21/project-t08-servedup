@@ -34,8 +34,14 @@ const getDish = (fav) => {
 //add data
 const addDish = (fav,dish) => {
     //fav should be a document in the users collection
-    fav.update({
-        dishes: firebase.firestore.FieldValue.arrayUnion(dish)
+    fav.get().then((favdata) => {
+        if (favdata.exists) {
+            fav.update({
+                dishes: firebase.firestore.FieldValue.arrayUnion(dish)
+            })
+        } else {
+            fav.set({merge:true})
+        }
     })
 }
 

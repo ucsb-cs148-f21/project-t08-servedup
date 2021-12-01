@@ -24,16 +24,16 @@ import 'firebase/firestore';
 
 import configureStore from './src/store.js';
 
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
-//   authDomain: 'served-up-63c2e.firebaseapp.com',
-//   databaseURL: 'https://served-up-63c2e.firebaseio.com',
-//   projectId: 'served-up-63c2e',
-//   storageBucket: 'served-up-63c2e.appspot.com',
-//   //messagingSenderId: 'sender-id',
-//   appId: '1:456652905966:ios:80d960e213cb40ea1182ff',
-//   //measurementId: 'G-measurement-id',
-// };
+const firebaseConfig = {
+  apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
+  authDomain: 'served-up-63c2e.firebaseapp.com',
+  databaseURL: 'https://served-up-63c2e.firebaseio.com',
+  projectId: 'served-up-63c2e',
+  storageBucket: 'served-up-63c2e.appspot.com',
+  //messagingSenderId: 'sender-id',
+  appId: '1:456652905966:ios:80d960e213cb40ea1182ff',
+  //measurementId: 'G-measurement-id',
+};
 
 // Initialize Firebase
 if (firebase.apps.length === 0) {
@@ -45,8 +45,7 @@ const Stack = createBottomTabNavigator();
 
 const db = firebase.firestore();
 const reviewRef = db.collection('Reviews');
-var fav = db.collection('Users').doc('Roy');
-addDish(fav,"Fish")
+
 
 
 // else if (route.name === 'Submit') {
@@ -55,6 +54,9 @@ addDish(fav,"Fish")
 // <Stack.Screen name="Submit" component={FormScreen}/>
 
 const App = () => {
+
+  var fav = db.collection('Users').doc('Roy');
+  addDish(fav,"Fish")
 
     return (
     <Provider store={Store}>
