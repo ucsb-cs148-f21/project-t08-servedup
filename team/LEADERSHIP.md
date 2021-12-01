@@ -7,6 +7,7 @@
 | 10.13 | Ryan Vu | Led the first retro meeting |
 | 10.18 | Ryan Vu | Let the meeting to disucss the MVP |
 | 10.29 | Quansen Wang | Led the second retro meeting |
+| 11.17 | Kaede Hamada | Led the third retro meeting |
 
 ### Leadership Roles
 #### Ryan Vu
