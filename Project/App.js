@@ -12,6 +12,7 @@ import MenuScreen from './screens/MenuScreen';
 import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import { LoginScreen } from './screens/LoginScreen';
+import {getDish, addDish, delDish} from './screens/Menuscreenhelper'
 
 import { Provider } from 'react-redux';
 import { Store } from './src/store';
@@ -45,6 +46,9 @@ const Stack = createBottomTabNavigator();
 
 const db = firebase.firestore();
 const reviewRef = db.collection('Reviews');
+var fav = db.collection('Users').doc('Roy');
+addDish(fav,"Fish")
+
 
 // else if (route.name === 'Submit') {
 //   iconName = focused ? 'git-commit' : 'git-commit-outline';

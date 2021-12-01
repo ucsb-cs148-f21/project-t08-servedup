@@ -19,28 +19,32 @@ firebase.initializeApp(firebaseConfig);
 }
 
 const db = firebase.firestore();
-var fav = db.collection('Favorites').doc('Roy');
+var fav = db.collection('Users').doc('Roy');
 
 //get data
 const getDish = (fav) => {
+    //fav should be a document in the users collection
     fav.get().then((doc) => {
         const favs = new doc.data().dishes;
         console.log(favs);
-    })
+        return (favs);
+    })   
 }
 
 //add data
 const addDish = (fav,dish) => {
+    //fav should be a document in the users collection
     fav.update({
         dishes: firebase.firestore.FieldValue.arrayUnion(dish)
     })
 }
 
 //remove data
-const remDish = (fav,dish) => {
+const delDish = (fav,dish) => {
+    //fav should be a document in the users collection
     fav.update({
         dishes: firebase.firestore.FieldValue.arrayRemove(dish)
     })
 }
 
-export {getDish, addDish, remDish};
+export {getDish, addDish, delDish};
