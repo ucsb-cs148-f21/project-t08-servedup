@@ -18,7 +18,7 @@ import { Store } from './src/store';
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
-import * as firebase from "firebase";
+import firebase from "firebase";
 import 'firebase/firestore';
 
 
