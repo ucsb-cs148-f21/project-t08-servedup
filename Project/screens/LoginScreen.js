@@ -4,7 +4,7 @@ import * as Google from "expo-google-app-auth";
 import * as firebase from 'firebase';
 import loginReducer from '../src/Reducers/loginReducer';
 import { connect, useSelector, useDispatch } from 'react-redux';
-import {setSignInState, setName} from '../src/Actions/types'
+import {setSignInState, setName, setPhotoURL, setEmail, setID} from '../src/Actions/types'
 
 import changeSignInOut from '../src/Actions/signInStates';
 
@@ -13,7 +13,7 @@ import Store from '../src/store';
 //default function LoginScreen({ navigation }) {
 export function LoginScreen({ navigation }) {
 
-    const { name, isSignedIn } = useSelector(state => state.loginReducer);
+    const { name, isSignedIn, id, email, photoURL } = useSelector(state => state.loginReducer);
     const dispatch = useDispatch();
 
     const [isAbleLogIn, setAbleLogIn] = React.useState(false);
@@ -38,17 +38,28 @@ export function LoginScreen({ navigation }) {
             if (type === "success") {
                 // Then you can use the Google REST API
                 console.log("LoginScreen.js 17 | success, navigating to profile");
-                navigation.navigate("User");
+                
                 setAbleLogIn(true);
                 setAbleLogOut(false);
                 accessTokenUser = accessToken;
-                console.log(accessTokenUser);
+                //console.log(accessTokenUser);
                 var userName = user.name;
+                var userEmail = user.email;
+                var userID = user.id;
+                var userPhotoURL = user.photoUrl;
+                //console.log("this is the photourl!" + userPhotoURL);
                 var signInState = true;
+                //console.log(user);
                 dispatch(setName(userName));
                 dispatch(setSignInState(signInState));
+                dispatch(setID(userID));
+                dispatch(setEmail(userEmail));
+                dispatch(setPhotoURL(userPhotoURL));
+
+                //id, email, photoURL
                 //console.log(name);
                 //console.log(Store);
+                navigation.navigate("User");
             }
         }
         catch (error) {
