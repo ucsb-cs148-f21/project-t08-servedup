@@ -152,6 +152,21 @@ const MenuScreen = ({ navigation }) => {
     var mealsList = [ processData(breakfastJson), processData(lunchJson),
                       processData(brunchJson), processData(dinnerJson) ];
     
+    /* ============================= Main Part ============================= */
+    
+    useEffect (() => {
+        // Fetch the data from APIs and store it to state variables.
+        getMenuData(0, setBreakfastJson); // Breakfast
+        getMenuData(2, setLunchJson); // Lunch
+        getMenuData(1, setBrunchJson); // Brunch
+        getMenuData(3, setDinnerJson); // Dinner
+    }, [today])
+    
+    // The array of all the data to diplay on the menu screen.
+    // With this structure, the data can be selected by switch selectors through its indexes.
+    var mealsList = [ processData(breakfastJson), processData(lunchJson),
+                      processData(brunchJson), processData(dinnerJson) ];
+    
     return (
       <SafeAreaView style={styles.container}>
             <SwitchSelector // Switch selector for meal hours

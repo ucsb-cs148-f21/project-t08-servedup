@@ -7,14 +7,20 @@ import {MediaTypeOptions, requestMediaLibraryPermissionsAsync, launchImageLibrar
 import Store from '../src/store';
 import { useSelector, useDispatch} from 'react-redux'
 
-import getName from '../src/Actions/signInStates';
+//import getName from '../src/Actions/signInStates';
 
 export default UserScreen = ({ navigation }) => {
-    //console.log(getName() + "hellO!!!");
+    
     const dispatch = useDispatch();
-    const disName = useSelector(state => state.loginReducer.name);
-    console.log(disName + " hello!!!");
-    const [image, setImage] = useState();
+    var disName = useSelector(state => state.loginReducer.name);
+    var disEmail = useSelector(state => state.loginReducer.email);
+    var disID = useSelector(state => state.loginReducer.id);
+    var disState = useSelector(state => state.loginReducer.isSignedIn);
+    var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
+    console.log("disName = " + disName + ", disEmail = " + disEmail + ", disID = " + disID + ", disState = " + disState + ", disPhotoURL = " + disPhotoURL);
+
+
+    const [image = disPhotoURL, setImage] = useState();
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
