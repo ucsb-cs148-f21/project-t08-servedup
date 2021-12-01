@@ -3,11 +3,11 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, SafeAreaView, ScrollView, SectionList } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, ScrollView, SectionList, Button, Alert, TouchableOpacity } from 'react-native';
 import SwitchSelector from "react-native-switch-selector";
 
-const MenuScreen = ({ navigation }) => {
-    
+function MenuScreen({ navigation }) {
+
     /* ============================= Variables ============================= */
     
     // Current date
@@ -35,7 +35,6 @@ const MenuScreen = ({ navigation }) => {
         { label: "Vegetarian", value: "1" },
         { label: "Vegan", value: "2" },
         { label: "WITH Nuts", value: "3" } ];
-
     // Array of food filter strings to find specific menu items: for processing data
     const filterStrings = ['(v)', '(vgn)', '(w/nuts)'];
     
@@ -113,6 +112,7 @@ const MenuScreen = ({ navigation }) => {
         }
         return result;
     }
+    
     // Store an menu name in the array inside the object which stores its section name.
         // dataList: 1-D array to store the menu data
         // pairData: pairData[0] = string for menu name, pairData[1] = string for section name
@@ -129,8 +129,12 @@ const MenuScreen = ({ navigation }) => {
     const createNoDataElement = (dataList, message) => {
         dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }],
                        [{ title: message, data: [], }], [{ title: message, data: [], }]]);
+    };
+
+    function printItem(name) {
+        Alert.alert("Added to the favorite list");
     }
-    
+
     /* ============================= Main Part ============================= */
     
     useEffect (() => {
@@ -185,9 +189,12 @@ const MenuScreen = ({ navigation }) => {
                     keyExtractor={(item, index) => index.toString()}
                     sections={mealsList[hourChoice][hallChoice][filterChoice]}
                     renderSectionHeader={({section}) => (
-                        <Text style={styles.sectionStyle}> {section.title} </Text>)}
+                        <Text style={styles.sectionStyle}> {section.title} </Text>
+                    )}
                     renderItem={({item}) => (
-                        <Text style={styles.textStyle}> {item} </Text>)}
+                        <Button backgroundColor='rgba(255, 255, 255, 0.8)' onPress={() => {printItem({item})}} title={item}></Button>
+                    )
+                }
                 />
                 : // False: display a loading message.
                 <Text style={styles.textStyle}>Loading...</Text>
@@ -203,9 +210,9 @@ const MenuScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
   },
-
   sectionStyle: {
     fontWeight: 'bold',
     textAlign: 'center',

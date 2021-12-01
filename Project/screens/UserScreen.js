@@ -1,4 +1,4 @@
-import { Button, Image, View, Platform, Text } from 'react-native';
+import { Button, Image, View, Platform, Text, StyleSheet } from 'react-native';
 import React, { useState, useEffect } from 'react';
 // import * as ImagePicker from 'expo-image-picker';
 import {MediaTypeOptions, requestMediaLibraryPermissionsAsync, launchImageLibraryAsync, launchCameraAsync} from 'expo-image-picker';
@@ -21,7 +21,6 @@ export default UserScreen = ({ navigation }) => {
 
     const [image = disPhotoURL, setImage] = useState();
     var name = "";
-    image=disPhotoURL;
   if (disName == "") {
     name = "User";
   } else {
@@ -70,19 +69,48 @@ export default UserScreen = ({ navigation }) => {
 
   return (
     <View  style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <View> 
-          <Text>Welcome to Servedup</Text>
-        </View>
-        <View  style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',}}>
-        {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
-        <Text>       {name}       </Text>
-        </View>
-        <View>
-            <Button title="Pick an image from camera roll" onPress={pickImage} />
-        </View>
-        <View>
-            <Button title="Take a new picture" onPress={takeImage} />
-        </View>
+        {
+          (disState) ?
+            <View>
+              <View> 
+              <Text>Welcome to Servedup</Text>
+            </View>
+
+            <View  style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',}}>
+              {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
+              <Text>       {name}       </Text>
+            </View>
+
+            <View>
+              <Button title="Pick an image from camera roll" onPress={pickImage} />
+            </View>
+
+            <View>
+              <Button title="Take a new picture" onPress={takeImage} />
+            </View>
+            </View>
+            : 
+            <Text style={styles.textStyle}>Use Login Screen to login first</Text>
+        }
     </View>
   );
   }
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+    },
+    sectionStyle: {
+      fontWeight: 'bold',
+      textAlign: 'center',
+      fontSize: 16,
+      padding: 6,
+      color: '#000000',
+    },
+    textStyle: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#000000',
+    },
+  });
