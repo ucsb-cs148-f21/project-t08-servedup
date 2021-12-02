@@ -26,7 +26,9 @@
     "expo-splash-screen": "~0.11.2",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.8.1",
+    "fetch-rate-limit-util": "^1.1.6",
     "firebase": "8.2.3",
+    "p-limit": "^4.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "^0.63.4",
@@ -43,16 +45,21 @@
     "react-spinners": "^0.11.0",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.0"
-    },
-    "devDependencies": {
-      "@babel/core": "^7.9.0",
-      "@emotion/babel-plugin": "^11.3.0",
-      "@testing-library/react": "^12.1.2",
-      "@testing-library/user-event": "^13.5.0",
-      "jest": "^27.3.1",
-      "jest-expo": "^43.0.1",
-      "react-test-renderer": "16.14.0"
-    },
-    "private": true
-  }
-
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@emotion/babel-plugin": "^11.3.0",
+    "@firebase/testing": "^0.20.11",
+    "@testing-library/react-native": "^8.0.0",
+    "@types/jest": "^27.0.2",
+    "firebase-admin": "^10.0.0",
+    "firebase-functions": "^3.16.0",
+    "jest": "^27.3.1",
+    "jest-expo": "^43.0.1",
+    "mock-async-storage": "^2.2.0",
+    "react-test-renderer": "^17.0.2",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0"
+  },
+  "private": true
+}

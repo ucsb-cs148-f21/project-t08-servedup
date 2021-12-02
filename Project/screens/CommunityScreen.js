@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
-import * as firebase from "firebase";
+import firebase from "firebase";
 import 'firebase/firestore';
 import * as Google from 'expo-google-app-auth';
 

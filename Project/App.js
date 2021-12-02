@@ -11,28 +11,29 @@ import MenuScreen from './screens/MenuScreen';
 import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import { LoginScreen } from './screens/LoginScreen';
+import {getDish, addDish, delDish} from './screens/Menuscreenhelper'
 
 import { Provider } from 'react-redux';
 import { Store } from './src/store';
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
-import * as firebase from "firebase";
+import firebase from "firebase";
 import 'firebase/firestore';
 
 
 import configureStore from './src/store.js';
 
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
-//   authDomain: 'served-up-63c2e.firebaseapp.com',
-//   databaseURL: 'https://served-up-63c2e.firebaseio.com',
-//   projectId: 'served-up-63c2e',
-//   storageBucket: 'served-up-63c2e.appspot.com',
-//   //messagingSenderId: 'sender-id',
-//   appId: '1:456652905966:ios:80d960e213cb40ea1182ff',
-//   //measurementId: 'G-measurement-id',
-// };
+const firebaseConfig = {
+  apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
+  authDomain: 'served-up-63c2e.firebaseapp.com',
+  databaseURL: 'https://served-up-63c2e.firebaseio.com',
+  projectId: 'served-up-63c2e',
+  storageBucket: 'served-up-63c2e.appspot.com',
+  //messagingSenderId: 'sender-id',
+  appId: '1:456652905966:ios:80d960e213cb40ea1182ff',
+  //measurementId: 'G-measurement-id',
+};
 
 // Initialize Firebase
 if (firebase.apps.length === 0) {
@@ -45,12 +46,17 @@ const Stack = createBottomTabNavigator();
 const db = firebase.firestore();
 const reviewRef = db.collection('Reviews');
 
+
+
 // else if (route.name === 'Submit') {
 //   iconName = focused ? 'git-commit' : 'git-commit-outline';
 // }
 // <Stack.Screen name="Submit" component={FormScreen}/>
 
 const App = () => {
+
+  var fav = db.collection('Users').doc('Roy');
+  addDish(fav,"Fish")
 
     return (
     <Provider store={Store}>
