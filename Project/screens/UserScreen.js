@@ -73,24 +73,24 @@ export default UserScreen = ({ navigation }) => {
           (disState) ?
             <View>
               <View> 
-              <Text>Welcome to Servedup</Text>
-            </View>
+                <Text style={{ fontSize: 30, color: "#00BCD4", textAlign: "center" }} > Welcome to ServedUp!</Text>
+              </View>
 
-            <View  style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',}}>
-              {image && <Image source={{ uri: image }} style={{ width: 100, height: 100 }} />}
-              <Text>       {name}       </Text>
-            </View>
+              <View  style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start',}}>
+                {image && <Image source={{ uri: image }} style={{ width: 150, height: 150,  }} />}
+                <Text>            {name}   </Text>
+              </View>
 
-            <View>
-              <Button title="Pick an image from camera roll" onPress={pickImage} />
-            </View>
+              <View>
+                <Button title="Pick an image from camera roll" onPress={pickImage} />
+              </View>
 
-            <View>
-              <Button title="Take a new picture" onPress={takeImage} />
-            </View>
-            </View>
-            : 
-            <Text style={styles.textStyle}>Use Login Screen to login first</Text>
+              <View>
+                <Button title="Take a new picture" onPress={takeImage} />
+              </View>
+              </View>
+              : 
+              <Text style={styles.textStyle}>Use Login Screen to login first</Text>
         }
     </View>
   );
@@ -100,6 +100,7 @@ export default UserScreen = ({ navigation }) => {
     container: {
       flex: 1,
       justifyContent: 'center',
+      marginHorizontal: 16,
     },
     sectionStyle: {
       fontWeight: 'bold',
@@ -112,5 +113,9 @@ export default UserScreen = ({ navigation }) => {
         textAlign: 'center',
         fontSize: 16,
         color: '#000000',
+    },
+    fixToText: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
     },
   });

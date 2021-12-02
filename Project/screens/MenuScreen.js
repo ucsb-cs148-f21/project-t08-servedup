@@ -133,6 +133,7 @@ function MenuScreen({ navigation }) {
 
     function printItem(name) {
         Alert.alert("Added to the favorite list");
+        console.log(name);
     }
 
     /* ============================= Main Part ============================= */

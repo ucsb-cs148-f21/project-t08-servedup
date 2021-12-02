@@ -66,6 +66,8 @@ export function LoginScreen({ navigation }) {
         console.log("LoginScreen.js | logging out");
             setAbleLogOut(true);
             setAbleLogIn(false);
+            dispatch(setSignInState(false));
+            
 
     };
 
