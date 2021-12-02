@@ -11,7 +11,7 @@ import MenuScreen from './screens/MenuScreen';
 import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import { LoginScreen } from './screens/LoginScreen';
-import {getDish, addDish, delDish} from './screens/Menuscreenhelper'
+import {getDish, addDish, delDish, addImage} from './screens/firebasehelper'
 
 import { Provider } from 'react-redux';
 import { Store } from './src/store';
@@ -44,8 +44,7 @@ if (firebase.apps.length === 0) {
 const Stack = createBottomTabNavigator();
 
 const db = firebase.firestore();
-const reviewRef = db.collection('Reviews');
-
+const store = firebase.storage();
 
 
 // else if (route.name === 'Submit') {
@@ -55,8 +54,8 @@ const reviewRef = db.collection('Reviews');
 
 const App = () => {
 
-  var fav = db.collection('Users').doc('Roy');
-  addDish(fav,"Fish")
+  addDish(db, "Kate", "Vitamin B")
+  addImage(store, "Roy", "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg", "trashcan")
 
     return (
     <Provider store={Store}>

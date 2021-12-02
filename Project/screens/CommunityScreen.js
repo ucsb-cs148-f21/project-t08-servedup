@@ -4,6 +4,9 @@ import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from "react-n
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import Store from '../src/store';
+import { useSelector, useDispatch} from 'react-redux'
+
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
@@ -335,8 +338,19 @@ const Portola = ({ navigation}) => {
 
 const Stack = createNativeStackNavigator();
 
+
+
 const comm = () => {
+  const dispatch = useDispatch();
+    var disName = useSelector(state => state.loginReducer.name);
+    var disEmail = useSelector(state => state.loginReducer.email);
+    var disID = useSelector(state => state.loginReducer.id);
+    var disState = useSelector(state => state.loginReducer.isSignedIn);
+    var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
+    console.log("disName = " + disName + ", disEmail = " + disEmail + ", disID = " + disID + ", disState = " + disState + ", disPhotoURL = " + disPhotoURL);
+
   return (
+    (disState) ?
       <Stack.Navigator>
         <Stack.Screen
           name="MainScreen"
@@ -348,6 +362,9 @@ const comm = () => {
         <Stack.Screen name="Ortega Chat" component={Ortega}/>
         <Stack.Screen name="Portola Chat" component={Portola}/>
       </Stack.Navigator>
+      : <View  style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={styles.textStyle}>Use Login Screen to login first</Text>
+          </View>
   );
 };
 

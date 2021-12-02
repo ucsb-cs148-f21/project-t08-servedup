@@ -19,11 +19,11 @@ firebase.initializeApp(firebaseConfig);
 }
 
 const db = firebase.firestore();
-var fav = db.collection('Users').doc('Roy');
 
 //get data
-const getDish = (fav) => {
+const getDish = (db, name) => {
     //fav should be a document in the users collection
+    var fav = db.collection('Users').doc(name);
     fav.get().then((doc) => {
         const favs = new doc.data().dishes;
         console.log(favs);
@@ -32,8 +32,9 @@ const getDish = (fav) => {
 }
 
 //add data
-const addDish = (fav,dish) => {
+const addDish = (db, name, dish) => {
     //fav should be a document in the users collection
+    var fav = db.collection('Users').doc(name);
     fav.get().then((favdata) => {
         if (favdata.exists) {
             fav.update({
@@ -46,11 +47,33 @@ const addDish = (fav,dish) => {
 }
 
 //remove data
-const delDish = (fav,dish) => {
+const delDish = (db, name, dish) => {
     //fav should be a document in the users collection
+    var fav = db.collection('Users').doc(name);
     fav.update({
         dishes: firebase.firestore.FieldValue.arrayRemove(dish)
     })
 }
 
-export {getDish, addDish, delDish};
+//upload user image
+const addImage = (store, userName, imageURL, imageName) => {
+    var refer = store.ref();
+    getFileBlob(imageURL, blob =>{
+        refer.child(userName+'/'+imageName).put(blob).then(function(snapshot) {
+           console.log('Uploaded a blob or file!');
+        })
+    })
+}
+
+var getFileBlob = function (url, cb) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.responseType = "blob";
+    xhr.addEventListener('load', function() {
+      cb(xhr.response);
+    });
+    xhr.send();
+};
+
+
+export {getDish, addDish, delDish, addImage};
