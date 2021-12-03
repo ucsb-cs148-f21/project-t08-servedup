@@ -103,20 +103,22 @@ function MenuScreen({ navigation }) {
                 // menus[4] = menus in user's favorite food list.
                 var menus = [[], [], [], [], []];
                 
-                // Push each menu item in the array, menus, with its section information.
                 for (var j = 0; j < state[i].length; j++) {
+                    // pair[0]: string of menu name, pair[1]: string of section name
                     var pair = Object.values(state[i][j]);
-                    
+                    // Store each menu item in the array, menus, with its section information.
                     for (var k = 0; k < menus.length; k++) {
-                        if ((k == 0)
+                        if ((k == 0) // If menus[0]: push all the item
+                            // If menus[1, 2, or 3]: push the item if it has a food filter string
                             || ((1 <= k <= 3) && (pair[0].includes(filterStrings[k - 1])))
                             || ((k == 4) && (favList.includes(pair[0])))) {
+                            // If menus[4]: push the item if it's in user's favorite food list
                             addElement(menus[k], pair);
                         }
                     }
                 }
                 
-                // If the menu contains no vegetarian, vegan, or nuts item,
+                // If the menu contains no vegetarian, vegan, nuts, or favorite item,
                 // store the message section that tells no result to display.
                 for (var l = 1; l < menus.length; l++) {
                     if (menus[l] == 0) {
