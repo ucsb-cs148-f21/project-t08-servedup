@@ -6,7 +6,39 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, SafeAreaView, ScrollView, SectionList, Button, Alert, TouchableOpacity } from 'react-native';
 import SwitchSelector from "react-native-switch-selector";
 
+import Store from '../src/store';
+import { useSelector, useDispatch} from 'react-redux'
+
+import firebase from "firebase";
+import 'firebase/firestore';
+import {getDish, addDish, delDish} from './Menuscreenhelper'
+
 function MenuScreen({ navigation }) {
+
+    const firebaseConfig = {
+        apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
+        authDomain: 'served-up-63c2e.firebaseapp.com',
+        databaseURL: 'https://served-up-63c2e.firebaseio.com',
+        projectId: 'served-up-63c2e',
+        storageBucket: 'served-up-63c2e.appspot.com',
+        //messagingSenderId: 'sender-id',
+        appId: '1:456652905966:ios:80d960e213cb40ea1182ff',
+        //measurementId: 'G-measurement-id',
+    };
+
+    // get fav dishes list from database
+    const [favList, setFavList] = useState([]);
+    const [buttonC = '#90CAF9', setButtonC] = useState();
+    // if (disState) {
+    //     if (firebase.apps.length === 0) {
+    //         firebase.initializeApp(firebaseConfig);
+    //     }
+        
+    //     const db = firebase.firestore();
+    //     var ppl = db.collection('Users').doc(disName);
+
+    //     favList = getDish(ppl);
+    // }
 
     /* ============================= Variables ============================= */
     
@@ -131,9 +163,32 @@ function MenuScreen({ navigation }) {
                        [{ title: message, data: [], }], [{ title: message, data: [], }]]);
     };
 
-    function printItem(name) {
-        Alert.alert("Added to the favorite list");
-        console.log(name);
+    // database and sync related variables
+    const dispatch = useDispatch();
+    var disName = useSelector(state => state.loginReducer.name);
+    var disEmail = useSelector(state => state.loginReducer.email);
+    var disID = useSelector(state => state.loginReducer.id);
+    var disState = useSelector(state => state.loginReducer.isSignedIn);
+    var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
+
+    function HandleFavFood(name) {
+        if (disState) {
+            if (favList.some(fav => fav.item === name.item) === false) {
+                Alert.alert("Added to the favorite list");
+                console.log(name);
+                setFavList([...favList, name]);
+                console.log(favList);
+                setButtonC('#90CAF9');
+            } else {
+                Alert.alert("Removed from the favorite list");
+                console.log(name);
+                setFavList(favList.filter(item => item.item !== name.item));
+                console.log(favList);
+                setButtonC('#CFD8DC');
+            }
+        } else {
+            Alert.alert("You need to sign in with your google account to add favorite food");
+        }
     }
 
     /* ============================= Main Part ============================= */
@@ -193,7 +248,10 @@ function MenuScreen({ navigation }) {
                         <Text style={styles.sectionStyle}> {section.title} </Text>
                     )}
                     renderItem={({item}) => (
-                        <Button backgroundColor='rgba(255, 255, 255, 0.8)' onPress={() => {printItem({item})}} title={item}></Button>
+                        favList.some(fav => fav.item === {item}.item) ?
+                        <Button color={buttonC} onPress={() => {HandleFavFood({item})}} title={item}></Button>
+                        :
+                        <Button color={buttonC} onPress={() => {HandleFavFood({item})}} title={item}></Button>
                     )
                 }
                 />

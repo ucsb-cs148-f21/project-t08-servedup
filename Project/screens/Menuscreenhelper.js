@@ -15,14 +15,14 @@ const firebaseConfig = {
 };
 
 if (firebase.apps.length === 0) {
-firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
 }
 
 const db = firebase.firestore();
 var fav = db.collection('Users').doc('Roy');
 
 //get data
-const getDish = (fav) => {
+function getDish (fav) {
     //fav should be a document in the users collection
     fav.get().then((doc) => {
         const favs = new doc.data().dishes;
@@ -32,7 +32,7 @@ const getDish = (fav) => {
 }
 
 //add data
-const addDish = (fav,dish) => {
+function addDish(fav,dish) {
     //fav should be a document in the users collection
     fav.get().then((favdata) => {
         if (favdata.exists) {
@@ -46,7 +46,7 @@ const addDish = (fav,dish) => {
 }
 
 //remove data
-const delDish = (fav,dish) => {
+function delDish(fav,dish){
     //fav should be a document in the users collection
     fav.update({
         dishes: firebase.firestore.FieldValue.arrayRemove(dish)
