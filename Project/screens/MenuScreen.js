@@ -23,8 +23,8 @@ function MenuScreen({ navigation }) {
     var disID = useSelector(state => state.loginReducer.id);
     var disState = useSelector(state => state.loginReducer.isSignedIn);
     var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
-    const [favList = getDish(db, disName), setFavList] = useState([]);
-    const [buttonC = '#CFD8DC', setButtonC] = useState();
+    // const [favList = getDish(db, disName), setFavList] = useState([]);
+    const [favList=[], setFavList] = useState([]);
 
     /* ============================= Variables ============================= */
     
@@ -149,26 +149,21 @@ function MenuScreen({ navigation }) {
                        [{ title: message, data: [], }], [{ title: message, data: [], }]]);
     };
 
-    function HandleFavFood(name) {
+    function handleFavFood(name) {
         if (disState) {
             if (favList.some(fav => fav.item === name.item) === false) {
                 Alert.alert("Added to the favorite list");
-                console.log(name);
                 setFavList([...favList, name]);
-                console.log(favList);
-                setButtonC('#90CAF9');
+                // addDish(db, name.item)
             } else {
                 Alert.alert("Removed from the favorite list");
-                console.log(name);
                 setFavList(favList.filter(item => item.item !== name.item));
-                console.log(favList);
-                setButtonC('#CFD8DC');
+                // delDish(db, name.item)
             }
         } else {
             Alert.alert("You need to sign in with your google account to add favorite food");
         }
     }
-
     /* ============================= Main Part ============================= */
     
     useEffect (() => {
@@ -220,16 +215,14 @@ function MenuScreen({ navigation }) {
                 (mealsList[hourChoice][hallChoice][filterChoice] != undefined) ?
                 // True: display the element of mealsList selected by switch selectors.
                 <SectionList
+                    extraData={favList}
                     keyExtractor={(item, index) => index.toString()}
                     sections={mealsList[hourChoice][hallChoice][filterChoice]}
                     renderSectionHeader={({section}) => (
                         <Text style={styles.sectionStyle}> {section.title} </Text>
                     )}
                     renderItem={({item}) => (
-                        favList.some(fav => fav.item === {item}.item) ?
-                        <Button color={buttonC} onPress={() => {HandleFavFood({item})}} title={item}></Button>
-                        :
-                        <Button color={buttonC} onPress={() => {HandleFavFood({item})}} title={item}></Button>
+                        <Button color={favList.some(fav => fav.item === {item}.item) ? '#90CAF9':'#CFD8DC'} onPress={() => {handleFavFood({item})}} title={item}></Button>
                     )
                 }
                 />
