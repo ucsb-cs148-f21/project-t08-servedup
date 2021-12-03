@@ -34,7 +34,9 @@ function MenuScreen({ navigation }) {
         { label: "All", value: "0" },
         { label: "Vegetarian", value: "1" },
         { label: "Vegan", value: "2" },
-        { label: "WITH Nuts", value: "3" } ];
+        { label: "WITH Nuts", value: "3" },
+        { label: "Your Favorites", value: "4" } ];
+    
     // Array of food filter strings to find specific menu items: for processing data
     const filterStrings = ['(v)', '(vgn)', '(w/nuts)'];
     
@@ -49,6 +51,9 @@ function MenuScreen({ navigation }) {
     const [ hourChoice, setHourChoice ] = useState(0); // Meal hour choice
     const [ hallChoice, setHallChoice ] = useState(0); // Dining hall choice
     const [ filterChoice, setFilterChoice ] = useState(0); // Food filter choice
+    
+    // Fake favorite list
+    const favorites = [];
     
     /* ============================= Functions ============================= */
     
@@ -77,20 +82,22 @@ function MenuScreen({ navigation }) {
                 // Create the array of arrays of objects from the menu data.
                 // menus[0] = all menus, menus[1] = menus with (v),
                 // menus[2] = menus with (vgn), menus[3] = menus with (w/nuts)
-                var menus = [[], [], [], []];
+                // menus[4] = menus in user's favorite food list.
+                var menus = [[], [], [], [], []];
                 
                 // Push each menu item in the array, menus, with its section information.
                 for (var j = 0; j < state[i].length; j++) {
                     var pair = Object.values(state[i][j]);
-                    addElement(menus[0], pair);
                     
-                    // Push the menu item if its name has a food filter string.
-                    for (var k = 1; k < menus.length; k++) {
-                        if (pair[0].includes(filterStrings[k - 1])) {
+                    for (var k = 0; k < menus.length; k++) {
+                        if ((k == 0)
+                            || ((1 <= k <= 3) && (pair[0].includes(filterStrings[k - 1])))
+                            || ((k == 4) && (favorites.includes(pair[0])))) {
                             addElement(menus[k], pair);
                         }
                     }
                 }
+                
                 // If the menu contains no vegetarian, vegan, or nuts item,
                 // store the message section that tells no result to display.
                 for (var l = 1; l < menus.length; l++) {
