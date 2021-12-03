@@ -134,9 +134,10 @@ function MenuScreen({ navigation }) {
         // dataList: Array to srore the message.
         // message: string to tell closed or error.
     const createNoDataElement = (dataList, message) => {
-        dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }],
-                       [{ title: message, data: [], }], [{ title: message, data: [], }]]);
-    };
+        dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }]
+                       [{ title: message, data: [], }], [{ title: message, data: [], }],
+                       [{ title: message, data: [], }]]);
+    }
 
     function printItem(name) {
         Alert.alert("Added to the favorite list");
