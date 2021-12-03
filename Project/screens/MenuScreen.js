@@ -70,9 +70,6 @@ function MenuScreen({ navigation }) {
     const [ hallChoice, setHallChoice ] = useState(0); // Dining hall choice
     const [ filterChoice, setFilterChoice ] = useState(0); // Food filter choice
     
-    // Fake favorite list
-    const favorites = [];
-    
     /* ============================= Functions ============================= */
     
     // Fetch the menu data for a specified hour and store in a specified state variable.
