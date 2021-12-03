@@ -4,10 +4,16 @@ import React, { useState, useEffect } from 'react';
 import {MediaTypeOptions, requestMediaLibraryPermissionsAsync, launchImageLibraryAsync, launchCameraAsync} from 'expo-image-picker';
 // import ImagePicker from 'react-native-image-picker';
 
+import {db, store} from "./firebasesetup"
+
 import Store from '../src/store';
 import { useSelector, useDispatch} from 'react-redux'
 
+import {getDish, addDish, delDish, addImage} from './firebasehelper'
+
 //import getName from '../src/Actions/signInStates';
+
+
 
 export default UserScreen = ({ navigation }) => {
     const dispatch = useDispatch();
@@ -66,6 +72,8 @@ export default UserScreen = ({ navigation }) => {
       setImage(result.uri);
     }
   };
+
+  addImage(store, "Quansen", image, "testing")
 
   return (
     <View  style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

@@ -1,24 +1,17 @@
 import firebase from "firebase";
 import 'firebase/firestore';
+import {db, store} from "./firebasesetup"
 
 
-
-const firebaseConfig = {
-    apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
-    authDomain: 'served-up-63c2e.firebaseapp.com',
-    databaseURL: 'https://served-up-63c2e.firebaseio.com',
-    projectId: 'served-up-63c2e',
-    storageBucket: 'served-up-63c2e.appspot.com',
-    //messagingSenderId: 'sender-id',
-    appId: '1:456652905966:ios:80d960e213cb40ea1182ff',
-    //measurementId: 'G-measurement-id',
-};
-
-if (firebase.apps.length === 0) {
-firebase.initializeApp(firebaseConfig);
+const iniDB = (db, name) => {
+    var col = db.collection('Users').doc(name);
+    col.get().then((doc) => {
+        if (!doc.exists) {
+            col.set({dishes:[], merge: true, uploadedAvatar: false})
+        }
+    })
 }
 
-const db = firebase.firestore();
 
 //get data
 const getDish = (db, name) => {
@@ -55,11 +48,17 @@ const delDish = (db, name, dish) => {
     })
 }
 
-//upload user image
+//upload image
 const addImage = (store, userName, imageURL, imageName) => {
-    var refer = store.ref();
+    var col = db.collection('Users').doc(userName)
+    col.get().then((doc) => {
+        col.update({
+            uploadedAvatar: true
+        })
+    })
+    var storeRef = store.ref();
     getFileBlob(imageURL, blob =>{
-        refer.child(userName+'/'+imageName).put(blob).then(function(snapshot) {
+        storeRef.child(userName+'/'+imageName).put(blob).then(function(snapshot) {
            console.log('Uploaded a blob or file!');
         })
     })
@@ -76,4 +75,47 @@ var getFileBlob = function (url, cb) {
 };
 
 
-export {getDish, addDish, delDish, addImage};
+//download image
+const getImage = (store, userName, imageName) => {
+    var storeRef = store.ref();
+    storeRef.child(userName+'/'+imageName).getDownloadURL().then((url) => {
+    // `url` is the download URL for 'images/stars.jpg'
+
+    // This can be downloaded directly:
+    var xhr = new XMLHttpRequest();
+    xhr.responseType = 'blob';
+    xhr.onload = (event) => {
+      var blob = xhr.response;
+    };
+    xhr.open('GET', url);
+    xhr.send();
+
+    // Or inserted into an <img> element
+    var img = document.getElementById('myimg');
+    img.setAttribute('src', url);
+  })
+  .catch((error) => {
+    // A full list of error codes is available at
+  // https://firebase.google.com/docs/storage/web/handle-errors
+  switch (error.code) {
+    case 'storage/object-not-found':
+      // File doesn't exist
+      break;
+    case 'storage/unauthorized':
+      // User doesn't have permission to access the object
+      break;
+    case 'storage/canceled':
+      // User canceled the upload
+      break;
+
+    // ...
+
+    case 'storage/unknown':
+      // Unknown error occurred, inspect the server response
+      break;
+  }
+  });
+}
+
+
+export {iniDB, getDish, addDish, delDish, addImage, getImage};
