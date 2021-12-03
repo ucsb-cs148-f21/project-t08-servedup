@@ -73,7 +73,7 @@ export default UserScreen = ({ navigation }) => {
         }
   };
 
-  //addImage(store, "Quansen", image, "testing")
+  addImage(store, "Roy Wang", image)
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: "aliceblue" }}>
