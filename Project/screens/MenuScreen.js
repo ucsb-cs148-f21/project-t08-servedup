@@ -6,7 +6,25 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, SafeAreaView, ScrollView, SectionList, Button, Alert, TouchableOpacity } from 'react-native';
 import SwitchSelector from "react-native-switch-selector";
 
+import Store from '../src/store';
+import { useSelector, useDispatch} from 'react-redux'
+
+import firebase from "firebase";
+import 'firebase/firestore';
+import {getDish, addDish, delDish} from './firebasehelper'
+import {db, store} from './firebasesetup'
+
 function MenuScreen({ navigation }) {
+    // get fav dishes list from database
+    // database and sync related variables
+    const dispatch = useDispatch();
+    var disName = useSelector(state => state.loginReducer.name);
+    var disEmail = useSelector(state => state.loginReducer.email);
+    var disID = useSelector(state => state.loginReducer.id);
+    var disState = useSelector(state => state.loginReducer.isSignedIn);
+    var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
+    const [favList = getDish(db, disName), setFavList] = useState([]);
+    // const [favList=[], setFavList] = useState([]);
 
     /* ============================= Variables ============================= */
     
@@ -93,8 +111,8 @@ function MenuScreen({ navigation }) {
                         if ((k == 0) // If menus[0]: push all the item
                             // If menus[1, 2, or 3]: push the item if it has a food filter string
                             || ((1 <= k <= 3) && (pair[0].includes(filterStrings[k - 1])))
+                            || ((k == 4) && (favList.includes(pair[0])))) {
                             // If menus[4]: push the item if it's in user's favorite food list
-                            || ((k == 4) && (favorites.includes(pair[0])))) {
                             addElement(menus[k], pair);
                         }
                     }
@@ -133,18 +151,31 @@ function MenuScreen({ navigation }) {
     }
     
     // Store the message section that tells closed or error.
-        // dataList: Array to srore the message.
-        // message: string to tell closed or error.
+    // dataList: Array to srore the message.
+    // message: string to tell closed or error.
     const createNoDataElement = (dataList, message) => {
         dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }],
                        [{ title: message, data: [], }], [{ title: message, data: [], }],
                        [{ title: message, data: [], }]]);
     }
 
-    function printItem(name) {
-        Alert.alert("Added to the favorite list");
+    function handleFavFood(name) {
+        if (disState) {
+            if (favList.some(fav => fav === name.item) === false) {
+                Alert.alert("Added to the favorite list");
+                var newList = [...favList, name.item]
+                setFavList(newList);
+                addDish(db, disName, name.item);
+            } else {
+                Alert.alert("Removed from the favorite list");
+                setFavList(favList.filter(item => item !== name.item));
+                delDish(db, disName, name.item);
+            }
+            console.log(favList);
+        } else {
+            Alert.alert("Sign in with your google account to add favorite food");
+        }
     }
-
     /* ============================= Main Part ============================= */
     
     useEffect (() => {
@@ -196,13 +227,17 @@ function MenuScreen({ navigation }) {
                 (mealsList[hourChoice][hallChoice][filterChoice] != undefined) ?
                 // True: display the element of mealsList selected by switch selectors.
                 <SectionList
+                    extraData={favList}
                     keyExtractor={(item, index) => index.toString()}
                     sections={mealsList[hourChoice][hallChoice][filterChoice]}
                     renderSectionHeader={({section}) => (
                         <Text style={styles.sectionStyle}> {section.title} </Text>
                     )}
                     renderItem={({item}) => (
-                        <Button backgroundColor='rgba(255, 255, 255, 0.8)' onPress={() => {printItem({item})}} title={item}></Button>
+                       disState ?
+                       <Button color={favList.some(fav => fav === {item}.item) ? '#A5D6A7':'#4DB6AC'} onPress={() => {handleFavFood({item})}} title={item}></Button>
+                       :
+                       <Button color="#4DB6AC" onPress={() => {handleFavFood({item})}} title={item}></Button>
                     )
                 }
                 />

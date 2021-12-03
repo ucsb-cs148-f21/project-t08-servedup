@@ -6,11 +6,12 @@ import loginReducer from '../src/Reducers/loginReducer';
 import { connect, useSelector, useDispatch } from 'react-redux';
 import { setSignInState, setName, setPhotoURL, setEmail, setID } from '../src/Actions/types'
 
-
-
 import changeSignInOut from '../src/Actions/signInStates';
 
 import Store from '../src/store';
+
+import {iniDB} from './firebasehelper'
+import {db, store} from './firebasesetup'
 
 //default function LoginScreen({ navigation }) {
 export function LoginScreen({ navigation }) {
@@ -53,6 +54,7 @@ export function LoginScreen({ navigation }) {
                 dispatch(setEmail(userEmail));
                 dispatch(setPhotoURL(userPhotoURL));
 
+                iniDB(db, userName);
                 navigation.navigate("User");
             }
         }
@@ -66,6 +68,8 @@ export function LoginScreen({ navigation }) {
         console.log("LoginScreen.js | logging out");
             setAbleLogOut(true);
             setAbleLogIn(false);
+            dispatch(setSignInState(false));
+            
 
     };
 
@@ -86,7 +90,7 @@ export function LoginScreen({ navigation }) {
 
             <View style={{ flex: 0.2 }} />
 
-            <Image source={require('../assets/serveduplogo.png')} style={{ width: 380, height: 380, alignSelf: "center" }} />
+            <Image source={require('../assets/serveduplogoNB.png')} style={{ width: 380, height: 380, alignSelf: "center" }} />
             
         </View>
 
