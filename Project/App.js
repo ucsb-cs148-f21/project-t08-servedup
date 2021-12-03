@@ -35,9 +35,9 @@ const Stack = createBottomTabNavigator();
 
 const App = () => {
 
-  iniDB(db, "Juan")
-  addDish(db, "Kate", "Vitamin B")
-  addImage(store, "Roy", "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg", "trashcan")
+//   iniDB(db, "Juan")
+//   addDish(db, "Kate", "Vitamin B")
+//   addImage(store, "Roy", "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg", "trashcan")
 
     return (
     <Provider store={Store}>
