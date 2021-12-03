@@ -4,33 +4,23 @@ import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from "react-n
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import Store from '../src/store';
+import { useSelector, useDispatch} from 'react-redux'
+
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
-import * as firebase from "firebase";
+import firebase from "firebase";
 import 'firebase/firestore';
 import * as Google from 'expo-google-app-auth';
 
-const firebaseConfig = {
-    apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
-    authDomain: 'served-up-63c2e.firebaseapp.com',
-    databaseURL: 'https://served-up-63c2e.firebaseio.com',
-    projectId: 'served-up-63c2e',
-    storageBucket: 'served-up-63c2e.appspot.com',
-    //messagingSenderId: 'sender-id',
-    appId: '1:456652905966:ios:80d960e213cb40ea1182ff',
-    //measurementId: 'G-measurement-id',
-  };
-  
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  
-  const db = firebase.firestore();
-  const carrillo = db.collection('Carrillo');
-  const dlg = db.collection('De La Guerra')
-  const ortega = db.collection('Ortega')
-  const portola = db.collection('Portola')
+import {getDish, addDish, delDish, addImage, getImage} from './firebasehelper'
+import {db, store} from "./firebasesetup"
+
+const carrillo = db.collection('Carrillo');
+const dlg = db.collection('De La Guerra')
+const ortega = db.collection('Ortega')
+const portola = db.collection('Portola')
 
 const Separator = () => (
   <View style={styles.separator} />
@@ -108,7 +98,8 @@ const Carrillo = ({ navigation}) => {
   
     async function handlePress() {
       const _id = Math.random().toString(36).substring(7);
-      const user = {_id, name};
+      var avatar = store.ref().child('Quansen/testing.jpg').getDownloadURL()
+      const user = {_id, name, avatar};
       await AsyncStorage.setItem('user', JSON.stringify(user));
       setUser(user);
       typeof user == "string" || throwError('username should be type string');
@@ -336,7 +327,16 @@ const Portola = ({ navigation}) => {
 const Stack = createNativeStackNavigator();
 
 const comm = () => {
+  const dispatch = useDispatch();
+    var disName = useSelector(state => state.loginReducer.name);
+    var disEmail = useSelector(state => state.loginReducer.email);
+    var disID = useSelector(state => state.loginReducer.id);
+    var disState = useSelector(state => state.loginReducer.isSignedIn);
+    var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
+    console.log("disName = " + disName + ", disEmail = " + disEmail + ", disID = " + disID + ", disState = " + disState + ", disPhotoURL = " + disPhotoURL);
+
   return (
+    (disState) ?
       <Stack.Navigator>
         <Stack.Screen
           name="MainScreen"
@@ -348,6 +348,9 @@ const comm = () => {
         <Stack.Screen name="Ortega Chat" component={Ortega}/>
         <Stack.Screen name="Portola Chat" component={Portola}/>
       </Stack.Navigator>
+      : <View  style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={styles.textStyle}>Use Login Screen to login first</Text>
+          </View>
   );
 };
 
@@ -356,10 +359,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginHorizontal: 16,
+    backgroundColor: "aliceblue"
   },
   title: {
     textAlign: 'center',
     marginVertical: 8,
+    backgroundColor: "aliceblue"
   },
   fixToText: {
     flexDirection: 'row',
