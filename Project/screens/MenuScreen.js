@@ -110,7 +110,7 @@ function MenuScreen({ navigation }) {
             } else {
                 // state[i] contains an object to represent the meal is not served.
                 if (state[i].status == 404 ) {
-                    var message = "Closed"
+                    var message = "Closed";
                 } else { // state[i] contains an object to represent some error.
                     var message = "Error";
                 }
@@ -134,7 +134,7 @@ function MenuScreen({ navigation }) {
         // dataList: Array to srore the message.
         // message: string to tell closed or error.
     const createNoDataElement = (dataList, message) => {
-        dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }]
+        dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }],
                        [{ title: message, data: [], }], [{ title: message, data: [], }],
                        [{ title: message, data: [], }]]);
     }
