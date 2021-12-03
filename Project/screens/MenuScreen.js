@@ -23,8 +23,8 @@ function MenuScreen({ navigation }) {
     var disID = useSelector(state => state.loginReducer.id);
     var disState = useSelector(state => state.loginReducer.isSignedIn);
     var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
-    // const [favList = getDish(db, disName), setFavList] = useState([]);
-    const [favList=[], setFavList] = useState([]);
+    const [favList = getDish(db, disName), setFavList] = useState([]);
+    // const [favList=[], setFavList] = useState([]);
 
     /* ============================= Variables ============================= */
     
@@ -153,15 +153,17 @@ function MenuScreen({ navigation }) {
         if (disState) {
             if (favList.some(fav => fav.item === name.item) === false) {
                 Alert.alert("Added to the favorite list");
-                setFavList([...favList, name]);
-                // addDish(db, name.item)
+                var newList = [...favList, name]
+                setFavList(newList);
+                addDish(db, disName, name.item);
             } else {
                 Alert.alert("Removed from the favorite list");
                 setFavList(favList.filter(item => item.item !== name.item));
-                // delDish(db, name.item)
+                delDish(db, disName, name.item);
             }
+            console.log(favList);
         } else {
-            Alert.alert("You need to sign in with your google account to add favorite food");
+            Alert.alert("Sign in with your google account to add favorite food");
         }
     }
     /* ============================= Main Part ============================= */
@@ -222,7 +224,7 @@ function MenuScreen({ navigation }) {
                         <Text style={styles.sectionStyle}> {section.title} </Text>
                     )}
                     renderItem={({item}) => (
-                        <Button color={favList.some(fav => fav.item === {item}.item) ? '#90CAF9':'#CFD8DC'} onPress={() => {handleFavFood({item})}} title={item}></Button>
+                        <Button color={favList.some(fav => fav.item === {item}.item) ? '#A5D6A7':'#4DB6AC'} onPress={() => {handleFavFood({item})}} title={item}></Button>
                     )
                 }
                 />

@@ -12,7 +12,7 @@ import { db, store } from "./firebasesetup";
 import Store from "../src/store";
 import { useSelector, useDispatch } from "react-redux";
 
-import { addImage, getImage } from "./firebasehelper";
+import {getAvatarbool, addImage, getImage} from './firebasehelper'
 
 export default UserScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -33,7 +33,6 @@ export default UserScreen = ({ navigation }) => {
       ", disPhotoURL = " +
       disPhotoURL
   );
-
   const [image = disPhotoURL, setImage] = useState();
   var name = "";
   if (disName == "") {
@@ -41,6 +40,8 @@ export default UserScreen = ({ navigation }) => {
   } else {
     name = disName;
   }
+
+  if (getAvatarbool())
 
   useEffect(() => {
     (async () => {
@@ -128,7 +129,7 @@ export default UserScreen = ({ navigation }) => {
         </View>
       ) : (
         <Text style={styles.textStyle}>
-          Please use the Login Screen to login
+          Log in to google account to access your profile
         </Text>
       )}
     </View>
