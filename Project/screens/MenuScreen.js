@@ -110,7 +110,7 @@ function MenuScreen({ navigation }) {
                     for (var k = 0; k < menus.length; k++) {
                         if ((k == 0)
                             || ((1 <= k <= 3) && (pair[0].includes(filterStrings[k - 1])))
-                            || ((k == 4) && (favorites.includes(pair[0])))) {
+                            || ((k == 4) && (favList.includes(pair[0])))) {
                             addElement(menus[k], pair);
                         }
                     }
@@ -128,7 +128,7 @@ function MenuScreen({ navigation }) {
             } else {
                 // state[i] contains an object to represent the meal is not served.
                 if (state[i].status == 404 ) {
-                    var message = "Closed"
+                    var message = "Closed";
                 } else { // state[i] contains an object to represent some error.
                     var message = "Error";
                 }
@@ -152,21 +152,21 @@ function MenuScreen({ navigation }) {
     // dataList: Array to srore the message.
     // message: string to tell closed or error.
     const createNoDataElement = (dataList, message) => {
-        dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }]
+        dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }],
                        [{ title: message, data: [], }], [{ title: message, data: [], }],
                        [{ title: message, data: [], }]]);
     }
 
     function handleFavFood(name) {
         if (disState) {
-            if (favList.some(fav => fav.item === name.item) === false) {
+            if (favList.some(fav => fav === name.item) === false) {
                 Alert.alert("Added to the favorite list");
-                var newList = [...favList, name]
+                var newList = [...favList, name.item]
                 setFavList(newList);
                 addDish(db, disName, name.item);
             } else {
                 Alert.alert("Removed from the favorite list");
-                setFavList(favList.filter(item => item.item !== name.item));
+                setFavList(favList.filter(item => item !== name.item));
                 delDish(db, disName, name.item);
             }
             console.log(favList);
@@ -232,7 +232,10 @@ function MenuScreen({ navigation }) {
                         <Text style={styles.sectionStyle}> {section.title} </Text>
                     )}
                     renderItem={({item}) => (
-                        <Button color={favList.some(fav => fav.item === {item}.item) ? '#A5D6A7':'#4DB6AC'} onPress={() => {handleFavFood({item})}} title={item}></Button>
+                       disState ?
+                       <Button color={favList.some(fav => fav === {item}.item) ? '#A5D6A7':'#4DB6AC'} onPress={() => {handleFavFood({item})}} title={item}></Button>
+                       :
+                       <Button color="#4DB6AC" onPress={() => {handleFavFood({item})}} title={item}></Button>
                     )
                 }
                 />

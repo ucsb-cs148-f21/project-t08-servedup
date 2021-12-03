@@ -33,15 +33,25 @@ export default UserScreen = ({ navigation }) => {
       ", disPhotoURL = " +
       disPhotoURL
   );
-  const [image = disPhotoURL, setImage] = useState();
+
+  function getUrl(stats) {
+      if (stats) {
+        return getImage(store, disName, 'profile.png');
+      } else {
+          return disPhotoURL;
+      }
+  }
+
+  var stat = getAvatarbool(db, disName);
+  var url = getUrl(stat);
+
+  const [image, setImage] = useState(url);
   var name = "";
   if (disName == "") {
     name = "User";
   } else {
     name = disName;
   }
-
-  if (getAvatarbool())
 
   useEffect(() => {
     (async () => {
@@ -66,6 +76,7 @@ export default UserScreen = ({ navigation }) => {
 
     if (!result.cancelled) {
       setImage(result.uri);
+      addImage(store, disName, result.uri);
     }
   };
 
@@ -81,6 +92,7 @@ export default UserScreen = ({ navigation }) => {
 
     if (!result.cancelled) {
       setImage(result.uri);
+      addImage(store, disName, result.uri);
     }
   };
 
