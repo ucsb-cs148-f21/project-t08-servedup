@@ -68,12 +68,18 @@ const delDish = (db, name, dish) => {
 //upload image
 const addImage = (store, userName, imageURL) => {
     
-    const storeRef = store.ref()
+    var storeRef = store.ref()
     storeRef.child(userName+'/profile.png').put(imageURL)
-    getFileBlob(imageURL, blob =>{
-        storeRef.child(userName+'/profile.png').put(blob).then(function(snapshot) {
-           console.log('Uploaded a blob or file!');
-        })
+    // getFileBlob(imageURL, blob =>{
+    //     storeRef.child(userName+'/profile.png').put(blob).then(function(snapshot) {
+    //        console.log('Uploaded a blob or file!');
+    //     })
+    // })
+
+    var col = db.collection('Users').doc(userName)
+    col.update({
+        uploadedAvatar: true,
+        avatar: imageURL
     })
 
     storeRef.child(userName+'/profile.png').getDownloadURL()
