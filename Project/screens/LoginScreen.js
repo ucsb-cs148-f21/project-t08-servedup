@@ -90,7 +90,7 @@ export function LoginScreen({ navigation }) {
 
             <View style={{ flex: 0.2 }} />
 
-            <Image source={require('../assets/serveduplogo.png')} style={{ width: 380, height: 380, alignSelf: "center" }} />
+            <Image source={require('../assets/serveduplogoNB.png')} style={{ width: 380, height: 380, alignSelf: "center" }} />
             
         </View>
 

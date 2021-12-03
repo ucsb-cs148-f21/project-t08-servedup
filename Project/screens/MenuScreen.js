@@ -11,7 +11,7 @@ import { useSelector, useDispatch} from 'react-redux'
 
 import firebase from "firebase";
 import 'firebase/firestore';
-import {getDish, addDish, delDish, iniDB} from './firebasehelper'
+import {getDish, addDish, delDish} from './firebasehelper'
 import {db, store} from './firebasesetup'
 
 function MenuScreen({ navigation }) {
@@ -23,9 +23,8 @@ function MenuScreen({ navigation }) {
     var disID = useSelector(state => state.loginReducer.id);
     var disState = useSelector(state => state.loginReducer.isSignedIn);
     var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
-    const [favList, setFavList] = useState([]);
-    const [buttonC = '#90CAF9', setButtonC] = useState();
-    setFavList(getDish(db, disName));
+    const [favList = getDish(db, disName), setFavList] = useState([]);
+    const [buttonC = '#CFD8DC', setButtonC] = useState();
 
     /* ============================= Variables ============================= */
     

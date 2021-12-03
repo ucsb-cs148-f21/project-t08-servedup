@@ -336,21 +336,23 @@ const comm = () => {
     console.log("disName = " + disName + ", disEmail = " + disEmail + ", disID = " + disID + ", disState = " + disState + ", disPhotoURL = " + disPhotoURL);
 
   return (
+    <View style={{backgroundColor: "aliceblue"}}>
     (disState) ?
-      <Stack.Navigator>
-        <Stack.Screen
-          name="MainScreen"
-          component={HomeScreen}
-          options={{ headerShown: false}}
-        />
-        <Stack.Screen name="Carrillo Chat" component={Carrillo}/>
-        <Stack.Screen name="De La Guerra Chat" component={DeLaGuerra}/>
-        <Stack.Screen name="Ortega Chat" component={Ortega}/>
-        <Stack.Screen name="Portola Chat" component={Portola}/>
-      </Stack.Navigator>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="MainScreen"
+            component={HomeScreen}
+            options={{ headerShown: false}}
+          />
+          <Stack.Screen name="Carrillo Chat" component={Carrillo}/>
+          <Stack.Screen name="De La Guerra Chat" component={DeLaGuerra}/>
+          <Stack.Screen name="Ortega Chat" component={Ortega}/>
+          <Stack.Screen name="Portola Chat" component={Portola}/>
+        </Stack.Navigator>
       : <View  style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Text style={styles.textStyle}>Use Login Screen to login first</Text>
-          </View>
+        </View>
+        </View>
   );
 };
 

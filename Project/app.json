@@ -4,9 +4,9 @@
     "slug": "Prototype",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/serveduplogo.png",
+    "icon": "./assets/serveduplogo1024x1024.png",
     "splash": {
-      "image": "./assets/serveduplogo.png",
+      "image": "./assets/serveduplogo1024x1024.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -28,7 +28,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/serveduplogo.png",
+        "foregroundImage": "./assets/serveduplogo1024x1024.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.servedup.cs148team8",
