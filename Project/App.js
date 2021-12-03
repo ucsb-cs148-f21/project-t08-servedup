@@ -11,41 +11,21 @@ import MenuScreen from './screens/MenuScreen';
 import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import { LoginScreen } from './screens/LoginScreen';
-import {getDish, addDish, delDish} from './screens/Menuscreenhelper'
+import comm from "./screens/comm"
+import {getDish, addDish, delDish, addImage, getImage, iniDB} from './screens/firebasehelper'
 
 import { Provider } from 'react-redux';
 import { Store } from './src/store';
 import { GiftedChat } from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
-import firebase from "firebase";
-import 'firebase/firestore';
+import {db, store} from "./screens/firebasesetup";
 
 
 import configureStore from './src/store.js';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
-  authDomain: 'served-up-63c2e.firebaseapp.com',
-  databaseURL: 'https://served-up-63c2e.firebaseio.com',
-  projectId: 'served-up-63c2e',
-  storageBucket: 'served-up-63c2e.appspot.com',
-  //messagingSenderId: 'sender-id',
-  appId: '1:456652905966:ios:80d960e213cb40ea1182ff',
-  //measurementId: 'G-measurement-id',
-};
-
-// Initialize Firebase
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig);
-
-}
 
 const Stack = createBottomTabNavigator();
-
-const db = firebase.firestore();
-const reviewRef = db.collection('Reviews');
-
 
 
 // else if (route.name === 'Submit') {
@@ -55,8 +35,9 @@ const reviewRef = db.collection('Reviews');
 
 const App = () => {
 
-  var fav = db.collection('Users').doc('Roy');
-  addDish(fav,"Fish")
+//   iniDB(db, "Juan")
+//   addDish(db, "Kate", "Vitamin B")
+//   addImage(store, "Roy", "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg", "trashcan")
 
     return (
     <Provider store={Store}>
@@ -91,7 +72,7 @@ const App = () => {
           component={MenuScreen}
           options={{ title: 'Today\'s menu' }}
         />
-        <Stack.Screen name="Reviews" component={CommunityScreen}/>
+        <Stack.Screen name="Reviews" component={comm}/>
         <Stack.Screen name="User" component={UserScreen}/>
       </Stack.Navigator>
             </NavigationContainer>
