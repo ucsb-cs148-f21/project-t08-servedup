@@ -6,11 +6,12 @@ import loginReducer from '../src/Reducers/loginReducer';
 import { connect, useSelector, useDispatch } from 'react-redux';
 import { setSignInState, setName, setPhotoURL, setEmail, setID } from '../src/Actions/types'
 
-
-
 import changeSignInOut from '../src/Actions/signInStates';
 
 import Store from '../src/store';
+
+import {iniDB} from './firebasehelper'
+import {db, store} from './firebasesetup'
 
 //default function LoginScreen({ navigation }) {
 export function LoginScreen({ navigation }) {
@@ -53,6 +54,7 @@ export function LoginScreen({ navigation }) {
                 dispatch(setEmail(userEmail));
                 dispatch(setPhotoURL(userPhotoURL));
 
+                iniDB(db, userName);
                 navigation.navigate("User");
             }
         }

@@ -11,34 +11,21 @@ import { useSelector, useDispatch} from 'react-redux'
 
 import firebase from "firebase";
 import 'firebase/firestore';
-import {getDish, addDish, delDish} from './Menuscreenhelper'
+import {getDish, addDish, delDish, iniDB} from './firebasehelper'
+import {db, store} from './firebasesetup'
 
 function MenuScreen({ navigation }) {
-
-    const firebaseConfig = {
-        apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
-        authDomain: 'served-up-63c2e.firebaseapp.com',
-        databaseURL: 'https://served-up-63c2e.firebaseio.com',
-        projectId: 'served-up-63c2e',
-        storageBucket: 'served-up-63c2e.appspot.com',
-        //messagingSenderId: 'sender-id',
-        appId: '1:456652905966:ios:80d960e213cb40ea1182ff',
-        //measurementId: 'G-measurement-id',
-    };
-
     // get fav dishes list from database
+    // database and sync related variables
+    const dispatch = useDispatch();
+    var disName = useSelector(state => state.loginReducer.name);
+    var disEmail = useSelector(state => state.loginReducer.email);
+    var disID = useSelector(state => state.loginReducer.id);
+    var disState = useSelector(state => state.loginReducer.isSignedIn);
+    var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
     const [favList, setFavList] = useState([]);
     const [buttonC = '#90CAF9', setButtonC] = useState();
-    // if (disState) {
-    //     if (firebase.apps.length === 0) {
-    //         firebase.initializeApp(firebaseConfig);
-    //     }
-        
-    //     const db = firebase.firestore();
-    //     var ppl = db.collection('Users').doc(disName);
-
-    //     favList = getDish(ppl);
-    // }
+    setFavList(getDish(db, disName));
 
     /* ============================= Variables ============================= */
     
@@ -156,20 +143,12 @@ function MenuScreen({ navigation }) {
     }
     
     // Store the message section that tells closed or error.
-        // dataList: Array to srore the message.
-        // message: string to tell closed or error.
+    // dataList: Array to srore the message.
+    // message: string to tell closed or error.
     const createNoDataElement = (dataList, message) => {
         dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }],
                        [{ title: message, data: [], }], [{ title: message, data: [], }]]);
     };
-
-    // database and sync related variables
-    const dispatch = useDispatch();
-    var disName = useSelector(state => state.loginReducer.name);
-    var disEmail = useSelector(state => state.loginReducer.email);
-    var disID = useSelector(state => state.loginReducer.id);
-    var disState = useSelector(state => state.loginReducer.isSignedIn);
-    var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
 
     function HandleFavFood(name) {
         if (disState) {
