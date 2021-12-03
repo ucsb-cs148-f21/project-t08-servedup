@@ -72,8 +72,8 @@ export default UserScreen = ({ navigation }) => {
       setImage(result.uri);
     }
   };
-
-  addImage(store, "Quansen", image, "testing")
+  console.log(disName)
+  addImage(store, disName, image)
 
   return (
     <View  style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

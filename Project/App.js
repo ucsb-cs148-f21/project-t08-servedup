@@ -12,7 +12,7 @@ import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import { LoginScreen } from './screens/LoginScreen';
 import comm from "./screens/comm"
-import {getDish, addDish, delDish, addImage, getImage, iniDB} from './screens/firebasehelper'
+import {getAvatarbool, getDish, addDish, delDish, addImage, getImage, iniDB} from './screens/firebasehelper'
 
 import { Provider } from 'react-redux';
 import { Store } from './src/store';
@@ -34,11 +34,25 @@ const Stack = createBottomTabNavigator();
 // <Stack.Screen name="Submit" component={FormScreen}/>
 
 const App = () => {
+  // // const ud = []
+  // var i = 1
+  // if (i == 1) {
+  //   const ud = getDish(db, 'Roy')
+  //   const judge = getAvatarbool(db, "Roy")
+  //   console.log("dish:" + ud)
+  //   if (judge == true) {
+  //     console.log("Judge is true")
+  //   }
+  // // }
+  
+  
+    
+  // console.log(ud)
+  // iniDB(db, "Juan")
+  // addDish(db, "Kate", "Vitamin B")
+  // addImage(store, "Roy", "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg", "trashcan")
 
-  iniDB(db, "Juan")
-  addDish(db, "Kate", "Vitamin B")
-  addImage(store, "Roy", "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg", "trashcan")
-
+    iniDB(db, "Roy Wang")
     return (
     <Provider store={Store}>
     <NavigationContainer>

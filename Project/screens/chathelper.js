@@ -1,8 +1,10 @@
-import { GiftedChat } from 'react-native-gifted-chat'
+import {Bubble, GiftedChat, Send} from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
 import * as React from 'react';
 import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from "react-native";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {db, store} from "./firebasesetup"
 import { useSelector, useDispatch} from 'react-redux'
@@ -18,10 +20,12 @@ const chathelper = (dininghall) => {
     var disState = useSelector(state => state.loginReducer.isSignedIn);
     var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
 
+    const storeRef = store.ref();
+    
     const user = {
           name: disName,
           email: disEmail,
-          avatar: disPhotoURL,
+          avatar: storeRef.child(disName+'/profile.jpeg').getDownloadURL(),
           id: disID,
           _id: disID, // need for gifted-chat
     };
@@ -47,7 +51,46 @@ const chathelper = (dininghall) => {
       setMessages((prevMessages) => GiftedChat.append(prevMessages, messages))
     }, [messages]) // append current message to previous messages
 
+
+    const renderSend = (props) => {
+      return (
+        <Send {...props}>
+          <View>
+            <MaterialCommunityIcons
+              name="send-circle"
+              style={{marginBottom: 5, marginRight: 5}}
+              size={32}
+              color="#2e64e5"
+            />
+          </View>
+        </Send>
+      );
+    };
   
+    const renderBubble = (props) => {
+      return (
+        <Bubble
+          {...props}
+          wrapperStyle={{
+            right: {
+              backgroundColor: '#2e64e5',
+            },
+          }}
+          textStyle={{
+            right: {
+              color: '#fff',
+            },
+          }}
+        />
+      );
+    };
+
+    const scrollToBottomComponent = () => {
+      return(
+        <FontAwesome name='angle-double-down' size={22} color='#333' />
+      );
+    }
+    
     async function handleSend(messages) {
       const writes = messages.map(m => dininghall.add(m) )
       await Promise.all(writes)
@@ -62,7 +105,17 @@ const chathelper = (dininghall) => {
     } else {
         return (
         <View style={styles.container}>
-            <GiftedChat messages={messages} user={user} onSend={handleSend} />
+            <GiftedChat 
+              messages={messages} 
+              user={user} 
+              onSend={handleSend} 
+              renderBubble={renderBubble}
+              alwaysShowSend
+              renderSend={renderSend}
+              scrollToBottom
+              scrollToBottomComponent={scrollToBottomComponent}
+              showUserAvatar
+            />
         </View>
         )
     }

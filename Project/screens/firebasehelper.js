@@ -1,27 +1,44 @@
+import { Component, useEffect, useState} from "react"
 import firebase from "firebase";
 import 'firebase/firestore';
 import {db, store} from "./firebasesetup"
+
 
 
 const iniDB = (db, name) => {
     var col = db.collection('Users').doc(name);
     col.get().then((doc) => {
         if (!doc.exists) {
-            col.set({dishes:[], merge: true, uploadedAvatar: false})
+            col.set({dishes:[], merge: true, uploadedAvatar: false, avatar:''})
         }
     })
 }
 
+const getAvatarbool = (db, name) => {
+    var col = db.collection('Users').doc(name);
+    const [judge, setJudge] = useState()
+    useEffect(() => {
+        col.get().then((doc) => {
+            setJudge(doc.data().uploadedAvatar)
+        })
+    }, [])
+    return judge
+}
+
+
+// 
 
 //get data
 const getDish = (db, name) => {
     //fav should be a document in the users collection
     var fav = db.collection('Users').doc(name);
-    fav.get().then((doc) => {
-        const favs = new doc.data().dishes;
-        console.log(favs);
-        return (favs);
-    })   
+    const [value, setValue] = useState([])
+    useEffect(() => {
+        fav.get().then((doc) => {
+            setValue(doc.data().dishes)
+        }) 
+    }, [])
+    return value
 }
 
 //add data
@@ -49,18 +66,20 @@ const delDish = (db, name, dish) => {
 }
 
 //upload image
-const addImage = (store, userName, imageURL, imageName) => {
+const addImage = (store, userName, imageURL) => {
+    
+    var storeRef = store.ref()
+    storeRef.child(userName+'/profile.png').put(imageURL)
+    // getFileBlob(imageURL, blob =>{
+    //     storeRef.child(userName+'/profile.png').put(blob).then(function(snapshot) {
+    //        console.log('Uploaded a blob or file!');
+    //     })
+    // })
+
     var col = db.collection('Users').doc(userName)
-    col.get().then((doc) => {
-        col.update({
-            uploadedAvatar: true
-        })
-    })
-    var storeRef = store.ref();
-    getFileBlob(imageURL, blob =>{
-        storeRef.child(userName+'/'+imageName).put(blob).then(function(snapshot) {
-           console.log('Uploaded a blob or file!');
-        })
+    col.update({
+        uploadedAvatar: true,
+        avatar: imageURL
     })
 }
 
@@ -118,4 +137,4 @@ const getImage = (store, userName, imageName) => {
 }
 
 
-export {iniDB, getDish, addDish, delDish, addImage, getImage};
+export {getAvatarbool, iniDB, getDish, addDish, delDish, addImage, getImage};
