@@ -135,7 +135,8 @@ const MenuScreen = ({ navigation }) => {
         // message: string to tell closed or error.
     const createNoDataElement = (dataList, message) => {
         dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }],
-                       [{ title: message, data: [], }], [{ title: message, data: [], }]]);
+                       [{ title: message, data: [], }], [{ title: message, data: [], }],
+                       [{ title: message, data: [], }]]);
     }
     
     /* ============================= Main Part ============================= */
