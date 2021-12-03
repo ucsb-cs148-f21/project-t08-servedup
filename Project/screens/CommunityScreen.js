@@ -359,10 +359,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginHorizontal: 16,
+    backgroundColor: "aliceblue"
   },
   title: {
     textAlign: 'center',
     marginVertical: 8,
+    backgroundColor: "aliceblue"
   },
   fixToText: {
     flexDirection: 'row',
