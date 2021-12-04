@@ -62,3 +62,12 @@ The purpose of the product is to provide information regarding the UCSB dining h
 #### Known Issues
 1. The User Profile page is not being updated upon logged in.
 2. The log out button in LoginScreen.js is currently not working.
+
+### Deployment
+#### Download APK file for offline testing.
+1. Use link: https://drive.google.com/file/d/1hZ7mLMwd9_uvXqoOU-eeD4j_CCNFAm70/view?usp=sharing
+2. Install the .apk file in an apk environment
+
+#### Test the package online
+1. Open link: https://appetize.io/app/n5m0bc0b5dumkv1zbe6btdg62g
+2. Test the application in the opened windown
