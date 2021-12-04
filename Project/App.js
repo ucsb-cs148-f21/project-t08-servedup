@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TextInput,  Button, StyleSheet, SafeAreaView } from "react-native";
+import {StyleSheet} from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 // { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -8,18 +8,12 @@ import { Ionicons } from '@expo/vector-icons';
 
 // FormScreen from './screens/FormScreen';
 import MenuScreen from './screens/MenuScreen';
-import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import { LoginScreen } from './screens/LoginScreen';
 import comm from "./screens/comm"
-import {getDish, addDish, delDish, addImage, getImage, iniDB} from './screens/firebasehelper'
 
 import { Provider } from 'react-redux';
 import { Store } from './src/store';
-import { GiftedChat } from 'react-native-gifted-chat'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEffect, useCallback} from 'react';
-import {db, store} from "./screens/firebasesetup";
 
 
 import configureStore from './src/store.js';
@@ -27,17 +21,7 @@ import configureStore from './src/store.js';
 
 const Stack = createBottomTabNavigator();
 
-
-// else if (route.name === 'Submit') {
-//   iconName = focused ? 'git-commit' : 'git-commit-outline';
-// }
-// <Stack.Screen name="Submit" component={FormScreen}/>
-
 const App = () => {
-
-//   iniDB(db, "Juan")
-//   addDish(db, "Kate", "Vitamin B")
-//   addImage(store, "Roy", "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg", "trashcan")
 
     return (
     <Provider store={Store}>

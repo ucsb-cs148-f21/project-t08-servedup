@@ -21,31 +21,16 @@ export default UserScreen = ({ navigation }) => {
   var disID = useSelector((state) => state.loginReducer.id);
   var disState = useSelector((state) => state.loginReducer.isSignedIn);
   var disPhotoURL = useSelector((state) => state.loginReducer.photoURL);
-  console.log(
-    "disName = " +
-      disName +
-      ", disEmail = " +
-      disEmail +
-      ", disID = " +
-      disID +
-      ", disState = " +
-      disState +
-      ", disPhotoURL = " +
-      disPhotoURL
-  );
 
-  function getUrl(stats) {
-      if (stats) {
-        return getImage(store, disName, 'profile.png');
-      } else {
-          return disPhotoURL;
-      }
+  var stats = getAvatarbool(db, disName);
+  if (stats === true) {
+    var profilePic = getImage(db, disName, 'profile.png');
+    console.log(profilePic);
   }
+  
 
-  var stat = getAvatarbool(db, disName);
-  var url = getUrl(stat);
+  const [image=disPhotoURL, setImage] = useState();
 
-  const [image, setImage] = useState(url);
   var name = "";
   if (disName == "") {
     name = "User";
@@ -68,7 +53,7 @@ export default UserScreen = ({ navigation }) => {
     let result = await launchImageLibraryAsync({
       mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [16, 9],
+      aspect: [9, 9],
       quality: 1,
     });
 
@@ -84,7 +69,7 @@ export default UserScreen = ({ navigation }) => {
     let result = await launchCameraAsync({
       mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [16, 9],
+      aspect: [9, 9],
       quality: 1,
     });
 
@@ -110,7 +95,6 @@ export default UserScreen = ({ navigation }) => {
           <View>
             <Text style={styles.textStyle2}>Welcome to Servedup!</Text>
           </View>
-
           <View
             style={{
               flex: 1,
@@ -119,12 +103,18 @@ export default UserScreen = ({ navigation }) => {
               justifyContent: "flex-start",
             }}
           >
-            {image && (
+            {stats ?
+              <Image
+                source={{uri: profilePic}}
+                style={{ width: 100, height: 100 }}
+              />
+              :
               <Image
                 source={{ uri: image }}
                 style={{ width: 100, height: 100 }}
               />
-            )}
+            }  
+          }
             <Text>         {name}</Text>
           </View>
 
