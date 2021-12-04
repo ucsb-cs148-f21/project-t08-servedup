@@ -44,6 +44,7 @@ const chathelper = (dininghall) => {
     //   }, [URL])
     // })
 
+    
 
     
     const user = {
@@ -113,9 +114,7 @@ const chathelper = (dininghall) => {
 
     const renderAvatar = (props) => {
       return (
-        <View> 
-          <Avatar rounded source={{uri: user.avatar}} />
-        </View>
+          <Avatar/>
       )
     }
 
@@ -149,7 +148,6 @@ const chathelper = (dininghall) => {
               scrollToBottom
               scrollToBottomComponent={scrollToBottomComponent}
               showUserAvatar = {true}
-              renderAvatar = {renderAvatar}
             />
         </View>
         )

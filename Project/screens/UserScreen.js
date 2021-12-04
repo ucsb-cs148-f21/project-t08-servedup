@@ -33,11 +33,9 @@ export default UserScreen = ({ navigation }) => {
       ", disPhotoURL = " +
       disPhotoURL
   );
-
+  
   const url = getImage(db,disName);
 
-  const [image, setImage] = useState(url);
-  console.log(url)
   var name = "";
   if (disName == "") {
     name = "User";
