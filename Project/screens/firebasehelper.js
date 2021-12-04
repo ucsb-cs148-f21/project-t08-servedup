@@ -10,7 +10,11 @@ import { useSelector, useDispatch } from "react-redux";
 const iniDB = (db, name, em, photourl) => {
     const col = db.collection('Users').doc(name);
     console.log("Before setting")
-    col.set({dishes:[], merge: true, uploadedAvatar: false, email: em, avatar: photourl})
+    col.get().then((doc) => {
+        if (!doc.exists) {
+            col.set({dishes:[], merge: true, uploadedAvatar: false, email: em, avatar: photourl})
+        }
+    })
     // useEffect(() => {
     //     // col.get().then((doc) => {
     //     //     if (!doc.exists) {
