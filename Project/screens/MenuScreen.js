@@ -106,7 +106,7 @@ function MenuScreen({ navigation }) {
                             // If menus[1, 2, or 3]: push the item if it has a food filter string
                             || ((1 <= k <= 3) && (pair[0].includes(filterStrings[k - 1])))
                             // If menus[4]: push the item if it's in user's favorite food list
-                            || ((k == 4) && (favList.includes(pair[0]))))
+                            || ((k == 4) && (favList.includes(pair[0])) && (disState)))
                             addElement(menus[k], pair);
                         
                     }
@@ -223,7 +223,9 @@ function MenuScreen({ navigation }) {
                 <SectionList
                     extraData={favList}
                     keyExtractor={(item, index) => index.toString()}
-                    sections={mealsList[hourChoice][hallChoice][filterChoice]}
+                    sections={
+                        mealsList[hourChoice][hallChoice][filterChoice]
+                    }
                     renderSectionHeader={({section}) => (
                         <Text style={styles.sectionStyle}> {section.title} </Text>
                     )}
