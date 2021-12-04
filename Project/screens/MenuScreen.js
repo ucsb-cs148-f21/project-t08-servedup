@@ -111,7 +111,7 @@ function MenuScreen({ navigation }) {
                             // If menus[4]: push the item if it's in user's favorite food list
                             || ((k == 4) && (favList.includes(pair[0]))))
                             addElement(menus[k], pair);
-                        }
+                        
                     }
                 }
                 

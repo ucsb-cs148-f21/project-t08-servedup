@@ -1,15 +1,20 @@
-import { GiftedChat } from 'react-native-gifted-chat'
+import {Avatar, Bubble, GiftedChat, Send} from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
 import * as React from 'react';
-import { View, Text, TextInput, Button, StyleSheet, SafeAreaView } from "react-native";
+import { Image, View, Text, TextInput, Button, StyleSheet, SafeAreaView } from "react-native";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+//import { Avatar } from 'react-native-elements';
 
 import {db, store} from "./firebasesetup"
 import { useSelector, useDispatch} from 'react-redux'
+import { getImage } from './firebasehelper';
 
 
 const chathelper = (dininghall) => {
     const [messages, setMessages] = useState([])
+    
     
     const dispatch = useDispatch();
     var disName = useSelector(state => state.loginReducer.name);
@@ -18,13 +23,38 @@ const chathelper = (dininghall) => {
     var disState = useSelector(state => state.loginReducer.isSignedIn);
     var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
 
+    const storeRef = store.ref();
+    
+
+    // const [URL, setURL] = useState('')
+    // useEffect(() => {
+    //     storeRef.child(disName+'/profile.png').getDownloadURL()
+    //     .then((url) => {
+    //     // `url` is the download URL for 'images/stars.jpg'
+
+    //     // This can be downloaded directly:
+    //     var xhr = new XMLHttpRequest();
+    //     xhr.responseType = 'blob';
+    //     xhr.onload = (event) => {
+    //       var blob = xhr.response;
+    //     };
+    //     xhr.open('GET', url);
+    //     xhr.send();
+    //     setURL(url)
+    //   }, [URL])
+    // })
+
+
+    
     const user = {
           name: disName,
           email: disEmail,
-          avatar: disPhotoURL,
+          avatar: getImage(db, disName),
           id: disID,
           _id: disID, // need for gifted-chat
     };
+
+    console.log("avatar is: " + user.avatar)
 
     useEffect(() => {
       const unsubscribe = dininghall.onSnapshot((querySnapshot) => {
@@ -47,7 +77,54 @@ const chathelper = (dininghall) => {
       setMessages((prevMessages) => GiftedChat.append(prevMessages, messages))
     }, [messages]) // append current message to previous messages
 
+
+    const renderSend = (props) => {
+      return (
+        <Send {...props}>
+          <View>
+            <MaterialCommunityIcons
+              name="send-circle"
+              style={{marginBottom: 5, marginRight: 5}}
+              size={32}
+              color="#2e64e5"
+            />
+          </View>
+        </Send>
+      );
+    };
   
+    const renderBubble = (props) => {
+      return (
+        <Bubble
+          {...props}
+          wrapperStyle={{
+            right: {
+              backgroundColor: '#2e64e5',
+            },
+          }}
+          textStyle={{
+            right: {
+              color: '#fff',
+            },
+          }}
+        />
+      );
+    };
+
+    const renderAvatar = (props) => {
+      return (
+        <View> 
+          <Avatar rounded source={{uri: user.avatar}} />
+        </View>
+      )
+    }
+
+    const scrollToBottomComponent = () => {
+      return(
+        <FontAwesome name='angle-double-down' size={22} color='#333' />
+      );
+    }
+    
     async function handleSend(messages) {
       const writes = messages.map(m => dininghall.add(m) )
       await Promise.all(writes)
@@ -62,7 +139,18 @@ const chathelper = (dininghall) => {
     } else {
         return (
         <View style={styles.container}>
-            <GiftedChat messages={messages} user={user} onSend={handleSend} />
+            <GiftedChat  
+              messages={messages} 
+              user={user} 
+              onSend={handleSend} 
+              renderBubble={renderBubble}
+              alwaysShowSend  
+              renderSend={renderSend}
+              scrollToBottom
+              scrollToBottomComponent={scrollToBottomComponent}
+              showUserAvatar = {true}
+              renderAvatar = {renderAvatar}
+            />
         </View>
         )
     }
