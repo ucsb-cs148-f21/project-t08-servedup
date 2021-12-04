@@ -34,8 +34,9 @@ export default UserScreen = ({ navigation }) => {
       disPhotoURL
   );
   
-  const url = getImage(db,disName);
-  const [pic, setPic] = useState(getImage(db,disName));
+  var url = getImage(db,disName);
+  const [pic=url, setPic] = useState();
+  console.log("URL is: "+url);
   var name = "";
   if (disName == "") {
     name = "User";
@@ -66,9 +67,7 @@ export default UserScreen = ({ navigation }) => {
 
     if (!result.cancelled) {
       setPic(result.uri);
-      console.log('image picked uploading')
       addImage(store, disName, result.uri);
-      console.log('picked image uploaded')
     }
   };
 
@@ -84,9 +83,7 @@ export default UserScreen = ({ navigation }) => {
 
     if (!result.cancelled) {
       setPic(result.uri);
-      console.log('image taken uploading')
       addImage(store, disName, result.uri);
-      console.log('tooked image uploaded')
     }
   };
 
@@ -114,7 +111,7 @@ export default UserScreen = ({ navigation }) => {
             }}
           >
               <Image
-                source={{ uri:  pic}}
+                source={{ uri: pic}}
                 style={{ width: 100, height: 100 }}
               />
             <Text>         {name}</Text>

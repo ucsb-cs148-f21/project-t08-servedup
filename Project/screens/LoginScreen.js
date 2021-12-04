@@ -54,7 +54,19 @@ export function LoginScreen({ navigation }) {
                 dispatch(setEmail(userEmail));
                 dispatch(setPhotoURL(userPhotoURL));
 
-                iniDB(db, userName);
+                console.log(userName)
+                console.log(userEmail)
+                console.log(userPhotoURL)
+                iniDB(db, userName, userEmail, userPhotoURL);
+                console.log("NOWWWWWWW")
+                // const ifInitialized = new Promise((resolve,reject) => {
+                //     if (email != '' && avatar != '') {
+                //         resolve("Initialized")
+                //     } 
+                // })
+                // Promise.all([ifInitialized]).then((messages) => {
+                //     console.log(messages)
+                // })
                 navigation.navigate("User");
             }
         }
@@ -117,5 +129,3 @@ const styles = StyleSheet.create({
     }
 }
 );
-
-
