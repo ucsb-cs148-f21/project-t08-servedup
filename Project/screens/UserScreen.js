@@ -35,7 +35,7 @@ export default UserScreen = ({ navigation }) => {
   );
   
   const url = getImage(db,disName);
-
+  const [pic, setPic] = useState(getImage(db,disName));
   var name = "";
   if (disName == "") {
     name = "User";
@@ -58,15 +58,17 @@ export default UserScreen = ({ navigation }) => {
     let result = await launchImageLibraryAsync({
       mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [16, 9],
+      aspect: [9, 9],
       quality: 1,
     });
 
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      setPic(result.uri);
+      console.log('image picked uploading')
       addImage(store, disName, result.uri);
+      console.log('picked image uploaded')
     }
   };
 
@@ -74,15 +76,17 @@ export default UserScreen = ({ navigation }) => {
     let result = await launchCameraAsync({
       mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [16, 9],
+      aspect: [9, 9],
       quality: 1,
     });
 
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      setPic(result.uri);
+      console.log('image taken uploading')
       addImage(store, disName, result.uri);
+      console.log('tooked image uploaded')
     }
   };
 
@@ -110,7 +114,7 @@ export default UserScreen = ({ navigation }) => {
             }}
           >
               <Image
-                source={{ uri:  url}}
+                source={{ uri:  pic}}
                 style={{ width: 100, height: 100 }}
               />
             <Text>         {name}</Text>
