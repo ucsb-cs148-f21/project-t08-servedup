@@ -1,11 +1,11 @@
-import {Bubble, GiftedChat, Send} from 'react-native-gifted-chat'
+import {Avatar, Bubble, GiftedChat, Send} from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
 import * as React from 'react';
 import { Image, View, Text, TextInput, Button, StyleSheet, SafeAreaView } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Avatar } from 'react-native-elements';
+//import { Avatar } from 'react-native-elements';
 
 import {db, store} from "./firebasesetup"
 import { useSelector, useDispatch} from 'react-redux'
@@ -49,7 +49,7 @@ const chathelper = (dininghall) => {
     const user = {
           name: disName,
           email: disEmail,
-          avatar: getImage(db, disName, 'profile.png'),
+          avatar: getImage(db, disName),
           id: disID,
           _id: disID, // need for gifted-chat
     };
@@ -57,19 +57,6 @@ const chathelper = (dininghall) => {
     console.log("avatar is: " + user.avatar)
 
     useEffect(() => {
-      setMessages([
-        {
-          _id: 1, 
-          text: "Hello developer",
-          createdAt: new Date(),
-          user: {
-            _id:2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-      ])
-
       const unsubscribe = dininghall.onSnapshot((querySnapshot) => {
       const messagesFirestore = querySnapshot
             .docChanges()
@@ -127,7 +114,6 @@ const chathelper = (dininghall) => {
     const renderAvatar = (props) => {
       return (
         <View> 
-        {...props}
           <Avatar rounded source={{uri: user.avatar}} />
         </View>
       )

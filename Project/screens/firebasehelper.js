@@ -3,13 +3,21 @@ import firebase from "firebase";
 import 'firebase/firestore';
 import {db, store} from "./firebasesetup"
 
+import { useSelector, useDispatch } from "react-redux";
+
 
 
 const iniDB = (db, name) => {
     const col = db.collection('Users').doc(name);
     col.get().then((doc) => {
+        const dispatch = useDispatch();
+        var disName = useSelector((state) => state.loginReducer.name);
+        var disEmail = useSelector((state) => state.loginReducer.email);
+        var disID = useSelector((state) => state.loginReducer.id);
+        var disState = useSelector((state) => state.loginReducer.isSignedIn);
+        var disPhotoURL = useSelector((state) => state.loginReducer.photoURL);
         if (!doc.exists) {
-            col.set({dishes:[], merge: true, uploadedAvatar: false, avatar:''})
+            col.set({dishes:[], merge: true, uploadedAvatar: false, avatar: disPhotoURL})
         }
     })
 }
@@ -68,18 +76,12 @@ const delDish = (db, name, dish) => {
 //upload image
 const addImage = (store, userName, imageURL) => {
     
-    var storeRef = store.ref()
+    const storeRef = store.ref()
     storeRef.child(userName+'/profile.png').put(imageURL)
-    // getFileBlob(imageURL, blob =>{
-    //     storeRef.child(userName+'/profile.png').put(blob).then(function(snapshot) {
-    //        console.log('Uploaded a blob or file!');
-    //     })
-    // })
-
-    var col = db.collection('Users').doc(userName)
-    col.update({
-        uploadedAvatar: true,
-        avatar: imageURL
+    getFileBlob(imageURL, blob =>{
+        storeRef.child(userName+'/profile.png').put(blob).then(function(snapshot) {
+           console.log('Uploaded a blob or file!');
+        })
     })
 
     storeRef.child(userName+'/profile.png').getDownloadURL()
@@ -116,7 +118,7 @@ var getFileBlob = function (url, cb) {
 
 
 //download image
-const getImage = (db, userName, imageName) => {
+const getImage = (db, userName) => {
     const col = db.collection('Users').doc(userName);
     const [url, seturl] = useState('')
     useEffect(() => {

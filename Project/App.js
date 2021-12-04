@@ -52,7 +52,6 @@ const App = () => {
   // addDish(db, "Kate", "Vitamin B")
   // addImage(store, "Roy", "https://media.wired.com/photos/5b899992404e112d2df1e94e/master/pass/trash2-01.jpg", "trashcan")
 
-    iniDB(db, "Roy Wang")
     return (
     <Provider store={Store}>
     <NavigationContainer>

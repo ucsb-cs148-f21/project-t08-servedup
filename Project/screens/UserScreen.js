@@ -34,18 +34,10 @@ export default UserScreen = ({ navigation }) => {
       disPhotoURL
   );
 
-  function getUrl(stats) {
-      if (stats) {
-        return getImage(store, disName, 'profile.png');
-      } else {
-          return disPhotoURL;
-      }
-  }
-
-  var stat = getAvatarbool(db, disName);
-  var url = getUrl(stat);
+  const url = getImage(db,disName);
 
   const [image, setImage] = useState(url);
+  console.log(url)
   var name = "";
   if (disName == "") {
     name = "User";
@@ -119,12 +111,10 @@ export default UserScreen = ({ navigation }) => {
               justifyContent: "flex-start",
             }}
           >
-            {image && (
               <Image
-                source={{ uri: image }}
+                source={{ uri:  url}}
                 style={{ width: 100, height: 100 }}
               />
-            )}
             <Text>         {name}</Text>
           </View>
 
@@ -147,6 +137,7 @@ export default UserScreen = ({ navigation }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
