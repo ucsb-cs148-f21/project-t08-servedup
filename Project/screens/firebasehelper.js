@@ -121,11 +121,20 @@ var getFileBlob = function (url, cb) {
 const getImage = (db, userName) => {
     const col = db.collection('Users').doc(userName);
     const [url, seturl] = useState('')
+
+    const ifGotImage = new Promise((resolve,reject) => {
+        if (url != '') {
+            resolve("Got image")
+        } 
+    })
     useEffect(() => {
         col.get().then((doc) => {
             seturl(doc.data().avatar)
         })
     }, [])
+    Promise.all([ifGotImage]).then((messages) => {
+        console.log(messages)
+    })
     return url
 }
 

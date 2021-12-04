@@ -33,9 +33,8 @@ export default UserScreen = ({ navigation }) => {
       ", disPhotoURL = " +
       disPhotoURL
   );
-
+  
   const url = getImage(db,disName);
-
   const [pic, setPic] = useState(getImage(db,disName));
   var name = "";
   if (disName == "") {
