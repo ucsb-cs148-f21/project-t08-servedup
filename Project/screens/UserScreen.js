@@ -21,16 +21,22 @@ export default UserScreen = ({ navigation }) => {
   var disID = useSelector((state) => state.loginReducer.id);
   var disState = useSelector((state) => state.loginReducer.isSignedIn);
   var disPhotoURL = useSelector((state) => state.loginReducer.photoURL);
+  console.log(
+    "disName = " +
+      disName +
+      ", disEmail = " +
+      disEmail +
+      ", disID = " +
+      disID +
+      ", disState = " +
+      disState +
+      ", disPhotoURL = " +
+      disPhotoURL
+  );
 
-  var stats = getAvatarbool(db, disName);
-  if (stats === true) {
-    var profilePic = getImage(db, disName, 'profile.png');
-    console.log(profilePic);
-  }
-  
+  const url = getImage(db,disName);
 
-  const [image=disPhotoURL, setImage] = useState();
-
+  const [pic, setPic] = useState(getImage(db,disName));
   var name = "";
   if (disName == "") {
     name = "User";
@@ -60,8 +66,10 @@ export default UserScreen = ({ navigation }) => {
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      setPic(result.uri);
+      console.log('image picked uploading')
       addImage(store, disName, result.uri);
+      console.log('picked image uploaded')
     }
   };
 
@@ -76,8 +84,10 @@ export default UserScreen = ({ navigation }) => {
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      setPic(result.uri);
+      console.log('image taken uploading')
       addImage(store, disName, result.uri);
+      console.log('tooked image uploaded')
     }
   };
 
@@ -95,6 +105,7 @@ export default UserScreen = ({ navigation }) => {
           <View>
             <Text style={styles.textStyle2}>Welcome to Servedup!</Text>
           </View>
+
           <View
             style={{
               flex: 1,
@@ -103,18 +114,10 @@ export default UserScreen = ({ navigation }) => {
               justifyContent: "flex-start",
             }}
           >
-            {stats ?
               <Image
-                source={{uri: profilePic}}
+                source={{ uri:  pic}}
                 style={{ width: 100, height: 100 }}
               />
-              :
-              <Image
-                source={{ uri: image }}
-                style={{ width: 100, height: 100 }}
-              />
-            }  
-          }
             <Text>         {name}</Text>
           </View>
 
@@ -137,6 +140,7 @@ export default UserScreen = ({ navigation }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
