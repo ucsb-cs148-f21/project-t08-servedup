@@ -7,19 +7,35 @@ import { useSelector, useDispatch } from "react-redux";
 
 
 
-const iniDB = (db, name) => {
+const iniDB = (db, name, em, photourl) => {
     const col = db.collection('Users').doc(name);
+    console.log("Before setting")
     col.get().then((doc) => {
-        const dispatch = useDispatch();
-        var disName = useSelector((state) => state.loginReducer.name);
-        var disEmail = useSelector((state) => state.loginReducer.email);
-        var disID = useSelector((state) => state.loginReducer.id);
-        var disState = useSelector((state) => state.loginReducer.isSignedIn);
-        var disPhotoURL = useSelector((state) => state.loginReducer.photoURL);
-        if (!doc.exists) {
-            col.set({dishes:[], merge: true, uploadedAvatar: false, avatar: disPhotoURL})
+        if(!doc.exists) {
+            col.set({dishes:[], merge: true, uploadedAvatar: false, email: em, avatar: photourl});
         }
-    })
+    });
+    // useEffect(() => {
+    //     // col.get().then((doc) => {
+    //     //     if (!doc.exists) {
+    //     //         col.set({dishes:[], merge: true, uploadedAvatar: false, email: em, avatar: photourl})
+    //     //         setEmail(em)
+    //     //         setAvatar(photourl)
+    //     //     }
+    //     // })
+    //     const ifInitialized = new Promise((resolve,reject) => {
+    //         if (email != '' && avatar != '') {
+    //             resolve("Initialized")
+    //         } 
+    //     })
+    //     col.set({dishes:[], merge: true, uploadedAvatar: false, email: em, avatar: photourl})
+    //             setEmail(em)
+    //             setAvatar(photourl)
+    // }, [])
+    
+    //     Promise.all([ifInitialized]).then((messages) => {
+    //         console.log(messages)
+    //     })
 }
 
 const getAvatarbool = (db, name) => {
