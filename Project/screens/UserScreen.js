@@ -34,15 +34,9 @@ export default UserScreen = ({ navigation }) => {
       disPhotoURL
   );
   
-  const [image, setImage] = useState('')
   var url = getImage(db,disName);
-  console.log("URL is: "+url)
-
-  const ifGotUrl = new Promise((resolve,reject) => {
-    if (image != '')
-      resolve("image received!")
-  })
-
+  const [pic=url, setPic] = useState();
+  console.log("URL is: "+url);
   var name = "";
   if (disName == "") {
     name = "User";
@@ -65,18 +59,15 @@ export default UserScreen = ({ navigation }) => {
     let result = await launchImageLibraryAsync({
       mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [16, 9],
+      aspect: [9, 9],
       quality: 1,
     });
 
-    setImage()
     console.log(result);
 
     if (!result.cancelled) {
+      setPic(result.uri);
       addImage(store, disName, result.uri);
-      // useEffect(() => {
-        setImage(getImage(db, disName))
-      // }, [])
     }
   };
 
@@ -84,24 +75,17 @@ export default UserScreen = ({ navigation }) => {
     let result = await launchCameraAsync({
       mediaTypes: MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [16, 9],
+      aspect: [9, 9],
       quality: 1,
     });
 
     console.log(result);
 
     if (!result.cancelled) {
+      setPic(result.uri);
       addImage(store, disName, result.uri);
-      // useEffect(() => {
-        setImage(getImage(db, disName))
-      // }, [])
     }
   };
-
-  Promise.all(ifGotUrl).then((messages) => {
-    console.log(messages)
-  })
-
 
   return (
     <View
@@ -127,7 +111,7 @@ export default UserScreen = ({ navigation }) => {
             }}
           >
               <Image
-                source={{ uri:  image}}
+                source={{ uri: pic}}
                 style={{ width: 100, height: 100 }}
               />
             <Text>         {name}</Text>

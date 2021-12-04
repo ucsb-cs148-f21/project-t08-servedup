@@ -11,10 +11,10 @@ const iniDB = (db, name, em, photourl) => {
     const col = db.collection('Users').doc(name);
     console.log("Before setting")
     col.get().then((doc) => {
-        if (!doc.exists) {
-            col.set({dishes:[], merge: true, uploadedAvatar: false, email: em, avatar: photourl})
+        if(!doc.exists) {
+            col.set({dishes:[], merge: true, uploadedAvatar: false, email: em, avatar: photourl});
         }
-    })
+    });
     // useEffect(() => {
     //     // col.get().then((doc) => {
     //     //     if (!doc.exists) {

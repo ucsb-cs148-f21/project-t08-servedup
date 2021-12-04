@@ -2,7 +2,7 @@ import {Avatar, Bubble, GiftedChat, Send} from 'react-native-gifted-chat'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback} from 'react';
 import * as React from 'react';
-import { Image, View, Text, TextInput, Button, StyleSheet, SafeAreaView } from "react-native";
+import { Image, View, Text, TextInput, Button, StyleSheet, SafeAreaView, Alert } from "react-native";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 //import { Avatar } from 'react-native-elements';
@@ -112,11 +112,13 @@ const chathelper = (dininghall) => {
       );
     };
 
-    const renderAvatar = (props) => {
+    const onPressAvatar = (user) => {
       return (
-          <Avatar/>
+        Alert.alert("Name: "+user.name + '\nEmail: '+user.email)
       )
     }
+
+  
 
     const scrollToBottomComponent = () => {
       return(
@@ -148,6 +150,7 @@ const chathelper = (dininghall) => {
               scrollToBottom
               scrollToBottomComponent={scrollToBottomComponent}
               showUserAvatar = {true}
+              onPressAvatar= {onPressAvatar}
             />
         </View>
         )
