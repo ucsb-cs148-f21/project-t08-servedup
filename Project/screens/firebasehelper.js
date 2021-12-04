@@ -36,7 +36,6 @@ const iniDB = (db, name, em, photourl) => {
     //     Promise.all([ifInitialized]).then((messages) => {
     //         console.log(messages)
     //     })
-    console.log('avatar: ' + avatar)
 }
 
 const getAvatarbool = (db, name) => {

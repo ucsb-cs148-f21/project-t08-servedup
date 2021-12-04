@@ -34,8 +34,15 @@ export default UserScreen = ({ navigation }) => {
       disPhotoURL
   );
   
+  const [image, setImage] = useState('')
   var url = getImage(db,disName);
   console.log("URL is: "+url)
+
+  const ifGotUrl = new Promise((resolve,reject) => {
+    if (image != '')
+      resolve("image received!")
+  })
+
   var name = "";
   if (disName == "") {
     name = "User";
@@ -62,11 +69,14 @@ export default UserScreen = ({ navigation }) => {
       quality: 1,
     });
 
+    setImage()
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
       addImage(store, disName, result.uri);
+      // useEffect(() => {
+        setImage(getImage(db, disName))
+      // }, [])
     }
   };
 
@@ -81,10 +91,17 @@ export default UserScreen = ({ navigation }) => {
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
       addImage(store, disName, result.uri);
+      // useEffect(() => {
+        setImage(getImage(db, disName))
+      // }, [])
     }
   };
+
+  Promise.all(ifGotUrl).then((messages) => {
+    console.log(messages)
+  })
+
 
   return (
     <View
@@ -110,7 +127,7 @@ export default UserScreen = ({ navigation }) => {
             }}
           >
               <Image
-                source={{ uri:  url}}
+                source={{ uri:  image}}
                 style={{ width: 100, height: 100 }}
               />
             <Text>         {name}</Text>
