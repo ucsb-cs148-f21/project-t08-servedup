@@ -55,7 +55,10 @@ export function LoginScreen({ navigation }) {
                 dispatch(setPhotoURL(userPhotoURL));
 
                 console.log(userName)
+                console.log(userEmail)
+                console.log(userPhotoURL)
                 iniDB(db, userName, userEmail, userPhotoURL);
+                console.log("NOWWWWWWW")
                 // const ifInitialized = new Promise((resolve,reject) => {
                 //     if (email != '' && avatar != '') {
                 //         resolve("Initialized")
