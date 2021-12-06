@@ -1,0 +1,1 @@
+Roy: I set up the firebase database for this project and assign the databse for our data. Our databse mainly consists of messages of the Dining halls and userdata. I also create the community screen and the chats for four dining halls that allow users to connect with each other. Meanwhile, I also set up firebasehelper to help other screens fetching data from firebase.
