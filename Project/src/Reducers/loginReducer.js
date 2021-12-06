@@ -2,11 +2,11 @@ import { CHANGE_SIGNINSTATE, CHANGE_NAME, CHANGE_EMAIL, CHANGE_ID, CHANGE_PHOTOU
 import { useSelector } from 'react-redux';
 
 const initialState = {
-	name: 'a',
+	name: 'defaultName',
 	isSignedIn: false,
-	id: 'a',
-	email: 'as',
-	photoURL: 'asd',
+	id: 'defaultID',
+	email: 'defaultEmail',
+	photoURL: 'defaultURL',
 }
 
 const loginReducer = (state = initialState, action) => {

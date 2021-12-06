@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TextInput,  Button, StyleSheet, SafeAreaView } from "react-native";
+import {StyleSheet} from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 // { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -8,47 +8,18 @@ import { Ionicons } from '@expo/vector-icons';
 
 // FormScreen from './screens/FormScreen';
 import MenuScreen from './screens/MenuScreen';
-import CommunityScreen from './screens/CommunityScreen';
 import UserScreen from './screens/UserScreen';
 import { LoginScreen } from './screens/LoginScreen';
+import comm from "./screens/comm"
 
 import { Provider } from 'react-redux';
 import { Store } from './src/store';
-import { GiftedChat } from 'react-native-gifted-chat'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState, useEffect, useCallback} from 'react';
-import * as firebase from "firebase";
-import 'firebase/firestore';
 
 
 import configureStore from './src/store.js';
 
-// const firebaseConfig = {
-//   apiKey: 'AIzaSyAGAPiJ4hblg4P4tbExbqdqZVDZKu7Dvw8',
-//   authDomain: 'served-up-63c2e.firebaseapp.com',
-//   databaseURL: 'https://served-up-63c2e.firebaseio.com',
-//   projectId: 'served-up-63c2e',
-//   storageBucket: 'served-up-63c2e.appspot.com',
-//   //messagingSenderId: 'sender-id',
-//   appId: '1:456652905966:ios:80d960e213cb40ea1182ff',
-//   //measurementId: 'G-measurement-id',
-// };
-
-// Initialize Firebase
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig);
-
-}
 
 const Stack = createBottomTabNavigator();
-
-const db = firebase.firestore();
-const reviewRef = db.collection('Reviews');
-
-// else if (route.name === 'Submit') {
-//   iconName = focused ? 'git-commit' : 'git-commit-outline';
-// }
-// <Stack.Screen name="Submit" component={FormScreen}/>
 
 const App = () => {
 
@@ -85,7 +56,7 @@ const App = () => {
           component={MenuScreen}
           options={{ title: 'Today\'s menu' }}
         />
-        <Stack.Screen name="Reviews" component={CommunityScreen}/>
+        <Stack.Screen name="Reviews" component={comm}/>
         <Stack.Screen name="User" component={UserScreen}/>
       </Stack.Navigator>
             </NavigationContainer>

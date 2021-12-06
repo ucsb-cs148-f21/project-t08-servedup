@@ -1,12 +1,34 @@
 import * as React from 'react';
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StatusBar } from 'expo-status-bar';
 import { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import { StyleSheet, Text, SafeAreaView, ScrollView, SectionList, Button, Alert } from 'react-native';
 import SwitchSelector from "react-native-switch-selector";
 
 const MenuScreen = ({ navigation }) => {
+=======
+import { StyleSheet, Text, SafeAreaView, ScrollView, SectionList, Button, Alert, TouchableOpacity } from 'react-native';
+import SwitchSelector from "react-native-switch-selector";
+
+import Store from '../src/store';
+import { useSelector, useDispatch} from 'react-redux'
+
+import firebase from "firebase";
+import 'firebase/firestore';
+import {getDish, addDish, delDish} from './firebasehelper'
+import {db, store} from './firebasesetup'
+
+function MenuScreen({ navigation }) {
+    // get fav dishes list from database
+    // database and sync related variables
+    const dispatch = useDispatch();
+    var disName = useSelector(state => state.loginReducer.name);
+    var disEmail = useSelector(state => state.loginReducer.email);
+    var disID = useSelector(state => state.loginReducer.id);
+    var disState = useSelector(state => state.loginReducer.isSignedIn);
+    var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
+    const [favList = getDish(db, disName), setFavList] = useState([]);
+    // const [favList=[], setFavList] = useState([]);
+>>>>>>> a989505a824d851e8f4d5d4211d403801e53abbc
 
     /* ============================= Variables ============================= */
     
@@ -34,7 +56,9 @@ const MenuScreen = ({ navigation }) => {
         { label: "All", value: "0" },
         { label: "Vegetarian", value: "1" },
         { label: "Vegan", value: "2" },
-        { label: "WITH Nuts", value: "3" } ];
+        { label: "WITH Nuts", value: "3" },
+        { label: "Your Favorites", value: "4" } ];
+    
     // Array of food filter strings to find specific menu items: for processing data
     const filterStrings = ['(v)', '(vgn)', '(w/nuts)'];
     
@@ -77,21 +101,25 @@ const MenuScreen = ({ navigation }) => {
                 // Create the array of arrays of objects from the menu data.
                 // menus[0] = all menus, menus[1] = menus with (v),
                 // menus[2] = menus with (vgn), menus[3] = menus with (w/nuts)
-                var menus = [[], [], [], []];
+                // menus[4] = menus in user's favorite food list.
+                var menus = [[], [], [], [], []];
                 
-                // Push each menu item in the array, menus, with its section information.
                 for (var j = 0; j < state[i].length; j++) {
+                    // pair[0]: string of menu name, pair[1]: string of section name
                     var pair = Object.values(state[i][j]);
-                    addElement(menus[0], pair);
-                    
-                    // Push the menu item if its name has a food filter string.
-                    for (var k = 1; k < menus.length; k++) {
-                        if (pair[0].includes(filterStrings[k - 1])) {
+                    // Store each menu item in the array, menus, with its section information.
+                    for (var k = 0; k < menus.length; k++) {
+                        if ((k == 0) // If menus[0]: push all the item
+                            // If menus[1, 2, or 3]: push the item if it has a food filter string
+                            || ((1 <= k <= 3) && (pair[0].includes(filterStrings[k - 1])))
+                            // If menus[4]: push the item if it's in user's favorite food list
+                            || ((k == 4) && (favList.includes(pair[0])) && (disState)))
                             addElement(menus[k], pair);
-                        }
+                        
                     }
                 }
-                // If the menu contains no vegetarian, vegan, or nuts item,
+                
+                // If the menu contains no vegetarian, vegan, nuts, or favorite item,
                 // store the message section that tells no result to display.
                 for (var l = 1; l < menus.length; l++) {
                     if (menus[l] == 0) {
@@ -103,7 +131,7 @@ const MenuScreen = ({ navigation }) => {
             } else {
                 // state[i] contains an object to represent the meal is not served.
                 if (state[i].status == 404 ) {
-                    var message = "Closed"
+                    var message = "Closed";
                 } else { // state[i] contains an object to represent some error.
                     var message = "Error";
                 }
@@ -124,34 +152,31 @@ const MenuScreen = ({ navigation }) => {
     }
     
     // Store the message section that tells closed or error.
-        // dataList: Array to srore the message.
-        // message: string to tell closed or error.
+    // dataList: Array to srore the message.
+    // message: string to tell closed or error.
     const createNoDataElement = (dataList, message) => {
         dataList.push([[{ title: message, data: [], }], [{ title: message, data: [], }],
-                       [{ title: message, data: [], }], [{ title: message, data: [], }]]);
-    };
-
-    const doNothing = async() => {
-        Alert.alert("Added to the favorite list");
-        console.log(name);
-
+                       [{ title: message, data: [], }], [{ title: message, data: [], }],
+                       [{ title: message, data: [], }]]);
     }
 
-    /* ============================= Main Part ============================= */
-    
-    useEffect (() => {
-        // Fetch the data from APIs and store it to state variables.
-        getMenuData(0, setBreakfastJson); // Breakfast
-        getMenuData(2, setLunchJson); // Lunch
-        getMenuData(1, setBrunchJson); // Brunch
-        getMenuData(3, setDinnerJson); // Dinner
-    }, [today])
-    
-    // The array of all the data to diplay on the menu screen.
-    // With this structure, the data can be selected by switch selectors through its indexes.
-    var mealsList = [ processData(breakfastJson), processData(lunchJson),
-                      processData(brunchJson), processData(dinnerJson) ];
-    
+    function handleFavFood(name) {
+        if (disState) {
+            if (favList.some(fav => fav === name.item) === false) {
+                Alert.alert("Added to the favorite list");
+                var newList = [...favList, name.item]
+                setFavList(newList);
+                addDish(db, disName, name.item);
+            } else {
+                Alert.alert("Removed from the favorite list");
+                setFavList(favList.filter(item => item !== name.item));
+                delDish(db, disName, name.item);
+            }
+            console.log(favList);
+        } else {
+            Alert.alert("Sign in with your google account to add favorite food");
+        }
+    }
     /* ============================= Main Part ============================= */
     
     useEffect (() => {
@@ -203,14 +228,21 @@ const MenuScreen = ({ navigation }) => {
                 (mealsList[hourChoice][hallChoice][filterChoice] != undefined) ?
                 // True: display the element of mealsList selected by switch selectors.
                 <SectionList
+                    extraData={favList}
                     keyExtractor={(item, index) => index.toString()}
-                    sections={mealsList[hourChoice][hallChoice][filterChoice]}
+                    sections={
+                        mealsList[hourChoice][hallChoice][filterChoice]
+                    }
                     renderSectionHeader={({section}) => (
                         <Text style={styles.sectionStyle}> {section.title} </Text>
                     )}
                     renderItem={({item}) => (
-                        <Button color="#000000" onPress={this.onPress.bind(item)} title={item}></Button>
-                    )}
+                       disState ?
+                       <Button color={favList.some(fav => fav === {item}.item) ? '#A5D6A7':'#4DB6AC'} onPress={() => {handleFavFood({item})}} title={item}></Button>
+                       :
+                       <Button color="#4DB6AC" onPress={() => {handleFavFood({item})}} title={item}></Button>
+                    )
+                }
                 />
                 : // False: display a loading message.
                 <Text style={styles.textStyle}>Loading...</Text>
@@ -228,6 +260,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: 'aliceblue',
   },
   sectionStyle: {
     fontWeight: 'bold',

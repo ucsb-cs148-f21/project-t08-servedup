@@ -1,14 +1,17 @@
 import React from "react";
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, View, Button, Image, Text } from "react-native";
 import * as Google from "expo-google-app-auth";
 import * as firebase from 'firebase';
 import loginReducer from '../src/Reducers/loginReducer';
 import { connect, useSelector, useDispatch } from 'react-redux';
-import {setSignInState, setName, setPhotoURL, setEmail, setID} from '../src/Actions/types'
+import { setSignInState, setName, setPhotoURL, setEmail, setID } from '../src/Actions/types'
 
 import changeSignInOut from '../src/Actions/signInStates';
 
 import Store from '../src/store';
+
+import {iniDB} from './firebasehelper'
+import {db, store} from './firebasesetup'
 
 //default function LoginScreen({ navigation }) {
 export function LoginScreen({ navigation }) {
@@ -27,38 +30,43 @@ export function LoginScreen({ navigation }) {
         iosStandaloneAppClientId: `<YOUR_IOS_CLIENT_ID>`,
         androidStandaloneAppClientId: `1013730947248-p7ol733de1v9qn5152q4ooslonqff1ek.apps.googleusercontent.com`,
     };
-
     var accessTokenUser = "";
-
     const signInAsync = async () => {
-        console.log("LoginScreen.js 6 | loggin in");
+        console.log("LoginScreen.js 34 | loggin in");
         try {
             const { type, accessToken, user} = await Google.logInAsync(config);
 
             if (type === "success") {
                 // Then you can use the Google REST API
-                console.log("LoginScreen.js 17 | success, navigating to profile");
+                console.log("LoginScreen.js 40 | success, navigating to profile");
                 
                 setAbleLogIn(true);
                 setAbleLogOut(false);
                 accessTokenUser = accessToken;
-                //console.log(accessTokenUser);
                 var userName = user.name;
                 var userEmail = user.email;
                 var userID = user.id;
                 var userPhotoURL = user.photoUrl;
-                //console.log("this is the photourl!" + userPhotoURL);
                 var signInState = true;
-                //console.log(user);
                 dispatch(setName(userName));
                 dispatch(setSignInState(signInState));
                 dispatch(setID(userID));
                 dispatch(setEmail(userEmail));
                 dispatch(setPhotoURL(userPhotoURL));
 
-                //id, email, photoURL
-                //console.log(name);
-                //console.log(Store);
+                console.log(userName)
+                console.log(userEmail)
+                console.log(userPhotoURL)
+                iniDB(db, userName, userEmail, userPhotoURL);
+                console.log("NOWWWWWWW")
+                // const ifInitialized = new Promise((resolve,reject) => {
+                //     if (email != '' && avatar != '') {
+                //         resolve("Initialized")
+                //     } 
+                // })
+                // Promise.all([ifInitialized]).then((messages) => {
+                //     console.log(messages)
+                // })
                 navigation.navigate("User");
             }
         }
@@ -72,31 +80,52 @@ export function LoginScreen({ navigation }) {
         console.log("LoginScreen.js | logging out");
             setAbleLogOut(true);
             setAbleLogIn(false);
+            dispatch(setSignInState(false));
+            
 
     };
 
     return (
         <View style={styles.container}>
-            <Button disabled={isAbleLogIn} title="Login with Google" onPress={signInAsync} />
 
-            <Button disabled={isAbleLogOut} title="Logout with Google" onPress={signOutAsync} />
+            <Text style={{ fontSize: 30, color: "white", textAlign: "center", backgroundColor: "black" }} > Welcome to ServedUp!</Text>
+
+            <Text style={{ fontSize: 20, color: "black", textAlign: "center", backgroundColor: "white" }} > Please sign in below using a UCSB account</Text>
+
+            <View style={{flex: 0.2}} />
+
+            <Button style={[styles.buttonContainer, { backgroundColor: "white" }]} disabled={isAbleLogIn} title="Login with Google" onPress={signInAsync} />
+
+            <View style={{ flex: 0.1 }} />
+
+            <Button style={styles.buttonContainer} disabled={isAbleLogOut} title="Logout with Google" onPress={signOutAsync} />
+
+            <View style={{ flex: 0.2 }} />
+
+            <Image source={require('../assets/serveduplogoNB.png')} style={{ width: 380, height: 380, alignSelf: "center" }} />
             
         </View>
-        
+
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
+        backgroundColor: "aliceblue"
     },
     buttonContainer: {
         flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 8,
+        paddingVertical: 6,
+        borderRadius: 4,
+    },
+    box: {
+        width: 100,
+        height: 100
     }
 }
 );
-
-
