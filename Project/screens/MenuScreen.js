@@ -1,11 +1,5 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-<<<<<<< HEAD
-import { StyleSheet, Text, SafeAreaView, ScrollView, SectionList, Button, Alert } from 'react-native';
-import SwitchSelector from "react-native-switch-selector";
-
-const MenuScreen = ({ navigation }) => {
-=======
 import { StyleSheet, Text, SafeAreaView, ScrollView, SectionList, Button, Alert, TouchableOpacity } from 'react-native';
 import SwitchSelector from "react-native-switch-selector";
 
@@ -28,7 +22,6 @@ function MenuScreen({ navigation }) {
     var disPhotoURL = useSelector(state => state.loginReducer.photoURL);
     const [favList = getDish(db, disName), setFavList] = useState([]);
     // const [favList=[], setFavList] = useState([]);
->>>>>>> a989505a824d851e8f4d5d4211d403801e53abbc
 
     /* ============================= Variables ============================= */
     
