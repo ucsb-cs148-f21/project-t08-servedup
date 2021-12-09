@@ -16,8 +16,8 @@ OR
 
 ### Deployment for final product
 #### Download APK file for offline testing.
-Use link: https://drive.google.com/file/d/1hZ7mLMwd9_uvXqoOU-eeD4j_CCNFAm70/view?usp=sharing
-Install the .apk file in an apk environment
+1. Use link: https://drive.google.com/file/d/1hZ7mLMwd9_uvXqoOU-eeD4j_CCNFAm70/view?usp=sharing
+2. Install the .apk file in an apk environment
 #### Test the package online
-Open link: https://appetize.io/app/n5m0bc0b5dumkv1zbe6btdg62g
-Test the application in the opened windown
+1. Open link: https://appetize.io/app/n5m0bc0b5dumkv1zbe6btdg62g
+2. Test the application in the opened windown
