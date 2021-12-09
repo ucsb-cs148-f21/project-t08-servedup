@@ -13,3 +13,11 @@ OR
 
 1. Click the emulator link
 2. Tryout the app on an Android Emulator
+
+### Deployment for final product
+#### Download APK file for offline testing.
+Use link: https://drive.google.com/file/d/1hZ7mLMwd9_uvXqoOU-eeD4j_CCNFAm70/view?usp=sharing
+Install the .apk file in an apk environment
+#### Test the package online
+Open link: https://appetize.io/app/n5m0bc0b5dumkv1zbe6btdg62g
+Test the application in the opened windown
